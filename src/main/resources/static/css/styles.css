@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Roboto Light", sans-serif;
+    color: #fff;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+}
+
+body {
+    background-color: #260147;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1100px;
+    min-height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #19022e;
+}
+
+.separate-line {
+    width: 80%;
+    background-color: #fff;
+    height: 1px;
+    margin: 15px auto;
+}
+
+header {
+    display: flex;
+    justify-content: end;
+}
+
+header nav button {
+    margin: 10px 10px 0 0;
+    padding: 8px 11px;
+    border-radius: 8px;
+    background-color: #b54b04;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+    flex: 1;
+}
+
+main h2 {
+    margin-bottom: 25px;
+    margin-top: 50px;
+    font-size: 80px;
+}
+
+main form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+main form input {
+    width: 190px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #6203ab;
+    color: #fff;
+}
+
+main form button {
+    padding: 10px 13px;
+    border-radius: 8px;
+    background-color: #b54b04;
+    cursor: pointer;
+}
+
+main p a {
+    color: #b54b04;
+    font-weight: bold;
+}
+
+footer {
+    padding-bottom: 10px;
+    text-align: center;
+}
