@@ -32,9 +32,19 @@ body {
     margin: 15px auto;
 }
 
-header {
+header nav {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+}
+
+header nav p a {
+    font-size: 30px;
+    text-decoration: none;
+}
+
+header nav p {
+    margin: 10px 0 0 10px;
+    padding: 8px 11px;
 }
 
 header nav button {
@@ -44,7 +54,55 @@ header nav button {
     background-color: #b54b04;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
+
+header nav button:hover {
+    background-color: #c45c10;
+}
+
+.error-mess-global {
+    width: 80%;
+    margin: 10px auto;
+    padding: 5px 0;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #ad0205;
+    font-weight: bold;
+    display: none;
+}
+
+form input {
+    border-radius: 8px;
+    background-color: #6203ab;
+    border: none;
+}
+
+form input:focus {
+    outline: none;
+    box-shadow: 0 0 7px rgba(181, 75, 4, 0.6);
+}
+
+form input::placeholder {
+    font-style: italic;
+}
+
+form button {
+    border-radius: 8px;
+    background-color: #b54b04;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+form button:active {
+    transform: scale(0.99);
+}
+
+form button:hover {
+    background-color: #c45c10;
+    transform: scale(1.01);
+}
+
 
 footer {
     padding-bottom: 10px;
