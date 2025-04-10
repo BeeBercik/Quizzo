@@ -1,11 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+@import "welcome.css";
+@import "forms.css";
+
 * {
     font-family: "Roboto Light", sans-serif;
     color: #fff;
     padding: 0;
     margin: 0;
-    font-size: 20px;
+    font-size: 17px;
 }
 
 body {
@@ -41,47 +44,6 @@ header nav button {
     background-color: #b54b04;
     cursor: pointer;
     font-size: 16px;
-}
-
-main {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 100px;
-    flex: 1;
-}
-
-main h2 {
-    margin-bottom: 25px;
-    margin-top: 50px;
-    font-size: 80px;
-}
-
-main form {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-main form input {
-    width: 190px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #6203ab;
-    color: #fff;
-}
-
-main form button {
-    padding: 10px 13px;
-    border-radius: 8px;
-    background-color: #b54b04;
-    cursor: pointer;
-}
-
-main p a {
-    color: #b54b04;
-    font-weight: bold;
 }
 
 footer {
