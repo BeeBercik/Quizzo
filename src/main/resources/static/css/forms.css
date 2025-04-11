@@ -1,11 +1,8 @@
 
 #forms-main {
-    display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    flex: 1;
-    /*margin-top: 50px;*/
 }
 
 fieldset {
@@ -40,9 +37,13 @@ legend {
 
 #forms-main form input {
     padding: 7px 10px;
-    width: 200px;
+    width: 230px;
 }
 
-#forms-main form  button {
+#forms-main form button {
     padding: 7px 10px;
+}
+
+#forms-main form button:active {
+    transform: scale(0.98);
 }
