@@ -112,6 +112,18 @@ form button:hover {
     transform: scale(1.02);
 }
 
+fieldset {
+    border: 2px solid #6203ab;
+    border-radius: 10px;
+    padding: 50px;
+}
+
+legend {
+    font-weight: bold;
+    color: #fff;
+    padding: 0 10px;
+    font-size: 20px;
+}
 
 footer {
     padding-bottom: 10px;

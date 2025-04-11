@@ -24,33 +24,75 @@
 
     <h2>Welcome, Robert!</h2>
 
-    <section class="actions">
+    <div class="dashboard-wrapper">
+      <section class="actions">
 
-      <div class="entry-code">
-        <form>
-          <input type="text" maxlength="5" placeholder="Code"/>
-          <button type="submit">Enter the code</button>
-        </form>
-      </div>
+        <div class="entry-code">
+          <form>
+            <input type="text" maxlength="5" placeholder="Code"/>
+            <button type="submit">Enter the code</button>
+          </form>
+        </div>
 
-      <div>
-        <button class="create-test">Create test/quiz</button>
-      </div>
+        <div>
+          <button class="create-test">Create test/quiz</button>
+        </div>
 
-    </section>
+      </section>
 
-    <section class="summary">
-      <article>
-        <h3>Test & quiz's history</h3>
+      <section class="summary">
+        <fieldset>
+          <legend>Test & quiz's history</legend>
 
-      </article>
+          <table>
+            <thead>
+            <tr>
+              <th>Title</th>
+              <th>Result</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Quiz about the nature of human</td>
+                <td>75%</td>
+              </tr>
+              <tr>
+                <td>Quiz about the nature of human</td>
+                <td>75%</td>
+              </tr>
+            </tbody>
+          </table>
 
-      <article>
-        <h3>Your active tests/quizzes</h3>
+        </fieldset>
 
-      </article>
-    </section>
+        <fieldset>
+          <legend>Your active tests/quizzes</legend>
 
+          <table>
+            <thead>
+            <tr>
+              <th>Title</th>
+              <th>Code</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>IT devices test</td>
+                <td>C4GF2</td>
+                <td>Delete</td>
+              </tr>
+              <tr>
+                <td>IT devices test</td>
+                <td>C4GF2</td>
+                <td>Delete</td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
+
+      </section>
+    </div>
   </main>
 
   <div class="separate-line"></div>

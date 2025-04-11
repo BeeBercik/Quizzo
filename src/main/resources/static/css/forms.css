@@ -5,19 +5,6 @@
     align-items: center;
 }
 
-fieldset {
-    border: 2px solid #6203ab;
-    border-radius: 10px;
-    padding: 50px;
-}
-
-legend {
-    font-weight: bold;
-    color: #fff;
-    padding: 0 10px;
-    font-size: 20px;
-}
-
 #forms-main form {
     display: flex;
     flex-direction: column;
