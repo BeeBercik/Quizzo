@@ -3,6 +3,7 @@
 @import "welcome.css";
 @import "forms.css";
 @import "dashboard.css";
+@import "create.css";
 
 * {
     font-family: "Roboto Light", sans-serif;
@@ -112,10 +113,13 @@ form button:hover {
     transform: scale(1.02);
 }
 
+form button:active {
+    transform: scale(0.98);
+}
+
 fieldset {
     border: 2px solid #6203ab;
     border-radius: 10px;
-    padding: 50px;
 }
 
 legend {

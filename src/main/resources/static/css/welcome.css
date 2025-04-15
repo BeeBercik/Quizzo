@@ -33,10 +33,6 @@
     padding: 10px 13px;
 }
 
-#welcome-main .entry-code form button:active {
-    transform: scale(0.98);
-}
-
 #welcome-main .entry-code p {
     font-style: italic;
 }
@@ -47,7 +43,7 @@
 }
 
 #welcome-main .entry-code p a:hover {
-    color: #c45c10;
+    color: #f47214;
 }
 
 #welcome-main .about {

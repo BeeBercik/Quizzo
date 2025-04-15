@@ -1,0 +1,86 @@
+
+#create-main {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+#create-main h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    text-align: center;
+}
+
+#create-main form {
+    width: 100%;
+    max-width: 600px;
+    background-color: #320a50;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#create-main .question {
+    margin-bottom: 50px;
+}
+
+#create-main form h3,
+#create-main form h4 {
+    margin: 10px 0;
+    text-align: center;
+}
+#create-main form h3 {
+    font-size: 24px;
+}
+#create-main form h4 {
+    font-size: 18px;
+}
+
+#create-main form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#create-main form input[type="text"] {
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    background-color: #452a65;
+}
+
+#create-main form button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #b54b04;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+#create-main form button[type="submit"]:hover {
+    background-color: #dd6711;
+}
+
+#create-main .center-btn {
+    margin-top: 10px;
+    text-align: center;
+}
+#create-main .center-btn button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6203ab;
+    transition: background-color 0.3s ease;
+}
+#create-main .center-btn button:hover {
+    background-color: #7c3fbd;
+}
+
+#create-main form .bad-options .elements {
+    display: flex;
+    flex-direction: column;
+}
+

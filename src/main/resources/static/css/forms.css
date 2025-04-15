@@ -34,3 +34,7 @@
 #forms-main form button:active {
     transform: scale(0.98);
 }
+
+#forms-main fieldset {
+    padding: 50px;
+}
