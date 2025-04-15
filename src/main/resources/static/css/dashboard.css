@@ -27,7 +27,11 @@
 
 #dashboard-main .actions input,
 #dashboard-main .actions button {
-    padding: 10px 20px;
+    padding: 10px;
+}
+
+#dashboard-main .actions button {
+    padding: 10px 13px;
 }
 
 #dashboard-main button a {

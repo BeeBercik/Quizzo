@@ -8,7 +8,12 @@
 #forms-main form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
+}
+
+#forms-main section {
+    width: 100%;
+    margin: 0 50px;
 }
 
 #forms-main .form-field {
@@ -17,14 +22,16 @@
 }
 
 #forms-main label {
-    font-size: 15px;
-    font-style: italic;
-    margin-bottom: 3px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 #forms-main form input {
-    padding: 7px 10px;
-    width: 230px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    min-width: 230px;
+    background-color: #452a65;
 }
 
 #forms-main form button {
@@ -37,4 +44,5 @@
 
 #forms-main fieldset {
     padding: 50px;
+    background-color: #320a50;
 }
