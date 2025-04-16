@@ -18,13 +18,33 @@
   </header>
 
   <div class="separate-line"></div>
-  <p class="error-mess-global" style="display: none">Something went wrong. Try again.</p>
+  <p class="error-mess-global">Something went wrong. Try again.</p>
 
   <main id="create-main">
 
     <h2>Create your own test / quiz</h2>
 
+
     <form>
+      <section class="options">
+        <div class="add-opt-wrapper">
+          <div class="option">
+            <label for="elimination">Bad options elimination</label>
+            <input type="checkbox" id="elimination">
+          </div>
+
+          <div class="option"> <!-- jesli checkbox nie active to disabled -->
+            <label for="quantity">How many eliminations</label>
+            <input type="number" id="quantity" min="1">
+          </div>
+        </div>
+
+        <div class="option">
+          <label for="duration">Time duration [min]</label>
+          <input type="number" id="duration" min="1">
+        </div>
+      </section>
+
       <section class="question">
         <h3>Question #1</h3>
 
