@@ -4,6 +4,7 @@
 @import "forms.css";
 @import "dashboard.css";
 @import "create.css";
+@import "attempt.css";
 
 * {
     font-family: "Roboto Light", sans-serif;
@@ -132,4 +133,13 @@ legend {
 footer {
     padding-bottom: 10px;
     text-align: center;
+}
+
+a {
+    text-decoration: none
+}
+
+h2 {
+    margin-top: 20px;
+    font-size: 30px;
 }

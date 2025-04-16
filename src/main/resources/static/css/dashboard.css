@@ -12,11 +12,6 @@
     flex: 1;
 }
 
-#dashboard-main h2 {
-    font-size: 30px;
-    margin-top: 20px;
-}
-
 #dashboard-main .actions {
     display: flex;
     flex-direction: row;
@@ -32,10 +27,6 @@
 
 #dashboard-main .actions button {
     padding: 10px 13px;
-}
-
-#dashboard-main button a {
-    text-decoration: none;
 }
 
 #dashboard-main .actions .create-test {
