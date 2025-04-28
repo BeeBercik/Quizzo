@@ -1,0 +1,99 @@
+
+#test-main {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#test-main .additional-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+#test-main .options {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#test-main .option {
+    text-align: center;
+    width: 150px;
+    height: 100px;
+    line-height: 100px;
+    background-color: #3a035c;
+    border-radius: 8px;
+    font-weight: bold;
+    border: 2px solid #6203ab;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#test-main .option:active {
+    transform: scale(0.98);
+}
+
+#test-main .option:hover {
+    background-color: #6203ab;
+    cursor: pointer;
+}
+
+.eliminated-option {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+#test-main .additional-info button {
+    padding: 13px;
+    border-radius: 5px;
+    border: none;
+    background-color: #b54b04;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#test-main button:hover {
+    background-color: #dd6711;
+}
+
+#test-main button:active {
+    transform: scale(0.98);
+}
+
+#test-main .q-nav-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#test-main .question {
+    width: 60%;
+    padding: 30px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #452a65;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#test-main .q-nav-container nav button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: #b54b04;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#test-main .q-nav-container nav button:hover {
+    background-color: #dd6711;
+}
+

@@ -5,6 +5,7 @@
 @import "dashboard.css";
 @import "create.css";
 @import "attempt.css";
+@import "test.css";
 
 * {
     font-family: "Roboto Light", sans-serif;
