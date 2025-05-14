@@ -21,35 +21,32 @@
     <p class="error-mess-global">Something went wrong. Try again.</p>
 
     <main id="test-main">
+
         <div class="additional-info">
             <p>Bad option eliminations: 2</p>
             <button>Eliminate bad option</button>
             <p>Remaining time:  30:00</p>
         </div>
 
-        <section class="options">
-            <div class="option eliminated-option">
-                <p>Red</p>
-            </div>
-            <div class="option">
-                <p>Blue</p>
-            </div>
-            <div class="option">
-                <p>Green</p>
-            </div>
-            <div class="option">
-                <p>Red</p>
-            </div>
-        </section>
+        <form>
+            <section class="options">
+                <button class="option eliminated-option" data-value="A">Red</button>
+                <button class="option" data-value="B">Blue</button>
+                <button class="option" data-value="C">Green</button>
+                <button class="option" data-value="D">Red</button>
+            </section>
 
-        <section class="q-nav-container">
-            <div class="question">
-                <p>What color is crocodile?</p>
-            </div>
-            <nav>
-                <button>Next</button>
-            </nav>
-        </section>
+            <section class="q-nav-container">
+                <div class="question">
+                    <p>What color is crocodile?</p>
+                </div>
+                <nav>
+                    <button>Next</button>
+    <!--                <button>FINISH</button>-->
+                </nav>
+            </section>
+        </form>
+
     </main>
 
     <div class="separate-line"></div>
