@@ -1,30 +1,24 @@
-import { initAttempt } from "./controllers/quizController.js";
+import {initAttempt, initTest, initWelcome} from "./controllers/quizController.js";
 
 let view = document.querySelector("main").dataset.view;
 initView(view);
 
-export function initView(view) {
+export function initView(view, data = null) {
     switch(view) {
         case "welcome":
-            prepareAttempt();
+            initWelcome();
+            console.log("welcome view");
             break;
         case "attempt":
-            //...
-            console.log("attempt");
+            initAttempt(data);
+            console.log("attempt view");
             break;
         case "test":
-            console.log("test");
+            initTest();
+            console.log("test view");
             break;
         default:
             console.log("Unknown view");
             break;
     }
-}
-
-function prepareAttempt() {
-    document.getElementsByTagName("form")[0].addEventListener("submit", (e) => {
-        e.preventDefault();
-        const code = document.getElementById("code").value;
-        initAttempt(code);
-    });
 }
