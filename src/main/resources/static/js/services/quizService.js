@@ -20,6 +20,7 @@ export function getTestDetails(code) {
         eliminationsCount: 3,
         questions: [
             {
+                id: 1,
                 question: "What color is crocodile?",
                 answers: {
                     A: "red",
@@ -30,6 +31,7 @@ export function getTestDetails(code) {
                 correctAnswer: "C"
             },
             {
+                id: 2,
                 question: "What is elephant?",
                 answers: {
                     A: "animal",
@@ -41,4 +43,9 @@ export function getTestDetails(code) {
             }
         ]
     };
+}
+
+export function submitAnswers(answers) {
+//     ..
+    console.log(answers);
 }

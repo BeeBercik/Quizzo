@@ -1,6 +1,6 @@
 
 import initView from "../main.js";
-import {fetchQuizInfo, getTestDetails} from "../services/quizService.js";
+import {fetchQuizInfo, getTestDetails, submitAnswers} from "../services/quizService.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import generateAttemptView from "../views/attemptView.js";
 import generateWelcomeView from "../views/welcomeView.js";
@@ -45,21 +45,45 @@ export function initTest(code) {
     }
 
     generateTestView(testDetails);
-    let current = 0;
-    renderQuestion(testDetails.questions[current]);
 
-    const button = document.getElementById("next-btn");
+    const answers = {};
+    const nextButton = document.getElementById("next-btn");
     const questionCount = testDetails.questions.length;
-    updateNextButton(button, current, questionCount);
-    current++;
+    const options = document.querySelector(".options");
+    let current = 0;
 
-    button.addEventListener("click", function(e) {
+    // SELECTING
+    options.addEventListener("click", function(e) {
         e.preventDefault();
-        renderQuestion(testDetails.questions[current]);
-        updateNextButton(button, current, questionCount);
-        current++;
+
+        const previousSelected = options.querySelectorAll("button.selected");
+        for(const element of previousSelected) {
+            element.classList.remove("selected");
+        }
+
+        e.target.classList.add("selected");
     });
 
+    renderQuestion(testDetails.questions[current]);
+    updateNextButton(nextButton, current, questionCount);
+
+    // SWITCHING
+    nextButton.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const saved = saveAnswer(testDetails, answers, current);
+        if(!saved) return;
+        if(current < questionCount - 1) {
+            current++;
+            renderQuestion(testDetails.questions[current]);
+            updateNextButton(nextButton, current, questionCount);
+        } else {
+            submitAnswers(answers);
+            initView("dashboard");
+        }
+    });
+
+    // ELIMINATING
     document.getElementById("eliminate-option").addEventListener("click", function() {
     //     ...
     });
@@ -70,4 +94,15 @@ export function initTest(code) {
 function updateNextButton(button, current, total) {
     if(current < total - 1) button.textContent = "Next";
     else button.textContent = "Finish";
+}
+
+function saveAnswer(testDetails, answers, current) {
+    const selected = document.querySelector(".options button.selected");
+    if(!selected) {
+        generateError("You must choose the answer");
+        return false;
+    }
+    answers[testDetails.questions[current].id] = selected.dataset.value;
+
+    return true;
 }
