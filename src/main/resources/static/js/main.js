@@ -3,18 +3,18 @@ import {initAttempt, initTest, initWelcome} from "./controllers/quizController.j
 let view = document.querySelector("main").dataset.view;
 initView(view);
 
-export function initView(view, data = null) {
+export default function initView(view, code = null) {
     switch(view) {
         case "welcome":
             initWelcome();
             console.log("welcome view");
             break;
         case "attempt":
-            initAttempt(data);
+            initAttempt(code);
             console.log("attempt view");
             break;
         case "test":
-            initTest();
+            initTest(code);
             console.log("test view");
             break;
         default:
