@@ -48,6 +48,12 @@
     cursor: pointer;
 }
 
+#test-main .option.selected {
+    background-color: #b54b04;
+    border-color: #dd6711;
+    transform: scale(1.05);
+}
+
 .eliminated-option {
     opacity: 0.4;
     pointer-events: none;
