@@ -17,7 +17,7 @@ export function getTestDetails(code) {
     return {
         time: 30,
         eliminations: true,
-        eliminationsCount: 3,
+        eliminationsCount: 4,
         questions: [
             {
                 id: 1,

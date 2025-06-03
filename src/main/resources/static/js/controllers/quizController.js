@@ -4,7 +4,7 @@ import {fetchQuizInfo, getTestDetails, submitAnswers} from "../services/quizServ
 import {codeValidation} from "../validators/codeValidator.js";
 import generateAttemptView from "../views/attemptView.js";
 import generateWelcomeView from "../views/welcomeView.js";
-import {generateError, renderQuestion} from "../ui.js";
+import {eliminateOption, generateError, renderQuestion} from "../ui.js";
 import generateTestView from "../views/testView.js";
 
 export function initWelcome() {
@@ -39,7 +39,7 @@ export function initAttempt(code) {
 
 export function initTest(code) {
     const testDetails = getTestDetails(code);
-    if(!testDetails) { // w miedzy czasie usunieto (gdy na attempt)
+    if(!testDetails) {
         generateError("Test with such code doesn't exist");
         return -1;
     }
@@ -49,46 +49,54 @@ export function initTest(code) {
     const answers = {};
     const nextButton = document.getElementById("next-btn");
     const questionCount = testDetails.questions.length;
-    const options = document.querySelector(".options");
+    const optionsContainer = document.querySelector(".options");
     let current = 0;
-
-    // SELECTING
-    options.addEventListener("click", function(e) {
-        e.preventDefault();
-
-        const previousSelected = options.querySelectorAll("button.selected");
-        for(const element of previousSelected) {
-            element.classList.remove("selected");
-        }
-
-        e.target.classList.add("selected");
-    });
+    const eliminated = [];
 
     renderQuestion(testDetails.questions[current]);
     updateNextButton(nextButton, current, questionCount);
 
-    // SWITCHING
-    nextButton.addEventListener("click", function(e) {
-        e.preventDefault();
-
-        const saved = saveAnswer(testDetails, answers, current);
-        if(!saved) return;
-        if(current < questionCount - 1) {
-            current++;
-            renderQuestion(testDetails.questions[current]);
-            updateNextButton(nextButton, current, questionCount);
-        } else {
-            submitAnswers(answers);
-            initView("dashboard");
-        }
+    optionsContainer.addEventListener("click", function(e) {
+        selectQuestion(optionsContainer, e);
     });
 
-    // ELIMINATING
+    nextButton.addEventListener("click", function(e) {
+        current = switchQuestion(testDetails, current, questionCount, answers, nextButton, eliminated, e);
+    });
+
     document.getElementById("eliminate-option").addEventListener("click", function() {
-    //     ...
+       eliminateOption(testDetails, optionsContainer, eliminated);
     });
 
     // timer ...
+}
+
+function selectQuestion(options, e) {
+    e.preventDefault();
+    if(e.target.disabled) return;
+
+    const previousSelected = options.querySelectorAll("button.selected");
+    for(const element of previousSelected) {
+        element.classList.remove("selected");
+    }
+    e.target.classList.add("selected");
+}
+
+function switchQuestion(testDetails, current, questionCount, answers, nextButton, eliminated, e) {
+    e.preventDefault();
+
+    const saved = saveAnswer(testDetails, answers, current);
+    if(!saved) return current;
+    if(current < questionCount - 1) {
+        current++;
+        eliminated.length = 0;
+        renderQuestion(testDetails.questions[current]);
+        updateNextButton(nextButton, current, questionCount);
+    } else {
+        submitAnswers(answers);
+        initView("dashboard");
+    }
+    return current;
 }
 
 function updateNextButton(button, current, total) {
@@ -103,6 +111,5 @@ function saveAnswer(testDetails, answers, current) {
         return false;
     }
     answers[testDetails.questions[current].id] = selected.dataset.value;
-
     return true;
 }
