@@ -56,19 +56,58 @@ export function initTest(code) {
     renderQuestion(testDetails.questions[current]);
     updateNextButton(nextButton, current, questionCount);
 
+    const timeLabel = document.getElementById("time");
+    const stopTimer = startTimer(testDetails.time * 60, timeLabel, submitAnswers);
+
     optionsContainer.addEventListener("click", function(e) {
         selectQuestion(optionsContainer, e);
     });
 
     nextButton.addEventListener("click", function(e) {
-        current = switchQuestion(testDetails, current, questionCount, answers, nextButton, eliminated, e);
+        current = switchQuestion(testDetails,
+            current,
+            questionCount,
+            answers,
+            nextButton,
+            eliminated,
+            stopTimer,
+            e);
     });
 
     document.getElementById("eliminate-option").addEventListener("click", function() {
        eliminateOption(testDetails, optionsContainer, eliminated);
     });
 
-    // timer ...
+}
+
+function startTimer(totalSeconds, displayEl, submitAnswers) {
+    let remaining = totalSeconds;
+
+    updateDisplay(remaining, displayEl);
+
+    const intervalId = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+            clearInterval(intervalId);
+            updateDisplay(0, displayEl);
+            submitAnswers();
+            initView("dashboard");
+        } else {
+            updateDisplay(remaining, displayEl);
+        }
+    }, 1000);
+
+
+    return () => clearInterval(intervalId);
+
+    function updateDisplay(sec, el) {
+        const min = Math.floor(sec / 60);
+        const s = sec % 60;
+
+        const mm = min.toString().padStart(2, "0");
+        const ss = s.toString().padStart(2, "0");
+        el.textContent = `${mm}:${ss}`;
+    }
 }
 
 function selectQuestion(options, e) {
@@ -82,7 +121,14 @@ function selectQuestion(options, e) {
     e.target.classList.add("selected");
 }
 
-function switchQuestion(testDetails, current, questionCount, answers, nextButton, eliminated, e) {
+function switchQuestion(testDetails,
+                        current,
+                        questionCount,
+                        answers,
+                        nextButton,
+                        eliminated,
+                        stopTimer,
+                        e) {
     e.preventDefault();
 
     const saved = saveAnswer(testDetails, answers, current);
@@ -93,6 +139,7 @@ function switchQuestion(testDetails, current, questionCount, answers, nextButton
         renderQuestion(testDetails.questions[current]);
         updateNextButton(nextButton, current, questionCount);
     } else {
+        stopTimer();
         submitAnswers(answers);
         initView("dashboard");
     }

@@ -46,7 +46,6 @@ export function eliminateOption(testDetails, optionsContainer, eliminated) {
     options[random].classList.add("eliminated-option");
     options[random].disabled = true;
 
-    console.log(random);
     const eliminations = document.getElementById("eliminations");
     testDetails.eliminationsCount--;
     eliminations.textContent = testDetails.eliminationsCount;
