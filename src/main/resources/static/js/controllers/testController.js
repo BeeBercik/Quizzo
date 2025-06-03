@@ -24,8 +24,12 @@ export default function initTest(code) {
     renderQuestion(testDetails.questions[current]);
     updateNextButton(nextButton, current, questionCount);
 
+    function timeUp() {
+        initView("dashboard");
+        submitAnswers(answers);
+    }
     const timeLabel = document.getElementById("time");
-    const stopTimer = startTimer(testDetails.time * 60, timeLabel, submitAnswers, answers);
+    const stopTimer = startTimer(testDetails.time * 60, timeLabel, timeUp);
 
     optionsContainer.addEventListener("click", function(e) {
         e.preventDefault();

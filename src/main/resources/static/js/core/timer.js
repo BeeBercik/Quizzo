@@ -1,6 +1,5 @@
-import initView from "../router.js";
 
-export default function startTimer(totalSeconds, timerElement, submitAnswers, answers) {
+export default function startTimer(totalSeconds, timerElement, onTimeUp) {
     let remaining = totalSeconds;
 
     updateDisplay(remaining, timerElement);
@@ -10,8 +9,7 @@ export default function startTimer(totalSeconds, timerElement, submitAnswers, an
         if (remaining <= 0) {
             clearInterval(intervalId);
             updateDisplay(0, timerElement);
-            submitAnswers(answers);
-            initView("dashboard");
+            onTimeUp();
         } else {
             updateDisplay(remaining, timerElement);
         }
