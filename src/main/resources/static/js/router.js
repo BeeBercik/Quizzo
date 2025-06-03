@@ -1,7 +1,6 @@
-import {initAttempt, initTest, initWelcome} from "./controllers/quizController.js";
-
-let view = document.querySelector("main").dataset.view;
-initView(view);
+import initTest from "./controllers/testController.js";
+import initAttempt from "./controllers/attemptController.js";
+import initWelcome from "./controllers/welcomeController.js";
 
 export default function initView(view, code = null) {
     switch(view) {
@@ -22,3 +21,5 @@ export default function initView(view, code = null) {
             break;
     }
 }
+let view = document.querySelector("main").dataset.view;
+initView(view);

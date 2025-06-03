@@ -1,5 +1,4 @@
 
-
 export function fetchQuizInfo(code) {
     // fetch for qiz info
     return {
@@ -15,7 +14,7 @@ export function fetchQuizInfo(code) {
 export function getTestDetails(code) {
     //  fetch for test details
     return {
-        time: 30,
+        time: 0.5,
         eliminations: true,
         eliminationsCount: 4,
         questions: [

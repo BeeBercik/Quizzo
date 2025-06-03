@@ -1,4 +1,4 @@
-import {generateError} from "../ui.js";
+import generateError from "../ui/errorBar.js";
 
 export function codeValidation(code) {
     if(code.length !== 5) {
