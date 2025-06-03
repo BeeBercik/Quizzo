@@ -6,7 +6,7 @@ export function generateError(message) {
 
     setTimeout(() => {
         errorBar.style.display = "none";
-    }, 2000);
+    }, 2500);
 }
 
 export function renderQuestion(q) {
@@ -24,6 +24,30 @@ export function renderQuestion(q) {
     }
 }
 
-export function eliminateOption() {
+export function eliminateOption(testDetails, optionsContainer, eliminated) {
+    if(testDetails.eliminationsCount < 1) {
+        generateError("You do not have any eliminations left");
+        return;
+    }
+    const options = optionsContainer.querySelectorAll(".option")
 
+    if(eliminated.length === options.length - 1) {
+        generateError("You cannot eliminate all answers");
+        return;
+    }
+
+    let random;
+    do {
+        random = Math.floor(Math.random() * options.length);
+    } while(eliminated.includes(random));
+
+    eliminated.push(random);
+    options[random].classList.remove("selected");
+    options[random].classList.add("eliminated-option");
+    options[random].disabled = true;
+
+    console.log(random);
+    const eliminations = document.getElementById("eliminations");
+    testDetails.eliminationsCount--;
+    eliminations.textContent = testDetails.eliminationsCount;
 }
