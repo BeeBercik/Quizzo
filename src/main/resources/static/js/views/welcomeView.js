@@ -10,13 +10,12 @@ export default function generateWelcomeView() {
                 <h2>Quizzo</h2>
 
                 <form>
-                    <input type="text" maxlength="5" placeholder="Code" id="code"/>
+                    <input type="text" maxlength="5" placeholder="Code" class="code"/>
                     <button type="submit">Enter the code</button>
                 </form>
 
                 <p>
                     .. or <a href="forms.html">log in</a>
-<!--                    Welcome, Robert!-->
                 </p>
             </section>
 

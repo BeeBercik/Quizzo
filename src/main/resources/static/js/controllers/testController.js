@@ -25,8 +25,8 @@ export default function initTest(code) {
     updateNextButton(nextButton, current, questionCount);
 
     function timeUp() {
-        initView("dashboard");
         submitAnswers(answers);
+        initView("dashboard");
     }
     const timeLabel = document.getElementById("time");
     const stopTimer = startTimer(testDetails.time * 60, timeLabel, timeUp);

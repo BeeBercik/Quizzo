@@ -5,9 +5,9 @@ import initView from "../router.js";
 export default function initWelcome() {
     generateWelcomeView();
 
-    document.getElementsByTagName("form")[0].addEventListener("submit", (e) => {
+    document.querySelector("form").addEventListener("submit", (e) => {
         e.preventDefault();
-        const code = document.getElementById("code").value.trim();
+        const code = document.querySelector("form .code").value.trim();
         if(!codeValidation(code)) return -1;
         initView("attempt", code);
     });
