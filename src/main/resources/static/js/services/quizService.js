@@ -44,6 +44,36 @@ export function getTestDetails(code) {
     };
 }
 
+export function getUserTests(userId) {
+//     fetching
+    return {
+        attended: [
+            {
+                id: 1,
+                title: "Attended test title 1",
+                result: 75
+            },
+            {
+                id: 2,
+                title: "Attended test title 2",
+                result: 55
+            }
+        ],
+        created: [
+            {
+                id: 10,
+                title: "Created test title 1",
+                code: "ABCD1"
+            },
+            {
+                id: 20,
+                title: "Created test title 2",
+                code: "ABCD2"
+            }
+        ]
+    }
+}
+
 export function submitAnswers(answers) {
 //     ..
     console.log(answers);
