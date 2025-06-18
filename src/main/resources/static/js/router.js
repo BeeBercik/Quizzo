@@ -1,6 +1,8 @@
 import initTest from "./controllers/testController.js";
 import initAttempt from "./controllers/attemptController.js";
 import initWelcome from "./controllers/welcomeController.js";
+import initDashboard from "./controllers/dashboardController.js";
+import {initGeneralComponentsListening} from "./controllers/generalLayoutController.js";
 
 export default function initView(view, code = null) {
     switch(view) {
@@ -16,10 +18,17 @@ export default function initView(view, code = null) {
             initTest(code);
             console.log("test view");
             break;
+        case "dashboard":
+            initDashboard();
+            console.log("dashboard view");
+            break;
         default:
             console.log("Unknown view");
             break;
     }
 }
+
+initGeneralComponentsListening();
 let view = document.querySelector("main").dataset.view;
 initView(view);
+
