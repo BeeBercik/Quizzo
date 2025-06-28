@@ -14,7 +14,9 @@ export default function initTest(code) {
     }
     generateTestView(testDetails);
 
-    const answers = {};
+    const answers = {
+        selectedAnswers: []
+    };
     const nextButton = document.getElementById("next-btn");
     const questionCount = testDetails.questions.length;
     const optionsContainer = document.querySelector(".options");
@@ -75,6 +77,9 @@ function saveAnswer(testDetails, answers, current) {
         generateError("You must choose the answer");
         return false;
     }
-    answers[testDetails.questions[current].id] = selected.dataset.value;
+    answers.selectedAnswers.push({
+        testId: testDetails.questions[current].id,
+        selectedAnswer: selected.dataset.value
+    });
     return true;
 }

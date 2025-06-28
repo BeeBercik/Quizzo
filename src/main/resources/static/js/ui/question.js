@@ -5,11 +5,11 @@ export function renderQuestion(q) {
 
     const options = document.querySelector(".options");
     options.innerHTML = "";
-    for (const key in q.answers) {
+    for (let i = 0; i < q.answers.length; i++) {
         const button = document.createElement("button");
         button.classList.add("option");
-        button.dataset.value = key;
-        button.textContent = q.answers[key];
+        button.dataset.value = i;
+        button.textContent = q.answers[i];
         options.appendChild(button);
     }
 }

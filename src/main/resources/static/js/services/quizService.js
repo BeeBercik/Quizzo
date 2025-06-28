@@ -19,25 +19,25 @@ export function getTestDetails(code) {
         eliminationsCount: 4,
         questions: [
             {
-                id: 1,
+                id: 10,
                 question: "What color is crocodile?",
-                answers: {
-                    A: "red",
-                    B: "blue",
-                    C: "green",
-                    D: "red"
-                },
+                answers: [
+                    "red",
+                    "blue",
+                    "green",
+                    "red"
+                ],
                 correctAnswer: "C"
             },
             {
-                id: 2,
+                id: 20,
                 question: "What is elephant?",
-                answers: {
-                    A: "animal",
-                    B: "human",
-                    C: "fish",
-                    D: "insect"
-                },
+                answers: [
+                    "animal",
+                    "human",
+                    "fish",
+                    "insect"
+                ],
                 correctAnswer: "A"
             }
         ]
