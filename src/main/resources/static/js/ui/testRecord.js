@@ -1,6 +1,5 @@
 
 export function generateAttendedTestRecord(data) {
-    console.log(data);
     const tr = document.createElement("tr");
 
     const tdTitle = document.createElement("td");
@@ -13,7 +12,6 @@ export function generateAttendedTestRecord(data) {
 }
 
 export function generateCreatedTestRecord(data) {
-    console.log(data);
     const tr = document.createElement("tr");
 
     const tdTitle = document.createElement("td");

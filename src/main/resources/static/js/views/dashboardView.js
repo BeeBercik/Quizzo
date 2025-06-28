@@ -21,7 +21,7 @@ export default function initDashboardView(myTests) {
         </div>
 
         <div>
-          <button class="create-test"><a href="create.html">Create test/quiz</a></button>
+          <button id="create-test"><a href="create.html">Create test/quiz</a></button>
         </div>
 
       </section>

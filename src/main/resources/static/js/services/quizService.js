@@ -78,3 +78,7 @@ export function submitAnswers(answers) {
 //     ..
     console.log(answers);
 }
+
+export function saveCreatedTest(test) {
+//     saving to the database
+}
