@@ -48,7 +48,9 @@ function submitTest(testDuration,
     }
 
     const questionsData = [];
+    getQuestionsAndAnswers(questionsData);
 
+    console.log("questionsData: ", questionsData);
     const finalTestData = {
         time: testDuration.value ,
         eliminations: eliminationQuantity.value === "" ? 0 : eliminationQuantity.value,
@@ -83,5 +85,40 @@ function bindListenersToBadOptionBtn() {
     badOptionBtns.forEach(btn => {
         btn.removeEventListener("click", generateBadOption);
         btn.addEventListener("click", generateBadOption);
+    });
+}
+
+function getQuestionsAndAnswers(questionsData) {
+    const questions = document.querySelectorAll(".question");
+    const allInputs = document.querySelectorAll(".question input");
+
+    allInputs.forEach(input => {
+        if(input.value.trim() === "") {
+            generateError("Input cannot be empty");
+            return;
+        }
+    });
+    let i = 1;
+    questions.forEach(q => {
+        const question = q.querySelector(`#q${i}`).value;
+        const correctAnswer = q.querySelector("#correct").value;
+        const badOptionsElements = q.querySelectorAll(".bad-options .elements input");
+
+        let j = 1;
+        const badOptions = [];
+        badOptionsElements.forEach(b => {
+            badOptions.push(b.value);
+            j++;
+        });
+
+        const questionData = {
+            question: question,
+            correctAnswer: correctAnswer,
+            badOptions: badOptions
+        };
+
+        console.log("question data: ", questionData);
+        questionsData.push(questionData);
+        i++;
     });
 }

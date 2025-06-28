@@ -14,7 +14,7 @@ export function fetchQuizInfo(code) {
 export function getTestDetails(code) {
     //  fetch for test details
     return {
-        time: 0.2,
+        time: 20,
         eliminations: true,
         eliminationsCount: 4,
         questions: [

@@ -34,7 +34,7 @@ export function createBadOption(container, optCount) {
     div.classList.add("element");
 
     div.innerHTML = `
-      <label for="bad2">${optCount}.</label>
+      <label for="bad${optCount}">${optCount}.</label>
       <input type="text" id="bad${optCount}" name="bad${optCount}"/>
     `;
 
