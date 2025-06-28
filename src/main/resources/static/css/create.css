@@ -95,11 +95,15 @@
 }
 
 #create-main .center-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 10px;
     text-align: center;
 }
 #create-main .center-btn button {
     padding: 8px 16px;
+    margin-bottom: 10px;
     border: none;
     border-radius: 5px;
     background-color: #6203ab;
@@ -114,3 +118,20 @@
     flex-direction: column;
 }
 
+#create-main #new-question-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 50px;
+    background-color: #3a035c;
+    border-radius: 8px;
+    font-weight: bold;
+    border: 2px solid #6203ab;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+#create-main #new-question-btn:hover {
+    background-color: #6203ab;
+    transform: scale(1.02);
+    cursor: pointer;
+}

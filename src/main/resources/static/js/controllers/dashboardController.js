@@ -14,4 +14,9 @@ export default function initDashboard() {
         if(!codeValidation(code)) return -1;
         initView("attempt", code);
     })
+
+    document.getElementById("create-test").addEventListener("click", function(e) {
+        e.preventDefault();
+        initView("create-test");
+    })
 }
