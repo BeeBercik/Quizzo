@@ -15,10 +15,10 @@ export default function generateAttemptView(quizInfo) {
                     <span>Questions:</span>${quizInfo.questions}
                 </p>
                 <p>
-                    <span>Time:</span>${quizInfo.questions} [min]
+                    <span>Time:</span>${quizInfo.time} [min]
                 </p>
                 <p>
-                    <span>Bad options elimination:</span>${quizInfo.elimination ? "Yes" : "No"} </p>
+                    <span>Bad options elimination:</span>${quizInfo.eliminationsCount === 0 ? "No" : "Yes"} </p>
             </div>
 
             <p class="description">Test / quiz contains single-choice questions. There is no possibility to go back to a previous question. The timer starts as soon as the test begins. Good luck!</p>

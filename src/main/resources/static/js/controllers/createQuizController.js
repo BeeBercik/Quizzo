@@ -1,8 +1,8 @@
-import initCreateTestView from "../views/createTestView.js";
-import {saveCreatedTest} from "../services/quizService.js";
+import initCreateTestView from "../views/createQuizView.js";
+import {sendCreatedTest} from "../services/quizService.js";
 import generateError from "../ui/errorBar.js";
 import initView from "../router.js";
-import {createBadOption, createQuestion} from "../ui/createTestPanel.js";
+import {createBadOption, createQuestion} from "../ui/createQuizPanel.js";
 
 export default function initCreateTest() {
     initCreateTestView();
@@ -50,14 +50,13 @@ function submitTest(testDuration,
     const questionsData = [];
     getQuestionsAndAnswers(questionsData);
 
-    console.log("questionsData: ", questionsData);
     const finalTestData = {
         time: testDuration.value ,
         eliminations: eliminationQuantity.value === "" ? 0 : eliminationQuantity.value,
         questionsData: questionsData
     }
     console.log(finalTestData);
-    saveCreatedTest(finalTestData);
+    sendCreatedTest(finalTestData);
     // initView("dashboard");
 }
 
@@ -107,17 +106,20 @@ function getQuestionsAndAnswers(questionsData) {
         let j = 1;
         const badOptions = [];
         badOptionsElements.forEach(b => {
-            badOptions.push(b.value);
+            badOptions.push({
+                value: b.value,
+                correct: false
+            });
             j++;
         });
+        const answers = [...badOptions, { value: correctAnswer, correct: true }];
 
         const questionData = {
             question: question,
-            correctAnswer: correctAnswer,
-            badOptions: badOptions
+            answers: answers
         };
 
-        console.log("question data: ", questionData);
+        // console.log("question data: ", questionData);
         questionsData.push(questionData);
         i++;
     });

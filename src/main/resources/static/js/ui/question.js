@@ -8,8 +8,8 @@ export function renderQuestion(q) {
     for (let i = 0; i < q.answers.length; i++) {
         const button = document.createElement("button");
         button.classList.add("option");
-        button.dataset.value = i;
-        button.textContent = q.answers[i];
+        button.dataset.value =q.answers[i].id;
+        button.textContent = q.answers[i].value;
         options.appendChild(button);
     }
 }

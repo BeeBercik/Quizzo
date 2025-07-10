@@ -1,4 +1,4 @@
-import {generateAttendedTestRecord, generateCreatedTestRecord} from "../ui/testRecord.js";
+import {generateAttendedTestRecord, generateCreatedTestRecord} from "../ui/quizRecord.js";
 
 export default function initDashboardView(myTests) {
     const attended = myTests.attended;

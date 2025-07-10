@@ -1,11 +1,11 @@
 import initDashboardView from "../views/dashboardView.js";
-import {getUserTests} from "../services/quizService.js";
+import {getUserQuizzes} from "../services/quizService.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
 
 export default function initDashboard() {
     const userid = 69;
-    const userTests = getUserTests(userid);
+    const userTests = getUserQuizzes(userid);
     initDashboardView(userTests);
 
     document.querySelector("form").addEventListener("submit", function(e) {

@@ -16,7 +16,7 @@ export default function initCreateTestView() {
             <input type="checkbox" id="elimination">
           </div>
 
-          <div class="option"> <!-- jesli checkbox nie active to disabled -->
+          <div class="option">
             <label for="quantity">How many eliminations</label>
             <input type="number" id="quantity" min="1">
           </div>

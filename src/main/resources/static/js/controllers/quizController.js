@@ -1,13 +1,13 @@
-import {getTestDetails, submitAnswers} from "../services/quizService.js";
+import {getQuizDetails, submitAnswers} from "../services/quizService.js";
 import {renderQuestion, selectQuestion, updateNextButton} from "../ui/question.js";
-import generateTestView from "../views/testView.js";
+import generateTestView from "../views/quizView.js";
 import generateError from "../ui/errorBar.js";
 import startTimer from "../core/timer.js";
 import eliminateOption from "../ui/optionEliminator.js";
 import initView from "../router.js";
 
 export default function initTest(code) {
-    const testDetails = getTestDetails(code);
+    const testDetails = getQuizDetails(code);
     if(!testDetails) {
         generateError("Test with such code doesn't exist");
         return -1;
@@ -15,16 +15,17 @@ export default function initTest(code) {
     generateTestView(testDetails);
 
     const answers = {
+        quizId: testDetails.id,
         selectedAnswers: []
     };
     const nextButton = document.getElementById("next-btn");
     const questionCount = testDetails.questions.length;
     const optionsContainer = document.querySelector(".options");
-    let current = 0;
     const eliminated = [];
+    let currentQuestion = 0;
 
-    renderQuestion(testDetails.questions[current]);
-    updateNextButton(nextButton, current, questionCount);
+    renderQuestion(testDetails.questions[currentQuestion]);
+    updateNextButton(nextButton, currentQuestion, questionCount);
 
     function timeUp() {
         submitAnswers(answers);
@@ -41,14 +42,14 @@ export default function initTest(code) {
 
     nextButton.addEventListener("click", function(e) {
         e.preventDefault()
-        const saved = saveAnswer(testDetails, answers, current);
-        if(!saved) return current;
+        const savedAnswers = saveAnswer(testDetails, answers);
+        if(!savedAnswers) return currentQuestion;
 
-        if(current < questionCount - 1) {
-            current++;
+        if(currentQuestion < questionCount - 1) {
+            currentQuestion++;
             eliminated.length = 0;
-            renderQuestion(testDetails.questions[current]);
-            updateNextButton(nextButton, current, questionCount);
+            renderQuestion(testDetails.questions[currentQuestion]);
+            updateNextButton(nextButton, currentQuestion, questionCount);
         } else {
             stopTimer();
             submitAnswers(answers);
@@ -71,15 +72,14 @@ export default function initTest(code) {
     });
 }
 
-function saveAnswer(testDetails, answers, current) {
+function saveAnswer(testDetails, answers) {
     const selected = document.querySelector(".options button.selected");
     if(!selected) {
         generateError("You must choose the answer");
         return false;
     }
     answers.selectedAnswers.push({
-        testId: testDetails.questions[current].id,
-        selectedAnswer: selected.dataset.value
+        selectedAnswerId: selected.dataset.value
     });
     return true;
 }

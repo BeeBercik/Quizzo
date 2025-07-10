@@ -1,9 +1,9 @@
-import initTest from "./controllers/testController.js";
+import initTest from "./controllers/quizController.js";
 import initAttempt from "./controllers/attemptController.js";
 import initWelcome from "./controllers/welcomeController.js";
 import initDashboard from "./controllers/dashboardController.js";
 import {initGeneralComponentsListening} from "./controllers/generalLayoutController.js";
-import initCreateTest from "./controllers/createTestController.js";
+import initCreateTest from "./controllers/createQuizController.js";
 
 export default function initView(view, code = null) {
     switch(view) {

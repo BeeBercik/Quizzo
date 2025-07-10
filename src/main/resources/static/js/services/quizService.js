@@ -3,48 +3,46 @@ export function fetchQuizInfo(code) {
     // fetch for qiz info
     return {
         name: "Quiz about the nature of human",
-        time: 30,
-        questions: 10,
+        time: 20,
+        questions: 2,
         elimination: true
     };
 
 //     return null;
 }
 
-export function getTestDetails(code) {
+export function getQuizDetails(code) {
     //  fetch for test details
     return {
+        id: 1,
         time: 20,
-        eliminations: true,
         eliminationsCount: 4,
         questions: [
             {
                 id: 10,
                 question: "What color is crocodile?",
                 answers: [
-                    "red",
-                    "blue",
-                    "green",
-                    "red"
+                    { id: 110, value: "red" },
+                    { id: 111, value: "blue" },
+                    { id: 112, value: "green" },
+                    { id: 113, value: "red" }
                 ],
-                correctAnswer: "C"
             },
             {
                 id: 20,
                 question: "What is elephant?",
                 answers: [
-                    "animal",
-                    "human",
-                    "fish",
-                    "insect"
+                    { id: 210, value: "animal" },
+                    { id: 211, value: "human" },
+                    { id: 212, value: "fish" },
+                    { id: 213, value: "insect" }
                 ],
-                correctAnswer: "A"
             }
         ]
     };
 }
 
-export function getUserTests(userId) {
+export function getUserQuizzes(userId) {
 //     fetching
     return {
         attended: [
@@ -79,6 +77,6 @@ export function submitAnswers(answers) {
     console.log(answers);
 }
 
-export function saveCreatedTest(test) {
+export function sendCreatedTest(test) {
 //     saving to the database
 }
