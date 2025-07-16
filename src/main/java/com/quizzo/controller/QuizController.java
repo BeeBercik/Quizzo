@@ -1,5 +1,6 @@
 package com.quizzo.controller;
 
+import com.quizzo.dto.QuizAttemptDetailsDto;
 import com.quizzo.model.Quiz;
 import com.quizzo.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,21 @@ public class QuizController {
     private QuizRepository quizRepository;
 
     @GetMapping
-    ResponseEntity<Quiz> getQuizzes() {
+    ResponseEntity<Quiz> getQuiz() {
         return ResponseEntity.
                 status(HttpStatus.OK)
                 .body(quizRepository.findAll().get(0));
+    }
+
+    @GetMapping("/attempt")
+    ResponseEntity<QuizAttemptDetailsDto> getQuizAttemptDetails() {
+        Quiz q = quizRepository.findAll().get(0);
+        return ResponseEntity.status(HttpStatus.FOUND).body(
+                new QuizAttemptDetailsDto(
+                        q.getTitle(),
+                        q.getDurationTime(),
+                        q.getQuestions().size(),
+                        q.getEliminationsCount()
+                ));
     }
 }

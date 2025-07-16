@@ -15,7 +15,7 @@ export default function generateAttemptView(quizInfo) {
                     <span>Questions:</span>${quizInfo.questions}
                 </p>
                 <p>
-                    <span>Time:</span>${quizInfo.time} [min]
+                    <span>Time:</span>${quizInfo.durationTime} [min]
                 </p>
                 <p>
                     <span>Bad options elimination:</span>${quizInfo.eliminationsCount === 0 ? "No" : "Yes"} </p>

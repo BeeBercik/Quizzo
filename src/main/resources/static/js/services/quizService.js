@@ -1,14 +1,16 @@
 
-export function fetchQuizInfo(code) {
-    // fetch for qiz info
-    return {
-        name: "Quiz about the nature of human",
-        time: 20,
-        questions: 2,
-        elimination: true
-    };
+export async function fetchQuizInfo(code) {
+    // return {
+    //     name: "Quiz about the nature of human",
+    //     durationTime: 20,
+    //     questions: 2,
+    //     eliminationsCount: 3
+    // };
 
-//     return null;
+    const response = await fetch("/api/quizzes/attempt");
+    const json = await response.json();
+    console.log(json)
+    return json;
 }
 
 export async function getQuizDetails(code) {

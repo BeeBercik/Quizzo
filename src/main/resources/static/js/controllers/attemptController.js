@@ -4,10 +4,10 @@ import generateAttemptView from "../views/attemptView.js";
 import initView from "../router.js";
 import generateError from "../ui/errorBar.js";
 
-export default function initAttempt(code) {
+export default async function initAttempt(code) {
     if(!codeValidation(code)) return -1;
 
-    const quizInfo = fetchQuizInfo(code);
+    const quizInfo = await fetchQuizInfo(code);
     if(!quizInfo) {
         generateError("Test with such code doesn't exist");
         return -1;
