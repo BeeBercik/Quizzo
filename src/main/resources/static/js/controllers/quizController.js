@@ -6,8 +6,8 @@ import startTimer from "../core/timer.js";
 import eliminateOption from "../ui/optionEliminator.js";
 import initView from "../router.js";
 
-export default function initTest(code) {
-    const testDetails = getQuizDetails(code);
+export default async function initTest(code) {
+    const testDetails = await getQuizDetails(code);
     if(!testDetails) {
         generateError("Test with such code doesn't exist");
         return -1;
@@ -32,7 +32,7 @@ export default function initTest(code) {
         initView("dashboard");
     }
     const timeLabel = document.getElementById("time");
-    const stopTimer = startTimer(testDetails.time * 60, timeLabel, timeUp);
+    const stopTimer = startTimer(testDetails.durationTime * 60, timeLabel, timeUp);
 
     optionsContainer.addEventListener("click", function(e) {
         e.preventDefault();

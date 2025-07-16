@@ -11,39 +11,44 @@ export function fetchQuizInfo(code) {
 //     return null;
 }
 
-export function getQuizDetails(code) {
+export async function getQuizDetails(code) {
     //  fetch for test details
-    return {
-        id: 1,
-        time: 20,
-        eliminationsCount: 4,
-        questions: [
-            {
-                id: 10,
-                question: "What color is crocodile?",
-                answers: [
-                    { id: 110, value: "red" },
-                    { id: 111, value: "blue" },
-                    { id: 112, value: "green" },
-                    { id: 113, value: "red" }
-                ],
-            },
-            {
-                id: 20,
-                question: "What is elephant?",
-                answers: [
-                    { id: 210, value: "animal" },
-                    { id: 211, value: "human" },
-                    { id: 212, value: "fish" },
-                    { id: 213, value: "insect" }
-                ],
-            }
-        ]
-    };
+    // return {
+    //     id: 1,
+    //     time: 20,
+    //     eliminationsCount: 4,
+    //     questions: [
+    //         {
+    //             id: 10,
+    //             question: "What color is crocodile?",
+    //             answers: [
+    //                 { id: 110, value: "red" },
+    //                 { id: 111, value: "blue" },
+    //                 { id: 112, value: "green" },
+    //                 { id: 113, value: "red" }
+    //             ],
+    //         },
+    //         {
+    //             id: 20,
+    //             question: "What is elephant?",
+    //             answers: [
+    //                 { id: 210, value: "animal" },
+    //                 { id: 211, value: "human" },
+    //                 { id: 212, value: "fish" },
+    //                 { id: 213, value: "insect" }
+    //             ],
+    //         }
+    //     ]
+    // };
+
+    const response = await fetch("/api/quizzes");
+    const json = await response.json();
+    console.log(json);
+    return json;
 }
 
 export function getUserQuizzes(userId) {
-//     fetching
+    // fetching
     return {
         attended: [
             {
@@ -70,6 +75,7 @@ export function getUserQuizzes(userId) {
             }
         ]
     }
+
 }
 
 export function submitAnswers(answers) {

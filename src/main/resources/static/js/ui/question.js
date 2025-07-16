@@ -1,7 +1,7 @@
 
 export function renderQuestion(q) {
     const question = document.querySelector(".question p");
-    question.textContent = q.question;
+    question.textContent = q.value;
 
     const options = document.querySelector(".options");
     options.innerHTML = "";
