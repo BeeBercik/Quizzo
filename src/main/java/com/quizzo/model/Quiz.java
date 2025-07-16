@@ -15,6 +15,7 @@ public class Quiz {
     private Integer id;
 
     private String title;
+    private String code;
     private LocalDateTime createTime;
     private Float durationTime;
     private Integer eliminationsCount;
@@ -73,5 +74,13 @@ public class Quiz {
 
     public void setDurationTime(Float durationTime) {
         this.durationTime = durationTime;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

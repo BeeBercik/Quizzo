@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @SpringBootApplication
 public class QuizzoApplication implements CommandLineRunner {
@@ -28,6 +29,12 @@ public class QuizzoApplication implements CommandLineRunner {
         quiz.setCreateTime(LocalDateTime.now());
         quiz.setDurationTime(20.5f);
         quiz.setEliminationsCount(3);
+
+        String code = generateCode();
+        while(quizRepository.existsByCode(code)) {
+            code = generateCode();
+        }
+        quiz.setCode(generateCode());
 
         Question q1 = new Question();
         q1.setValue("What color is elephant?");
@@ -49,5 +56,17 @@ public class QuizzoApplication implements CommandLineRunner {
         quiz.getQuestions().add(q1);
 
         quizRepository.save(quiz);
+    }
+
+    private String generateCode() {
+        int length = 5;
+        String positions = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder code = new StringBuilder(length);
+
+        for (int i = 0; i < 5; i++) {
+            char r = positions.charAt(new Random().nextInt(positions.length()));
+            code.append(r);
+        }
+        return code.toString();
     }
 }
