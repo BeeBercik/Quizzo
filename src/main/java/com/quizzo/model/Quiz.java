@@ -1,6 +1,5 @@
 package com.quizzo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,7 +15,9 @@ public class Quiz {
     private Integer id;
 
     private String title;
-    private LocalDateTime dateTime;
+    private LocalDateTime createTime;
+    private Float durationTime;
+    private Integer eliminationsCount;
 
     @OneToMany(mappedBy = "quiz",
             orphanRemoval = true,
@@ -30,16 +31,24 @@ public class Quiz {
         return id;
     }
 
+    public Integer getEliminationsCount() {
+        return eliminationsCount;
+    }
+
+    public void setEliminationsCount(Integer eliminationsCount) {
+        this.eliminationsCount = eliminationsCount;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 
     public List<Question> getQuestions() {
@@ -56,5 +65,13 @@ public class Quiz {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Float getDurationTime() {
+        return durationTime;
+    }
+
+    public void setDurationTime(Float durationTime) {
+        this.durationTime = durationTime;
     }
 }
