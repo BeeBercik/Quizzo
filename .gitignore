@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 .gitattributes
+.DS_Store
 
 ### STS ###
 .apt_generated
