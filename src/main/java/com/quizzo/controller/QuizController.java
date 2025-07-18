@@ -2,11 +2,11 @@ package com.quizzo.controller;
 
 import com.quizzo.dto.QuizAttemptDetailsDto;
 import com.quizzo.model.Quiz;
-import com.quizzo.repository.QuizRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.quizzo.service.QuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,25 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/quizzes")
 public class QuizController {
 
-    @Autowired
-    private QuizRepository quizRepository;
+    private final QuizService quizService;
 
-    @GetMapping
-    ResponseEntity<Quiz> getQuiz() {
-        return ResponseEntity.
-                status(HttpStatus.OK)
-                .body(quizRepository.findAll().get(0));
+    public QuizController(QuizService quizService) {
+        this.quizService = quizService;
     }
 
-    @GetMapping("/attempt")
-    ResponseEntity<QuizAttemptDetailsDto> getQuizAttemptDetails() {
-        Quiz q = quizRepository.findAll().get(0);
-        return ResponseEntity.status(HttpStatus.FOUND).body(
-                new QuizAttemptDetailsDto(
-                        q.getTitle(),
-                        q.getDurationTime(),
-                        q.getQuestions().size(),
-                        q.getEliminationsCount()
-                ));
+    @GetMapping("/{code}")
+    ResponseEntity<Quiz> getQuiz(@PathVariable(name = "code") String code) {
+        return ResponseEntity.
+                status(HttpStatus.OK)
+                .body(quizService.getQuizByCode(code));
+    }
+
+    @GetMapping("/attempt/{code}")
+    ResponseEntity<QuizAttemptDetailsDto> getQuizAttemptDetails(@PathVariable(name = "code") String code) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(quizService.getQuizAttemptDetails(code));
     }
 }
