@@ -1,4 +1,4 @@
-import {getQuizDetails, submitAnswers} from "../services/quizService.js";
+import {getQuiz, submitAnswers} from "../services/quizService.js";
 import {renderQuestion, selectQuestion, updateNextButton} from "../ui/question.js";
 import generateTestView from "../views/quizView.js";
 import generateError from "../ui/errorBar.js";
@@ -7,7 +7,7 @@ import eliminateOption from "../ui/optionEliminator.js";
 import initView from "../router.js";
 
 export default async function initTest(code) {
-    const testDetails = await getQuizDetails(code);
+    const testDetails = await getQuiz(code);
     if(!testDetails) {
         generateError("Test with such code doesn't exist");
         return -1;

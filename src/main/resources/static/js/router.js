@@ -12,10 +12,12 @@ export default function initView(view, code = null) {
             console.log("welcome view");
             break;
         case "attempt":
+            console.log(code);
             initAttempt(code);
             console.log("attempt view");
             break;
         case "test":
+            console.log(code);
             initTest(code);
             console.log("test view");
             break;

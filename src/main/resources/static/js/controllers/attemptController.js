@@ -1,5 +1,5 @@
 import {codeValidation} from "../validators/codeValidator.js";
-import {fetchQuizInfo} from "../services/quizService.js";
+import {getQuizAttemptDetails} from "../services/quizService.js";
 import generateAttemptView from "../views/attemptView.js";
 import initView from "../router.js";
 import generateError from "../ui/errorBar.js";
@@ -7,7 +7,7 @@ import generateError from "../ui/errorBar.js";
 export default async function initAttempt(code) {
     if(!codeValidation(code)) return -1;
 
-    const quizInfo = await fetchQuizInfo(code);
+    const quizInfo = await getQuizAttemptDetails(code);
     if(!quizInfo) {
         generateError("Test with such code doesn't exist");
         return -1;
