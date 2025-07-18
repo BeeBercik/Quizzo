@@ -1,6 +1,7 @@
 package com.quizzo.service;
 
-import com.quizzo.dto.QuizAttemptDetailsDto;
+import com.quizzo.dto.QuizAttemptDetailsResponse;
+import com.quizzo.dto.QuizResponse;
 import com.quizzo.exception.QuizNotFoundException;
 import com.quizzo.model.Quiz;
 import com.quizzo.repository.QuizRepository;
@@ -15,16 +16,25 @@ public class QuizService {
         this.quizRepository = quizRepository;
     }
 
-    public Quiz getQuizByCode(String code) {
-        return quizRepository.findByCode(code).orElseThrow(
-                () -> new QuizNotFoundException("Quiz " + code + " not found"));
-    }
-
-    public QuizAttemptDetailsDto getQuizAttemptDetails(String code) {
+    public QuizResponse getQuizByCode(String code) {
         Quiz q = quizRepository.findByCode(code).orElseThrow(
                 () -> new QuizNotFoundException("Quiz " + code + " not found"));
 
-        return new QuizAttemptDetailsDto(
+        return new QuizResponse(
+                q.getId(),
+                q.getTitle(),
+                q.getCode(),
+                q.getCreateTime(),
+                q.getDurationTime(),
+                q.getEliminationsCount(),
+                q.getQuestions());
+    }
+
+    public QuizAttemptDetailsResponse getQuizAttemptDetails(String code) {
+        Quiz q = quizRepository.findByCode(code).orElseThrow(
+                () -> new QuizNotFoundException("Quiz " + code + " not found"));
+
+        return new QuizAttemptDetailsResponse(
                 q.getTitle(),
                 q.getDurationTime(),
                 q.getQuestions().size(),
