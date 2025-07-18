@@ -17,9 +17,7 @@ public class QuizService {
     }
 
     public QuizResponse getQuizByCode(String code) {
-        Quiz q = quizRepository.findByCode(code).orElseThrow(
-                () -> new QuizNotFoundException("Quiz " + code + " not found"));
-
+        Quiz q = getQuiz(code);
         return new QuizResponse(
                 q.getId(),
                 q.getTitle(),
@@ -31,14 +29,17 @@ public class QuizService {
     }
 
     public QuizAttemptDetailsResponse getQuizAttemptDetails(String code) {
-        Quiz q = quizRepository.findByCode(code).orElseThrow(
-                () -> new QuizNotFoundException("Quiz " + code + " not found"));
-
+        Quiz q = getQuiz(code);
         return new QuizAttemptDetailsResponse(
                 q.getTitle(),
                 q.getDurationTime(),
                 q.getQuestions().size(),
                 q.getEliminationsCount()
         );
+    }
+
+    private Quiz getQuiz(String code) {
+        return quizRepository.findByCode(code.trim().toUpperCase())
+                .orElseThrow(() -> new QuizNotFoundException("Quiz " + code + " not found"));
     }
 }

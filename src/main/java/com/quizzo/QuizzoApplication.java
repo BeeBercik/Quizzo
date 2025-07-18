@@ -34,7 +34,7 @@ public class QuizzoApplication implements CommandLineRunner {
         while(quizRepository.existsByCode(code)) {
             code = generateCode();
         }
-        quiz.setCode(generateCode());
+        quiz.setCode(generateCode().toUpperCase());
 
         Question q1 = new Question();
         q1.setValue("What color is elephant?");

@@ -65,7 +65,7 @@ export default async function initTest(code) {
             return;
         }
         if(eliminated.length === options.length - 1) {
-            generateError("You cannot eliminate all answers");
+            generateError("Cannot eliminate all answers");
             return;
         }
        eliminateOption(testDetails, options, eliminated);
@@ -75,7 +75,7 @@ export default async function initTest(code) {
 function saveAnswer(testDetails, answers) {
     const selected = document.querySelector(".options button.selected");
     if(!selected) {
-        generateError("You must choose the answer");
+        generateError("Choose the answer");
         return false;
     }
     answers.selectedAnswers.push({

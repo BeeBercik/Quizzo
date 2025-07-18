@@ -2,7 +2,6 @@ package com.quizzo.controller;
 
 import com.quizzo.dto.QuizAttemptDetailsResponse;
 import com.quizzo.dto.QuizResponse;
-import com.quizzo.model.Quiz;
 import com.quizzo.service.QuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

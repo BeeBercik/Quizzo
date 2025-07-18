@@ -1,6 +1,6 @@
 
 export async function getQuizAttemptDetails(code) {
-    const response = await fetch(`/api/quizzes/attempt/${code}`);
+    const response = await fetch(`/api/quizzes/attempt/${code.toUpperCase()}`);
     if(response.status !== 200) return null;
 
     const json = await response.json();
@@ -10,7 +10,7 @@ export async function getQuizAttemptDetails(code) {
 }
 
 export async function getQuiz(code) {
-    const response = await fetch(`/api/quizzes/${code}`);
+    const response = await fetch(`/api/quizzes/${code.toUpperCase()}`);
     if(response.status !== 200) return null;
 
     const json = await response.json();
