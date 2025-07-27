@@ -20,6 +20,10 @@ public class Quiz {
     private Float durationTime;
     private Integer eliminationsCount;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "quiz",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
@@ -82,5 +86,27 @@ public class Quiz {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", code='" + code + '\'' +
+                ", createTime=" + createTime +
+                ", durationTime=" + durationTime +
+                ", eliminationsCount=" + eliminationsCount +
+                ", user=" + user +
+                ", questions=" + questions +
+                '}';
     }
 }
