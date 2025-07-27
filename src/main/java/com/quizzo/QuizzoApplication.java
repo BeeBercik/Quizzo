@@ -3,7 +3,9 @@ package com.quizzo;
 import com.quizzo.model.Answer;
 import com.quizzo.model.Question;
 import com.quizzo.model.Quiz;
+import com.quizzo.model.User;
 import com.quizzo.repository.QuizRepository;
+import com.quizzo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,23 +20,31 @@ public class QuizzoApplication implements CommandLineRunner {
     @Autowired
     private QuizRepository quizRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(QuizzoApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
+        User user = new User("rokan", "rokan123", "robert.kania@onet.pl", LocalDateTime.now());
+
         Quiz quiz = new Quiz();
         quiz.setTitle("Quiz about animals");
         quiz.setCreateTime(LocalDateTime.now());
         quiz.setDurationTime(20.5f);
         quiz.setEliminationsCount(3);
 
+        quiz.setUser(user);
+        user.getQuizzes().add(quiz);
+
         String code = generateCode();
         while(quizRepository.existsByCode(code)) {
             code = generateCode();
         }
-        quiz.setCode(generateCode().toUpperCase());
+        quiz.setCode(code.toUpperCase());
 
         Question q1 = new Question();
         q1.setValue("What color is elephant?");
@@ -55,7 +65,7 @@ public class QuizzoApplication implements CommandLineRunner {
 
         quiz.getQuestions().add(q1);
 
-        quizRepository.save(quiz);
+        userRepository.save(user);
     }
 
     private String generateCode() {
