@@ -19,10 +19,15 @@ public class User {
     private String email;
     private LocalDateTime createTime;
 
-    @OneToMany(mappedBy = "user",
+    @OneToMany(mappedBy = "owner",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private List<Quiz> quizzes = new ArrayList<>();
+    private List<Quiz> createdQuizzes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Attempt> attempts = new ArrayList<>();
 
     public User() {
     }
@@ -74,12 +79,20 @@ public class User {
         this.createTime = createTime;
     }
 
-    public List<Quiz> getQuizzes() {
-        return quizzes;
+    public List<Quiz> getCreatedQuizzes() {
+        return createdQuizzes;
     }
 
-    public void setQuizzes(List<Quiz> quizzes) {
-        this.quizzes = quizzes;
+    public void setCreatedQuizzes(List<Quiz> createdQuizzes) {
+        this.createdQuizzes = createdQuizzes;
+    }
+
+    public List<Attempt> getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(List<Attempt> attempts) {
+        this.attempts = attempts;
     }
 
     @Override

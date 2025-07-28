@@ -22,12 +22,18 @@ public class Quiz {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User owner;
+
+    @OneToMany(mappedBy = "quiz",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<Attempt> userAttempts = new ArrayList<>();
 
     @OneToMany(mappedBy = "quiz",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
+
 
     public Quiz() {
     }
@@ -88,12 +94,20 @@ public class Quiz {
         this.code = code;
     }
 
-    public User getUser() {
-        return user;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public List<Attempt> getUserAttempts() {
+        return userAttempts;
+    }
+
+    public void setUserAttempts(List<Attempt> userAttempts) {
+        this.userAttempts = userAttempts;
     }
 
     @Override
@@ -105,7 +119,7 @@ public class Quiz {
                 ", createTime=" + createTime +
                 ", durationTime=" + durationTime +
                 ", eliminationsCount=" + eliminationsCount +
-                ", user=" + user +
+                ", user=" + owner +
                 ", questions=" + questions +
                 '}';
     }
