@@ -1,9 +1,7 @@
 package com.quizzo;
 
-import com.quizzo.model.Answer;
-import com.quizzo.model.Question;
-import com.quizzo.model.Quiz;
-import com.quizzo.model.User;
+import com.quizzo.model.*;
+import com.quizzo.repository.AttemptRepository;
 import com.quizzo.repository.QuizRepository;
 import com.quizzo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,9 @@ public class QuizzoApplication implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AttemptRepository attemptRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(QuizzoApplication.class, args);
     }
@@ -37,8 +38,8 @@ public class QuizzoApplication implements CommandLineRunner {
         quiz.setDurationTime(20.5f);
         quiz.setEliminationsCount(3);
 
-        quiz.setUser(user);
-        user.getQuizzes().add(quiz);
+        quiz.setOwner(user);
+        user.getCreatedQuizzes().add(quiz);
 
         String code = generateCode();
         while(quizRepository.existsByCode(code)) {
@@ -66,6 +67,17 @@ public class QuizzoApplication implements CommandLineRunner {
         quiz.getQuestions().add(q1);
 
         userRepository.save(user);
+
+        Attempt attempt = new Attempt(
+                user,
+                quiz,
+                60,
+                LocalDateTime.now()
+        );
+
+        user.getAttempts().add(attempt);
+        quiz.getUserAttempts().add(attempt);
+        attemptRepository.save(attempt);
     }
 
     private String generateCode() {
