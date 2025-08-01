@@ -57,3 +57,13 @@ export function submitAnswers(answers) {
 export function sendCreatedTest(test) {
 //     saving to the database
 }
+
+export function sendLoginData(data) {
+    console.log("LOGIN!");
+    console.log(data);
+}
+
+export function sendRegisterData(data) {
+    console.log("REGISTER!");
+    console.log(data);
+}
