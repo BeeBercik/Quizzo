@@ -11,4 +11,8 @@ export default function initWelcome() {
         if(!codeValidation(code)) return -1;
         initView("attempt", code);
     });
+
+    document.getElementById("auth-forms").addEventListener("click", function() {
+        initView("auth-forms");
+    });
 }
