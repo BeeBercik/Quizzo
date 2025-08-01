@@ -15,7 +15,7 @@ export default function generateWelcomeView() {
                 </form>
 
                 <p>
-                    .. or <a href="forms.html">log in</a>
+                    .. or <span id="auth-forms">log in</span>
                 </p>
             </section>
 

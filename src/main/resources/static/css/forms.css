@@ -1,32 +1,32 @@
 
-#forms-main {
+#auth-main {
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
 }
 
-#forms-main form {
+#auth-main form {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-#forms-main section {
+#auth-main section {
     width: 100%;
     margin: 0 50px;
 }
 
-#forms-main .form-field {
+#auth-main .form-field {
     display: flex;
     flex-direction: column;
 }
 
-#forms-main label {
+#auth-main label {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-#forms-main form input {
+#auth-main form input {
     box-sizing: border-box;
     width: 100%;
     padding: 10px;
@@ -34,15 +34,15 @@
     background-color: #452a65;
 }
 
-#forms-main form button {
+#auth-main form button {
     padding: 7px 10px;
 }
 
-#forms-main form button:active {
+#auth-main form button:active {
     transform: scale(0.98);
 }
 
-#forms-main fieldset {
+#auth-main fieldset {
     padding: 50px;
     background-color: #320a50;
 }
