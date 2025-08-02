@@ -1,7 +1,7 @@
 package com.quizzo.service;
 
 import com.quizzo.dto.QuizAttemptDetailsResponse;
-import com.quizzo.dto.QuizResponse;
+import com.quizzo.dto.QuizDetailsResponse;
 import com.quizzo.exception.QuizNotFoundException;
 import com.quizzo.model.Quiz;
 import com.quizzo.repository.QuizRepository;
@@ -16,9 +16,9 @@ public class QuizService {
         this.quizRepository = quizRepository;
     }
 
-    public QuizResponse getQuizByCode(String code) {
+    public QuizDetailsResponse getQuizByCode(String code) {
         Quiz q = getQuiz(code);
-        return new QuizResponse(
+        return new QuizDetailsResponse(
                 q.getId(),
                 q.getTitle(),
                 q.getCode(),
@@ -41,5 +41,9 @@ public class QuizService {
     private Quiz getQuiz(String code) {
         return quizRepository.findByCode(code.trim().toUpperCase())
                 .orElseThrow(() -> new QuizNotFoundException("Quiz " + code + " not found"));
+    }
+
+    private float calculateScore(int correct, int total) {
+        return Math.round(100f * correct / total);
     }
 }
