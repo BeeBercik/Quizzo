@@ -1,7 +1,7 @@
 package com.quizzo.controller;
 
 import com.quizzo.dto.QuizAttemptDetailsResponse;
-import com.quizzo.dto.QuizResponse;
+import com.quizzo.dto.QuizDetailsResponse;
 import com.quizzo.service.QuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class QuizController {
     }
 
     @GetMapping("/{code}")
-    ResponseEntity<QuizResponse> getQuiz(@PathVariable(name = "code") String code) {
+    ResponseEntity<QuizDetailsResponse> getQuiz(@PathVariable(name = "code") String code) {
         return ResponseEntity.
                 status(HttpStatus.OK)
                 .body(quizService.getQuizByCode(code));
