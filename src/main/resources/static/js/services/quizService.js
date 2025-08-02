@@ -1,3 +1,4 @@
+import initView from "../router.js";
 
 export async function getQuizAttemptDetails(code) {
     const response = await fetch(`/api/quizzes/attempt/${code.toUpperCase()}`);
@@ -19,37 +20,7 @@ export async function getQuiz(code) {
     return json;
 }
 
-export function getUserQuizzes(userId) {
-    return {
-        attended: [
-            {
-                id: 1,
-                title: "Attended test title 1",
-                result: 75
-            },
-            {
-                id: 2,
-                title: "Attended test title 2",
-                result: 55
-            }
-        ],
-        created: [
-            {
-                id: 10,
-                title: "Created test title 1",
-                code: "ABCD1"
-            },
-            {
-                id: 20,
-                title: "Created test title 2",
-                code: "ABCD2"
-            }
-        ]
-    }
-
-}
-
-export function submitAnswers(answers) {
+export function sendAnswers(answers) {
 //     ..
     console.log(answers);
 }
@@ -58,12 +29,35 @@ export function sendCreatedTest(test) {
 //     saving to the database
 }
 
-export function sendLoginData(data) {
-    console.log("LOGIN!");
+export async function sendLoginData(data) {
+    console.log("LOGIN");
     console.log(data);
+
+    const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+
+    if(!response.ok) return null;
+
+    const json = await response.json();
+    initView("dashboard", null, json);
 }
 
-export function sendRegisterData(data) {
-    console.log("REGISTER!");
+export async function sendRegisterData(data) {
+    console.log("REGISTER");
     console.log(data);
+
+//  ...
+}
+
+export async function getLoggedUserData() {
+    const response = await fetch('api/auth/login');
+
+    if(!response.ok) {
+        return null;
+    }
+
+    return await response.json();
 }

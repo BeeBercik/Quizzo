@@ -1,4 +1,4 @@
-import {getQuiz, submitAnswers} from "../services/quizService.js";
+import {getQuiz, sendAnswers} from "../services/quizService.js";
 import {renderQuestion, selectQuestion, updateNextButton} from "../ui/question.js";
 import generateTestView from "../views/quizView.js";
 import generateError from "../ui/errorBar.js";
@@ -28,7 +28,7 @@ export default async function initTest(code) {
     updateNextButton(nextButton, currentQuestion, questionCount);
 
     function timeUp() {
-        submitAnswers(answers);
+        sendAnswers(answers);
         initView("dashboard");
     }
     const timeLabel = document.getElementById("time");
@@ -52,7 +52,7 @@ export default async function initTest(code) {
             updateNextButton(nextButton, currentQuestion, questionCount);
         } else {
             stopTimer();
-            submitAnswers(answers);
+            sendAnswers(answers);
             initView("dashboard");
         }
     });
