@@ -11,9 +11,23 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(QuizNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleQuizNotFoundException(QuizNotFoundException ex) {
-        return ResponseEntity.
-                status(HttpStatus.NOT_FOUND)
+    ResponseEntity<Map<String, String>> handleQuizNotFoundException(QuizNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IncorrectUserDataException.class)
+    ResponseEntity<Map<String, String>> handleUserNotFoundException(IncorrectUserDataException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotLoggedException.class)
+    ResponseEntity<Map<String, String>> handleUserNotLoggedInException(UserNotLoggedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", ex.getMessage()));
     }
 }
