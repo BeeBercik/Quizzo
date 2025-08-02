@@ -1,18 +1,30 @@
 import generateWelcomeView from "../views/welcomeView.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
+import {getLoggedUserData} from "../services/quizService.js";
+import generateError from "../ui/errorBar.js";
 
-export default function initWelcome() {
-    generateWelcomeView();
+export default async function initWelcome() {
+    const isUserLogged = await getLoggedUserData() != null;
+    generateWelcomeView(isUserLogged);
 
     document.querySelector("form").addEventListener("submit", (e) => {
         e.preventDefault();
+
         const code = document.querySelector("form .code").value.trim();
         if(!codeValidation(code)) return -1;
+        else if(!isUserLogged) {
+            generateError("You are not logged in");
+            return 0;
+        }
+
         initView("attempt", code);
     });
 
-    document.getElementById("auth-forms").addEventListener("click", function() {
-        initView("auth-forms");
-    });
+    if(!isUserLogged) {
+        document.getElementById("auth-forms").addEventListener("click", async function() {
+            const user = await getLoggedUserData();
+            initView("auth-forms");
+        });
+    }
 }

@@ -1,12 +1,19 @@
 import initDashboardView from "../views/dashboardView.js";
-import {getUserQuizzes} from "../services/quizService.js";
+import {getLoggedUserData} from "../services/quizService.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
+import generateError from "../ui/errorBar.js";
 
-export default function initDashboard() {
-    const userid = 69;
-    const userTests = getUserQuizzes(userid);
-    initDashboardView(userTests);
+export default async function initDashboard(userData) {
+    userData == null ? userData = await getLoggedUserData() : '';
+
+    if (userData == null) {
+        generateError("You are not logged in");
+        return 0;
+    }
+
+    document.getElementById('dashboard-btn').textContent = `${userData.login}'s panel`;
+    initDashboardView(userData);
 
     document.querySelector("form").addEventListener("submit", function(e) {
         e.preventDefault();

@@ -1,6 +1,6 @@
 import initView from "../router.js";
 
-export function initGeneralComponentsListening() {
+export async function initGeneralComponentsListening() {
     document.getElementById("dashboard-btn").addEventListener("click", function(e) {
         e.preventDefault();
         initView("dashboard");

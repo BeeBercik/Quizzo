@@ -6,7 +6,7 @@ import {initGeneralComponentsListening} from "./controllers/generalLayoutControl
 import initCreateTest from "./controllers/createQuizController.js";
 import { initAuth } from "./controllers/authController.js";
 
-export default function initView(view, code = null) {
+export default function initView(view, code = null, data = null) {
     switch(view) {
         case "welcome":
             initWelcome();
@@ -23,7 +23,7 @@ export default function initView(view, code = null) {
             console.log("test view");
             break;
         case "dashboard":
-            initDashboard();
+            initDashboard(data);
             console.log("dashboard view");
             break;
         case "create-test":

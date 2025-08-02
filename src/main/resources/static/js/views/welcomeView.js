@@ -1,5 +1,5 @@
 
-export default function generateWelcomeView() {
+export default function generateWelcomeView(isUserLogged) {
     const main = document.querySelector("main");
     main.id = "welcome-main";
     main.dataset.view = "welcome";
@@ -14,8 +14,8 @@ export default function generateWelcomeView() {
                     <button type="submit">Enter the code</button>
                 </form>
 
-                <p>
-                    .. or <span id="auth-forms">log in</span>
+                <p id="login-option">
+<!--                    .. or <span id="auth-forms">log in</span>-->
                 </p>
             </section>
 
@@ -25,4 +25,6 @@ export default function generateWelcomeView() {
                 </p>
             </section>
         `;
+    if(!isUserLogged)
+        document.getElementById("login-option").innerHTML = `.. or <span id="auth-forms">log in</span>`;
 }

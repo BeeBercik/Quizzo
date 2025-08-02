@@ -1,14 +1,14 @@
 import {generateAttendedTestRecord, generateCreatedTestRecord} from "../ui/quizRecord.js";
 
-export default function initDashboardView(myTests) {
-    const attended = myTests.attended;
-    const created = myTests.created;
+export default function initDashboardView(userData) {
+    const attended = userData.attempts;
+    const created = userData.createdQuizzes;
 
     const main = document.querySelector("main");
     main.id = "dashboard-main";
     main.dataset.view = "dashboard";
     main.innerHTML = `
-    <h2>Welcome, User!</h2>
+    <h2>Welcome, <span id="user-login"></span>!</h2>
 
     <div class="dashboard-wrapper">
       <section class="actions">
@@ -65,4 +65,5 @@ export default function initDashboardView(myTests) {
     </div>`;
     attended.forEach(record => generateAttendedTestRecord(record));
     created.forEach(record => generateCreatedTestRecord(record));
+    document.getElementById('user-login').textContent = userData.login;
 }

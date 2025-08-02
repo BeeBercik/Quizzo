@@ -3,9 +3,9 @@ export function generateAttendedTestRecord(data) {
     const tr = document.createElement("tr");
 
     const tdTitle = document.createElement("td");
-    tdTitle.textContent = data.title;
+    tdTitle.textContent = data.quizTitle;
     const tdResult = document.createElement("td");
-    tdResult.textContent = data.result;
+    tdResult.textContent = `${data.score} %`;
 
     tr.append(tdTitle, tdResult);
     document.querySelector("#attendedTests tbody").appendChild(tr);
