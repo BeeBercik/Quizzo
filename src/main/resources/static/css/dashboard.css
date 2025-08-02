@@ -12,6 +12,10 @@
     flex: 1;
 }
 
+#dashboard-main #user-login {
+    font-size: 30px;
+}
+
 #dashboard-main .actions {
     display: flex;
     flex-direction: row;

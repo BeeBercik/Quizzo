@@ -33,17 +33,18 @@
     padding: 10px 13px;
 }
 
-#welcome-main .entry-code p {
+#welcome-main .entry-code #auth-forms {
     font-style: italic;
 }
 
-#welcome-main .entry-code p a {
+#welcome-main .entry-code p #auth-forms {
     color: #dd6711;
     font-weight: bold;
 }
 
-#welcome-main .entry-code p a:hover {
+#welcome-main .entry-code p #auth-forms:hover {
     color: #f47214;
+    cursor: pointer;
 }
 
 #welcome-main .about {
