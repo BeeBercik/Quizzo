@@ -4,13 +4,13 @@ export function createQuestion(qCount) {
 
     const qSection = document.createElement("section");
     qSection.innerHTML = `
-        <h3>Question #${qCount}</h3>
+        <h3>Question #${qCount} <i class="fa-solid fa-trash delete-icon"></i></h3>
 
         <label for="q${qCount}">Q:</label>
         <input type="text" id="q${qCount}" name="q${qCount}"/>
 
-        <label for="correct">Correct option:</label>
-        <input type="text" id="correct" name="correct"/>
+        <label for="correct${qCount}">Correct option:</label>
+        <input type="text" id="correct${qCount}" name="correct${qCount}"/>
 
         <div class="bad-options">
           <h4>Bad options</h4>
@@ -34,7 +34,7 @@ export function createBadOption(container, optCount) {
     div.classList.add("element");
 
     div.innerHTML = `
-      <label for="bad${optCount}">${optCount}.</label>
+      <label for="bad${optCount}">${optCount}. <i class="fa-solid fa-trash delete-icon"></i></label>
       <input type="text" id="bad${optCount}" name="bad${optCount}"/>
     `;
 
