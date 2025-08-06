@@ -144,3 +144,15 @@ h2 {
     margin-top: 20px;
     font-size: 30px;
 }
+
+.delete-icon {
+    margin-left: 5px;
+    color: #c80404;
+    font-size: 25px;
+    transition: color ease-in-out 0.2s;
+}
+
+.delete-icon:hover {
+    cursor: pointer;
+    color: #ff0101;
+}
