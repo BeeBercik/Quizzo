@@ -22,8 +22,6 @@ public class Answer {
     public Answer() {
     }
 
-
-
     public Integer getId() {
         return id;
     }

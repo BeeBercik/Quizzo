@@ -1,11 +1,19 @@
 package com.quizzo.service;
 
+import com.quizzo.dto.AnswerResponse;
+import com.quizzo.dto.QuestionResponse;
 import com.quizzo.dto.QuizAttemptDetailsResponse;
 import com.quizzo.dto.QuizDetailsResponse;
 import com.quizzo.exception.QuizNotFoundException;
+import com.quizzo.model.Answer;
+import com.quizzo.model.Question;
 import com.quizzo.model.Quiz;
 import com.quizzo.repository.QuizRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class QuizService {
@@ -17,15 +25,40 @@ public class QuizService {
     }
 
     public QuizDetailsResponse getQuizByCode(String code) {
-        Quiz q = getQuiz(code);
+        Quiz quiz = getQuiz(code);
+
+        List<Question> questionsCopy = new ArrayList<>(quiz.getQuestions());
+        Collections.shuffle(questionsCopy);
+
+        List<QuestionResponse> questionResponses = new ArrayList<>();
+
+        for (Question q : questionsCopy) {
+            List<Answer> answersCopy = new ArrayList<>(q.getAnswers());
+            Collections.shuffle(answersCopy);
+
+            List<AnswerResponse> answerDtos = answersCopy.stream()
+                            .map(adto -> new AnswerResponse(
+                                    adto.getId(),
+                                    adto.getValue(),
+                                    adto.getCorrect()
+                            )).toList();
+
+            questionResponses.add(new QuestionResponse(
+                    q.getId(),
+                    q.getValue(),
+                    answerDtos
+            ));
+        }
+
         return new QuizDetailsResponse(
-                q.getId(),
-                q.getTitle(),
-                q.getCode(),
-                q.getCreateTime(),
-                q.getDurationTime(),
-                q.getEliminationsCount(),
-                q.getQuestions());
+                quiz.getId(),
+                quiz.getTitle(),
+                quiz.getCode(),
+                quiz.getCreateTime(),
+                quiz.getDurationTime(),
+                quiz.getEliminationsCount(),
+                questionResponses
+        );
     }
 
     public QuizAttemptDetailsResponse getQuizAttemptDetails(String code) {
