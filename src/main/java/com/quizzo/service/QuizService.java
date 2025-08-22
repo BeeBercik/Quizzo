@@ -3,12 +3,8 @@ package com.quizzo.service;
 import com.quizzo.dto.*;
 import com.quizzo.exception.QuizNotFoundException;
 import com.quizzo.exception.UserNotLoggedException;
-import com.quizzo.model.Answer;
-import com.quizzo.model.Question;
-import com.quizzo.model.Quiz;
-import com.quizzo.model.User;
-import com.quizzo.repository.QuizRepository;
-import com.quizzo.repository.UserRepository;
+import com.quizzo.model.*;
+import com.quizzo.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +20,16 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final AttemptRepository attemptRepository;
 
-    public QuizService(QuizRepository quizRepository, UserRepository userRepository) {
+    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, AttemptRepository attemptRepository) {
         this.quizRepository = quizRepository;
         this.userRepository = userRepository;
+        this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
+        this.attemptRepository = attemptRepository;
     }
 
     public QuizDetailsResponse getQuizByCode(String code) {
@@ -113,6 +115,34 @@ public class QuizService {
 
         quiz.setOwner(user);
         quizRepository.save(quiz);
+    }
+
+    public void submitQuizAttempt(AttemptRequest attempt, HttpSession session) {
+        Integer quizId = attempt.quizId();
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException("Quiz not found"));
+
+        Attempt attemptEntity = new Attempt();
+        attemptEntity.setQuiz(quiz);
+        attemptEntity.setAttemptTime(LocalDateTime.now());
+
+        UserIdentityDto userIdentityDto = (UserIdentityDto) session.getAttribute("user");
+        User user = userRepository.findById(userIdentityDto.id()).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+        attemptEntity.setUser(user);
+
+        int goodAnswers = 0;
+        for (SubmittedAnswerRequest submittedAnswer : attempt.answers()) {
+            Integer submittedAnswerId = submittedAnswer.selectedAnswerId();
+            Integer questionId = submittedAnswer.questionId();
+
+            List<Answer> answers = questionRepository.findById(questionId).orElseThrow().getAnswers();
+            for(Answer a : answers) {
+                if(a.getId().equals(submittedAnswerId) && a.getCorrect())
+                    goodAnswers++;
+            }
+        }
+        attemptEntity.setScore(Math.round(goodAnswers * 100f / attempt.answers().size()));
+
+        attemptRepository.save(attemptEntity);
     }
 
     private String generateCode() {

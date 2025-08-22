@@ -18,8 +18,15 @@ export function generateCreatedTestRecord(data) {
     tdTitle.textContent = data.title;
     const tdCode = document.createElement("td");
     tdCode.textContent = data.code;
-    // DELETE option
+    tdCode.classList.add('code-td');
+    const tdDelete = document.createElement("td");
+    tdDelete.textContent = 'D';
+    tdDelete.id = 'q-delete';
+    const tdSummary = document.createElement("td");
+    tdSummary.textContent = 'S';
+    tdSummary.id = 'q-summary';
 
-    tr.append(tdTitle, tdCode);
+
+    tr.append(tdTitle, tdCode, tdDelete, tdSummary);
     document.querySelector("#createdTests tbody").appendChild(tr);
 }

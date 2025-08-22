@@ -1,5 +1,5 @@
 import initDashboardView from "../views/dashboardView.js";
-import {getLoggedUserData} from "../services/quizService.js";
+import {deleteQuiz, getLoggedUserData} from "../services/quizService.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
 import generateError from "../ui/errorBar.js";
@@ -20,10 +20,10 @@ export default async function initDashboard(userData) {
         const code = document.querySelector("form .code").value.trim();
         if(!codeValidation(code)) return -1;
         initView("attempt", code);
-    })
+    });
 
     document.getElementById("create-test").addEventListener("click", function(e) {
         e.preventDefault();
         initView("create-test");
-    })
+    });
 }

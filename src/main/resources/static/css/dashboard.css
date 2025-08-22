@@ -96,20 +96,34 @@
 }
 
 #dashboard-main .summary table tbody td:nth-child(2) {
-    max-width: 50px;
+    max-width: 55px;
     text-align: center;
-}
-
-#dashboard-main .summary table tbody td:nth-child(3) {
-    color: red;
-    cursor: pointer;
-    text-align: center;
-}
-
-#dashboard-main .summary table tbody td:nth-child(3):hover {
-    font-weight: bold;
 }
 
 #dashboard-main .summary table tbody tr:nth-child(even) {
     background-color: #7103c5;
+}
+
+#dashboard-main .summary #q-delete {
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    background-color: #cd0303;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#dashboard-main .summary #q-summary {
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    background-color: #0281da;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#dashboard-main .summary #q-delete:hover {
+    background-color: #fd0202;
+}
+
+#dashboard-main .summary #q-summary:hover {
+    background-color: #0294fa;
 }

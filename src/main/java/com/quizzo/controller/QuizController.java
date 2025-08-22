@@ -1,5 +1,6 @@
 package com.quizzo.controller;
 
+import com.quizzo.dto.AttemptRequest;
 import com.quizzo.dto.CreatedQuizRequest;
 import com.quizzo.dto.QuizAttemptDetailsResponse;
 import com.quizzo.dto.QuizDetailsResponse;
@@ -36,6 +37,14 @@ public class QuizController {
     @PostMapping("/create")
     ResponseEntity<?> createQuiz(@RequestBody CreatedQuizRequest createdQuiz, HttpSession session) {
         quizService.saveQuiz(createdQuiz, session);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping("/submit")
+    ResponseEntity<?> submitQuiz(@RequestBody AttemptRequest attemptRequest, HttpSession session) {
+        quizService.submitQuizAttempt(attemptRequest, session);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

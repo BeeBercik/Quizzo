@@ -52,7 +52,7 @@ export default function initDashboardView(userData) {
             <tr>
               <th>Title</th>
               <th>Code</th>
-<!--              <th>Action</th>--> <!-- possible DELETE option -->
+<!--           delete and summary options       -->
             </tr>
             </thead>
             <tbody>
