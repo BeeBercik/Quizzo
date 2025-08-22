@@ -67,7 +67,6 @@ function submitTest(title, testDuration,
     }
     console.log(finalTestData);
     sendCreatedTest(finalTestData);
-    initView("dashboard");
 }
 
 function generateQuestion() {

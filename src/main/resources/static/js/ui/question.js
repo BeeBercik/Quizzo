@@ -2,6 +2,7 @@
 export function renderQuestion(q) {
     const question = document.querySelector(".question p");
     question.textContent = q.value;
+    question.dataset.id = q.id;
 
     const options = document.querySelector(".options");
     options.innerHTML = "";

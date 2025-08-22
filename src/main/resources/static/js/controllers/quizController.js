@@ -16,7 +16,7 @@ export default async function initTest(code) {
 
     const answers = {
         quizId: testDetails.id,
-        selectedAnswers: []
+        answers: []
     };
     const nextButton = document.getElementById("next-btn");
     const questionCount = testDetails.questions.length;
@@ -41,7 +41,7 @@ export default async function initTest(code) {
     });
 
     nextButton.addEventListener("click", function(e) {
-        e.preventDefault()
+        e.preventDefault();
         const savedAnswers = saveAnswer(testDetails, answers);
         if(!savedAnswers) return currentQuestion;
 
@@ -53,7 +53,6 @@ export default async function initTest(code) {
         } else {
             stopTimer();
             sendAnswers(answers);
-            initView("dashboard");
         }
     });
 
@@ -78,7 +77,9 @@ function saveAnswer(testDetails, answers) {
         generateError("Choose the answer");
         return false;
     }
-    answers.selectedAnswers.push({
+    const question = document.querySelector(".question p");
+    answers.answers.push({
+        questionId: question.dataset.id,
         selectedAnswerId: selected.dataset.value
     });
     return true;

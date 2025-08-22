@@ -21,9 +21,20 @@ export async function getQuiz(code) {
     return json;
 }
 
-export function sendAnswers(answers) {
-//     ..
+export async function sendAnswers(answers) {
     console.log(answers);
+    const response = await fetch("/api/quizzes/submit", {
+        method: 'POST',
+        headers: { 'content-type': 'application/json'},
+        body: JSON.stringify(answers)
+    });
+
+    if(response.status !== 200) {
+        generateError('Error during submitting quiz');
+        return 0;
+    }
+
+    initView("dashboard");
 }
 
 export async function sendCreatedTest(test) {
@@ -35,12 +46,16 @@ export async function sendCreatedTest(test) {
         body: JSON.stringify(test)
     });
 
-    if(!response.ok) generateError('Error during saving to database');
+    if(response.status !== 200) {
+        generateError('Error during saving to database');
+        return 0;
+    }
+
+    initView("dashboard");
 }
 
 export async function sendLoginData(data) {
     console.log("LOGIN");
-    console.log(data);
 
     const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -48,7 +63,7 @@ export async function sendLoginData(data) {
         body: JSON.stringify(data)
     });
 
-    if(!response.ok) return null;
+    if(response.status !== 200) return null;
 
     const json = await response.json();
     initView("dashboard", null, json);
@@ -64,7 +79,7 @@ export async function sendRegisterData(data) {
 export async function getLoggedUserData() {
     const response = await fetch('api/auth/login');
 
-    if(!response.ok) {
+    if(response.status !== 200) {
         return null;
     }
 
