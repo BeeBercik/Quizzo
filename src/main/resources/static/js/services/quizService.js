@@ -34,8 +34,8 @@ export async function sendCreatedTest(test) {
         headers: { 'content-type': 'application/json'},
         body: JSON.stringify(test)
     });
-    
-    if(response.status !== 200) generateError('Error during saving to database');
+
+    if(!response.ok) generateError('Error during saving to database');
 }
 
 export async function sendLoginData(data) {

@@ -5,10 +5,12 @@ export default function initCreateTestView() {
     main.id = "create-main";
 
     main.innerHTML = `
-            
     <h2>Create your own test / quiz</h2>
 
     <form>
+      <label for="q-title">Title:</label>
+      <input type="text" id="q-title" maxlength="30">
+      
       <section class="options">
         <div class="add-opt-wrapper">
           <div class="option">

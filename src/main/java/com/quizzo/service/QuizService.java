@@ -80,7 +80,7 @@ public class QuizService {
     public void saveQuiz(CreatedQuizRequest createdQuiz, HttpSession session) {
         Quiz quiz = new Quiz();
 
-        quiz.setTitle("Temporary title");
+        quiz.setTitle(capitalizeFirstLetter(createdQuiz.title()));
         quiz.setCode(generateCode());
         quiz.setCreateTime(LocalDateTime.now());
 
@@ -90,7 +90,7 @@ public class QuizService {
         List<Question> questions = createdQuiz.questionsData().stream()
                 .map(qDto -> {
                     Question q = new Question();
-                    q.setValue(qDto.question());
+                    q.setValue(capitalizeFirstLetter(qDto.question()));
                     q.setQuiz(quiz);
 
                     List<Answer> answers = qDto.answers().stream()
@@ -125,6 +125,13 @@ public class QuizService {
             code.append(r);
         }
         return code.toString();
+    }
+
+    private String capitalizeFirstLetter(String text) {
+        if (text == null || text.isBlank()) {
+            return text;
+        }
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 
     private Quiz getQuiz(String code) {

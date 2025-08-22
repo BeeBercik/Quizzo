@@ -24,6 +24,10 @@
     gap: 20px;
 }
 
+#create-main #q-title {
+    margin-bottom: 50px;
+}
+
 #create-main .options {
     display: flex;
     flex-direction: row;

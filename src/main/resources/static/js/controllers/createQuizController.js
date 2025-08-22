@@ -13,6 +13,7 @@ export default function initCreateTest() {
     const eliminationOption = document.getElementById("elimination");
     const eliminationQuantity = document.getElementById("quantity");
     const testDuration = document.getElementById("duration");
+    const title = document.getElementById("q-title");
 
     eliminationOption.checked = false;
     eliminationQuantity.disabled = true;
@@ -30,7 +31,7 @@ export default function initCreateTest() {
 
     document.querySelector("form").addEventListener("submit", function(e) {
         e.preventDefault();
-        submitTest(testDuration, eliminationQuantity);
+        submitTest(title, testDuration, eliminationQuantity);
     })
 }
 
@@ -43,10 +44,15 @@ function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) 
     }
 }
 
-function submitTest(testDuration,
+function submitTest(title, testDuration,
                     eliminationQuantity) {
     if(testDuration.value === "" || testDuration.value < 1) {
         generateError("Minimum duration time for test is 1 minute");
+        return;
+    }
+
+    if(title.value === "") {
+        generateError("Title cannot be empty!");
         return;
     }
 
@@ -54,13 +60,14 @@ function submitTest(testDuration,
     if(!getQuestionsAndAnswers(questionsData)) return null;
 
     const finalTestData = {
+        title: title.value,
         time: testDuration.value ,
         eliminations: eliminationQuantity.value === "" ? 0 : eliminationQuantity.value,
         questionsData: questionsData
     }
     console.log(finalTestData);
     sendCreatedTest(finalTestData);
-    // initView("dashboard");
+    initView("dashboard");
 }
 
 function generateQuestion() {
