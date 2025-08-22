@@ -1,4 +1,5 @@
 import initView from "../router.js";
+import generateError from "../ui/errorBar.js";
 
 export async function getQuizAttemptDetails(code) {
     const response = await fetch(`/api/quizzes/attempt/${code.toUpperCase()}`);
@@ -25,8 +26,16 @@ export function sendAnswers(answers) {
     console.log(answers);
 }
 
-export function sendCreatedTest(test) {
-//     saving to the database
+export async function sendCreatedTest(test) {
+    console.log(test);
+
+    const response = await fetch("/api/quizzes/create", {
+        method: 'POST',
+        headers: { 'content-type': 'application/json'},
+        body: JSON.stringify(test)
+    });
+    
+    if(response.status !== 200) generateError('Error during saving to database');
 }
 
 export async function sendLoginData(data) {
