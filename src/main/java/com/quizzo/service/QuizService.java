@@ -1,11 +1,13 @@
 package com.quizzo.service;
 
 import com.quizzo.dto.*;
+import com.quizzo.exception.QuizNotActiveException;
 import com.quizzo.exception.QuizNotFoundException;
 import com.quizzo.exception.UserNotLoggedException;
 import com.quizzo.model.*;
 import com.quizzo.repository.*;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,15 +23,15 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
     private final AttemptRepository attemptRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, AttemptRepository attemptRepository) {
+    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AttemptRepository attemptRepository, AnswerRepository answerRepository) {
         this.quizRepository = quizRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
         this.attemptRepository = attemptRepository;
+        this.answerRepository = answerRepository;
     }
 
     public QuizDetailsResponse getQuizByCode(String code) {
@@ -154,7 +156,7 @@ public class QuizService {
             char r = positions.charAt(new Random().nextInt(positions.length()));
             code.append(r);
         }
-        return code.toString();
+        return code.toString().toUpperCase();
     }
 
     private String capitalizeFirstLetter(String text) {
@@ -165,11 +167,26 @@ public class QuizService {
     }
 
     private Quiz getQuiz(String code) {
-        return quizRepository.findByCode(code.trim().toUpperCase())
+        Quiz quiz = quizRepository.findByCode(code.trim().toUpperCase())
                 .orElseThrow(() -> new QuizNotFoundException("Quiz " + code + " not found"));
+
+        if(!quiz.getActive())
+            throw new QuizNotActiveException("Quz not active");
+
+        return quiz;
     }
 
-    private float calculateScore(int correct, int total) {
-        return Math.round(100f * correct / total);
+    public void deleteQuiz(String code, HttpSession session) {
+        Quiz quiz = getQuiz(code);
+
+        UserIdentityDto user = (UserIdentityDto) session.getAttribute("user");
+        User userEntity = userRepository.findById(user.id())
+                .orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+
+        if(!userEntity.getCreatedQuizzes().contains(quiz))
+            throw new IllegalArgumentException("Quiz does not belong to the logged user");
+
+        quiz.setActive(false);
+        quizRepository.save(quiz);
     }
 }

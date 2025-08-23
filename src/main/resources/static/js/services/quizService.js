@@ -55,8 +55,6 @@ export async function sendCreatedTest(test) {
 }
 
 export async function sendLoginData(data) {
-    console.log("LOGIN");
-
     const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'content-type': 'application/json'},
@@ -84,4 +82,17 @@ export async function getLoggedUserData() {
     }
 
     return await response.json();
+}
+
+export async function deleteQuiz(code) {
+    const response = await fetch(`/api/quizzes/${code}`, {
+        method: 'DELETE'
+    });
+
+    if(response.status !== 204) {
+        generateError('This specific quiz cannot be removed');
+        return;
+    }
+
+    initView('dashboard');
 }

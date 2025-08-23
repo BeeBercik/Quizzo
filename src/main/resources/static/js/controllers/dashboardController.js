@@ -26,4 +26,16 @@ export default async function initDashboard(userData) {
         e.preventDefault();
         initView("create-test");
     });
+
+    const tbody = document.querySelector('#createdTests tbody');
+    tbody.addEventListener('click', async (e) => {
+        const tdDelete = e.target.closest('.q-delete');
+        if(!tdDelete) return;
+
+        const row = tdDelete.closest('tr');
+        const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
+        if(!code) return;
+
+        await deleteQuiz(code);
+    });
 }

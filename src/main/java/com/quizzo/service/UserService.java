@@ -41,6 +41,7 @@ public class UserService {
                 .collect(Collectors.toList());
 
         List<QuizSummaryResponse> quizResponses = user.getCreatedQuizzes().stream()
+                .filter(Quiz::getActive)
                 .map(this::convertToQuizResponse)
                 .collect(Collectors.toList());
 

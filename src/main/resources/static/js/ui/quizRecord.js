@@ -21,11 +21,10 @@ export function generateCreatedTestRecord(data) {
     tdCode.classList.add('code-td');
     const tdDelete = document.createElement("td");
     tdDelete.textContent = 'D';
-    tdDelete.id = 'q-delete';
+    tdDelete.classList.add('q-delete');
     const tdSummary = document.createElement("td");
     tdSummary.textContent = 'S';
-    tdSummary.id = 'q-summary';
-
+    tdSummary.classList.add('q-summary');
 
     tr.append(tdTitle, tdCode, tdDelete, tdSummary);
     document.querySelector("#createdTests tbody").appendChild(tr);

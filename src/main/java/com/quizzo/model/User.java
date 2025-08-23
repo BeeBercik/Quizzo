@@ -20,8 +20,8 @@ public class User {
     private LocalDateTime createTime;
 
     @OneToMany(mappedBy = "owner",
-            orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Quiz> createdQuizzes = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",

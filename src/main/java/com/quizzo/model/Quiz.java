@@ -20,15 +20,14 @@ public class Quiz {
     private LocalDateTime createTime;
     private Float durationTime;
     private Integer eliminationsCount;
+    private Boolean active;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User owner;
 
-    @OneToMany(mappedBy = "quiz",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz")
     private List<Attempt> userAttempts = new ArrayList<>();
 
     @OneToMany(mappedBy = "quiz",
@@ -112,6 +111,14 @@ public class Quiz {
         this.userAttempts = userAttempts;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "Quiz{" +
@@ -121,7 +128,9 @@ public class Quiz {
                 ", createTime=" + createTime +
                 ", durationTime=" + durationTime +
                 ", eliminationsCount=" + eliminationsCount +
-                ", user=" + owner +
+                ", active=" + active +
+                ", owner=" + owner.getId()   +
+                ", userAttempts=" + userAttempts.size() +
                 ", questions=" + questions +
                 '}';
     }

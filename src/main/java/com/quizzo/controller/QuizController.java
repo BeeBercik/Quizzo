@@ -49,4 +49,12 @@ public class QuizController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @DeleteMapping("/{code}")
+    ResponseEntity<?> removeQuiz(@PathVariable(name = "code") String code, HttpSession session) {
+        quizService.deleteQuiz(code, session);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

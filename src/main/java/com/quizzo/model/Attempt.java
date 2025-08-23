@@ -2,6 +2,8 @@ package com.quizzo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +22,7 @@ public class Attempt {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JsonIgnore
     private Quiz quiz;
 
@@ -74,5 +77,16 @@ public class Attempt {
 
     public void setAttemptTime(LocalDateTime attemptTime) {
         this.attemptTime = attemptTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Attempt{" +
+                "id=" + id +
+                ", user=" + user.getId() +
+                ", quiz=" + quiz.getId() +
+                ", score=" + score +
+                ", attemptTime=" + attemptTime +
+                '}';
     }
 }

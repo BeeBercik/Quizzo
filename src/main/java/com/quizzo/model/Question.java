@@ -22,8 +22,8 @@ public class Question {
     private Quiz quiz;
 
     @OneToMany(mappedBy = "question",
-            orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 
     public Question() {
@@ -59,5 +59,15 @@ public class Question {
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", value='" + value + '\'' +
+                ", quiz=" + quiz.getId() +
+                ", answers=" + answers.size() +
+                '}';
     }
 }
