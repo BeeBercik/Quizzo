@@ -1,9 +1,6 @@
 package com.quizzo.controller;
 
-import com.quizzo.dto.AttemptRequest;
-import com.quizzo.dto.CreatedQuizRequest;
-import com.quizzo.dto.QuizAttemptDetailsResponse;
-import com.quizzo.dto.QuizDetailsResponse;
+import com.quizzo.dto.*;
 import com.quizzo.service.QuizService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -56,5 +53,12 @@ public class QuizController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @GetMapping("/summary/{code}")
+    ResponseEntity<QuizSummaryResponse> summaryQuiz(@PathVariable(name = "code") String code, HttpSession session) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(quizService.getQuizSummary(code, session));
     }
 }

@@ -2,7 +2,7 @@ package com.quizzo.service;
 
 import com.quizzo.dto.AttemptResponse;
 import com.quizzo.dto.LoginRequest;
-import com.quizzo.dto.QuizSummaryResponse;
+import com.quizzo.dto.CreatedQuizDetailsResponse;
 import com.quizzo.dto.UserProfileResponse;
 import com.quizzo.exception.IncorrectUserDataException;
 import com.quizzo.model.Attempt;
@@ -40,7 +40,7 @@ public class UserService {
                 .map(this::convertToAttemptResponse)
                 .collect(Collectors.toList());
 
-        List<QuizSummaryResponse> quizResponses = user.getCreatedQuizzes().stream()
+        List<CreatedQuizDetailsResponse> createdQuizzes = user.getCreatedQuizzes().stream()
                 .filter(Quiz::getActive)
                 .map(this::convertToQuizResponse)
                 .collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class UserService {
                 user.getId(),
                 user.getLogin(),
                 attemptResponses,
-                quizResponses
+                createdQuizzes
         );
     }
 
@@ -61,8 +61,8 @@ public class UserService {
         );
     }
 
-    private QuizSummaryResponse convertToQuizResponse(Quiz quiz) {
-        return new QuizSummaryResponse(
+    private CreatedQuizDetailsResponse convertToQuizResponse(Quiz quiz) {
+        return new CreatedQuizDetailsResponse(
                 quiz.getTitle(),
                 quiz.getCode()
         );

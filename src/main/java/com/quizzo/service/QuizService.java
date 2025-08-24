@@ -7,7 +7,6 @@ import com.quizzo.exception.UserNotLoggedException;
 import com.quizzo.model.*;
 import com.quizzo.repository.*;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,14 +23,12 @@ public class QuizService {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final AttemptRepository attemptRepository;
-    private final AnswerRepository answerRepository;
 
-    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AttemptRepository attemptRepository, AnswerRepository answerRepository) {
+    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AttemptRepository attemptRepository) {
         this.quizRepository = quizRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.attemptRepository = attemptRepository;
-        this.answerRepository = answerRepository;
     }
 
     public QuizDetailsResponse getQuizByCode(String code) {
@@ -147,6 +144,53 @@ public class QuizService {
         attemptRepository.save(attemptEntity);
     }
 
+    public void deleteQuiz(String code, HttpSession session) {
+        Quiz quiz = getSpecificUserQuiz(code, session);
+        quiz.setActive(false);
+
+        quizRepository.save(quiz);
+    }
+
+    public QuizSummaryResponse getQuizSummary(String code, HttpSession session) {
+        Quiz quiz = getSpecificUserQuiz(code, session);
+        List<Attempt> attempts = attemptRepository.findAllByQuiz(quiz);
+
+        List<AttemptSummaryResponse> attemptResponses = attempts.stream()
+                .map(attempt -> new AttemptSummaryResponse(
+                        attempt.getScore(),
+                        attempt.getAttemptTime()
+                )).toList();
+
+        List<QuizSummaryUserResponse> userSummaries = attempts.stream()
+                .map(attempt -> {
+                    User user = attempt.getUser();
+                    return new QuizSummaryUserResponse(
+                            user.getLogin(),
+                            user.getEmail(),
+                            attemptResponses);
+                }).toList();
+
+        return new QuizSummaryResponse(
+                quiz.getTitle(),
+                quiz.getCode(),
+                userSummaries,
+                quiz.getCreateTime());
+    }
+
+    private Quiz getSpecificUserQuiz(String code, HttpSession session) {
+        UserIdentityDto user = (UserIdentityDto) session.getAttribute("user");
+        if(user == null) throw new UserNotLoggedException("User not logged in");
+
+        User userEntity = userRepository.findById(user.id())
+                .orElseThrow(() -> new UserNotLoggedException("User does not exist"));
+
+        Quiz quiz = getQuiz(code);
+        if(!userEntity.getCreatedQuizzes().contains(quiz))
+            throw new IllegalArgumentException("Quiz does not belong to the logged user");
+
+        return quiz;
+    }
+
     private String generateCode() {
         int length = 5;
         String positions = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -174,19 +218,5 @@ public class QuizService {
             throw new QuizNotActiveException("Quz not active");
 
         return quiz;
-    }
-
-    public void deleteQuiz(String code, HttpSession session) {
-        Quiz quiz = getQuiz(code);
-
-        UserIdentityDto user = (UserIdentityDto) session.getAttribute("user");
-        User userEntity = userRepository.findById(user.id())
-                .orElseThrow(() -> new UserNotLoggedException("User not logged in"));
-
-        if(!userEntity.getCreatedQuizzes().contains(quiz))
-            throw new IllegalArgumentException("Quiz does not belong to the logged user");
-
-        quiz.setActive(false);
-        quizRepository.save(quiz);
     }
 }
