@@ -5,6 +5,7 @@ import initDashboard from "./controllers/dashboardController.js";
 import {initGeneralComponentsListening} from "./controllers/generalLayoutController.js";
 import initCreateTest from "./controllers/createQuizController.js";
 import { initAuth } from "./controllers/authController.js";
+import initQuizSummary from "./controllers/summaryQuizController.js";
 
 export default function initView(view, code = null, data = null) {
     switch(view) {
@@ -33,6 +34,10 @@ export default function initView(view, code = null, data = null) {
         case "auth-forms":
             initAuth();
             console.log("auth-forms view");
+            break;
+        case "summary":
+            initQuizSummary(code);
+            console.log("quiz summary view");
             break;
         default:
             console.log("Unknown view");

@@ -30,12 +30,28 @@ export default async function initDashboard(userData) {
     const tbody = document.querySelector('#createdTests tbody');
     tbody.addEventListener('click', async (e) => {
         const tdDelete = e.target.closest('.q-delete');
-        if(!tdDelete) return;
+        if(tdDelete) await initDeleteQuiz(tdDelete)
 
-        const row = tdDelete.closest('tr');
-        const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
-        if(!code) return;
-
-        await deleteQuiz(code);
+        const tdSummary = e.target.closest('.q-summary');
+        if(tdSummary) {
+            const code = getSummaryQuizCode(tdSummary);
+            initView('summary', code);
+        }
     });
+}
+
+async function initDeleteQuiz(tdDelete) {
+    const row = tdDelete.closest('tr');
+    const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
+    if(!code) return;
+
+    await deleteQuiz(code);
+}
+
+function getSummaryQuizCode(tdSummary) {
+    const row = tdSummary.closest('tr');
+    const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
+    if(!code) return;
+
+    return code;
 }

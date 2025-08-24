@@ -96,3 +96,14 @@ export async function deleteQuiz(code) {
 
     initView('dashboard');
 }
+
+export async function getQuizSummary(code) {
+    const response = await fetch(`/api/quizzes/${code}`);
+
+    if(response.status !== 204) {
+        generateError('Quiz summary cannot be shown');
+        return;
+    }
+
+    return await response.json();
+}
