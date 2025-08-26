@@ -6,6 +6,6 @@ import java.util.List;
 public record QuizSummaryResponse(
         String title,
         String code,
-        List<QuizSummaryUserResponse> users,
+        List<UserAttemptsSummaryResponse> users,
         LocalDateTime creationDate) {
 }

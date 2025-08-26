@@ -84,6 +84,7 @@ public class QuizService {
         quiz.setTitle(capitalizeFirstLetter(createdQuiz.title()));
         quiz.setCode(generateCode());
         quiz.setCreateTime(LocalDateTime.now());
+        quiz.setActive(true);
 
         quiz.setDurationTime(Float.parseFloat(createdQuiz.time()));
         quiz.setEliminationsCount(createdQuiz.eliminations());
@@ -153,22 +154,24 @@ public class QuizService {
 
     public QuizSummaryResponse getQuizSummary(String code, HttpSession session) {
         Quiz quiz = getSpecificUserQuiz(code, session);
-        List<Attempt> attempts = attemptRepository.findAllByQuiz(quiz);
 
-        List<AttemptSummaryResponse> attemptResponses = attempts.stream()
-                .map(attempt -> new AttemptSummaryResponse(
-                        attempt.getScore(),
-                        attempt.getAttemptTime()
-                )).toList();
+        List<User> users = userRepository.findDistinctByAttempts_Quiz(quiz);
+        System.out.println(users);
 
-        List<QuizSummaryUserResponse> userSummaries = attempts.stream()
-                .map(attempt -> {
-                    User user = attempt.getUser();
-                    return new QuizSummaryUserResponse(
-                            user.getLogin(),
-                            user.getEmail(),
+        List<UserAttemptsSummaryResponse> userSummaries = users.stream()
+                .map(u -> {
+                    List<UserResultSummaryResponse> attemptResponses = u.getAttempts().stream()
+                            .map(attempt -> new UserResultSummaryResponse(
+                                    attempt.getScore(),
+                                    attempt.getAttemptTime()
+                            )).toList();
+
+                    return new UserAttemptsSummaryResponse(
+                            u.getLogin(),
+                            u.getEmail(),
                             attemptResponses);
-                }).toList();
+                })
+                .toList();
 
         return new QuizSummaryResponse(
                 quiz.getTitle(),
