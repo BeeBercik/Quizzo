@@ -8,6 +8,7 @@ import com.quizzo.exception.IncorrectUserDataException;
 import com.quizzo.model.Attempt;
 import com.quizzo.model.Quiz;
 import com.quizzo.model.User;
+import com.quizzo.repository.AttemptRepository;
 import com.quizzo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AttemptRepository attemptRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AttemptRepository attemptRepository) {
         this.userRepository = userRepository;
+        this.attemptRepository = attemptRepository;
     }
 
     public UserProfileResponse getUserProfileData(LoginRequest loginRequest) {
@@ -36,7 +39,7 @@ public class UserService {
     }
 
     private UserProfileResponse buildUserProfile(User user) {
-        List<AttemptResponse> attemptResponses = user.getAttempts().stream()
+        List<AttemptResponse> attemptResponses = attemptRepository.findAllByUserOrderByAttemptTimeDesc(user).stream()
                 .map(this::convertToAttemptResponse)
                 .collect(Collectors.toList());
 
