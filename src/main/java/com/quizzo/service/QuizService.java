@@ -1,6 +1,7 @@
 package com.quizzo.service;
 
 import com.quizzo.dto.*;
+import com.quizzo.exception.AnswerNotFoundException;
 import com.quizzo.exception.QuizNotActiveException;
 import com.quizzo.exception.QuizNotFoundException;
 import com.quizzo.exception.UserNotLoggedException;
@@ -23,12 +24,14 @@ public class QuizService {
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
     private final AttemptRepository attemptRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AttemptRepository attemptRepository) {
+    public QuizService(QuizRepository quizRepository, UserRepository userRepository, QuestionRepository questionRepository, AttemptRepository attemptRepository, AnswerRepository answerRepository) {
         this.quizRepository = quizRepository;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.attemptRepository = attemptRepository;
+        this.answerRepository = answerRepository;
     }
 
     public QuizDetailsResponse getQuizByCode(String code) {
@@ -220,5 +223,11 @@ public class QuizService {
             throw new QuizNotActiveException("Quz not active");
 
         return quiz;
+    }
+
+    public Boolean checkIfAbleToEliminate(int id) {
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new AnswerNotFoundException("Answer with such id odes not exist"));
+        return answer.getCorrect();
     }
 }

@@ -117,3 +117,14 @@ export async function getQuizSummary(code) {
 
     return await response.json();
 }
+
+export async function getAnswerCorrectness(id) {
+    const response = await fetch(`/api/quizzes/check/option/${id}`);
+
+    if(response.status !== 200) {
+        generateError('Error during option elimination');
+        return;
+    }
+
+    return (await response.json()).correct;
+}

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/quizzes")
 public class QuizController {
@@ -60,5 +62,12 @@ public class QuizController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(quizService.getQuizSummary(code, session));
+    }
+
+    @GetMapping("/check/option/{id}")
+    ResponseEntity<Map<String , Boolean>> checkToEliminate(@PathVariable(name = "id") int optionId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("correct", quizService.checkIfAbleToEliminate(optionId)));
     }
 }

@@ -44,4 +44,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", ex.getMessage()));
     }
+
+    @ExceptionHandler(AnswerNotFoundException.class)
+    ResponseEntity<Map<String, String>> handleAnswerNotFoundException(AnswerNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
+    }
 }

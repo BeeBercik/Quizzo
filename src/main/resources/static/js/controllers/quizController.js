@@ -67,7 +67,7 @@ export default async function initTest(code) {
             generateError("Cannot eliminate all answers");
             return;
         }
-       eliminateOption(testDetails, options, eliminated);
+        eliminateOption(testDetails, options, eliminated);
     });
 }
 
