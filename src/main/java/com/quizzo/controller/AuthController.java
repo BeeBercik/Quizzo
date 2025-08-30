@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/auth/login")
+@RequestMapping("api/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -22,7 +22,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     ResponseEntity<UserProfileResponse> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
         session.setAttribute("user", authService.login(loginRequest));
         return ResponseEntity
@@ -36,5 +36,13 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getUserProfileData(user.id()));
+    }
+
+    @PostMapping("/logout")
+    ResponseEntity<?> logoutUser(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }

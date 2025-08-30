@@ -74,8 +74,18 @@ export async function sendRegisterData(data) {
 //  ...
 }
 
+export async function logoutUser() {
+    const response = await fetch('api/auth/logout', {
+        method: 'POST'
+    });
+
+    if(response.status !== 204) {
+        generateError("Error while trying to logout");
+    }
+}
+
 export async function getLoggedUserData() {
-    const response = await fetch('api/auth/login');
+    const response = await fetch('api/auth');
 
     if(response.status !== 200) {
         return null;

@@ -16,6 +16,13 @@
     font-size: 30px;
 }
 
+#dashboard-main #logout-btn {
+    margin-left: 10px;
+    font-size: 30px;
+    color: red;
+    cursor: pointer;
+}
+
 #dashboard-main .actions {
     display: flex;
     flex-direction: row;

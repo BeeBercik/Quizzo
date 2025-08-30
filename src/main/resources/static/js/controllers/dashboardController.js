@@ -1,5 +1,5 @@
 import initDashboardView from "../views/dashboardView.js";
-import {deleteQuiz, getLoggedUserData} from "../services/quizService.js";
+import {deleteQuiz, getLoggedUserData, logoutUser} from "../services/quizService.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
 import generateError from "../ui/errorBar.js";
@@ -14,6 +14,12 @@ export default async function initDashboard(userData) {
 
     document.getElementById('dashboard-btn').textContent = `${userData.login}'s panel`;
     initDashboardView(userData);
+
+    document.getElementById("logout-btn").addEventListener("click", async function(e) {
+        e.preventDefault();
+        await logoutUser();
+        initView("welcome");
+    });
 
     document.querySelector("form").addEventListener("submit", function(e) {
         e.preventDefault();

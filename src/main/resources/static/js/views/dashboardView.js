@@ -8,7 +8,7 @@ export default function initDashboardView(userData) {
     main.id = "dashboard-main";
     main.dataset.view = "dashboard";
     main.innerHTML = `
-    <h2>Welcome, <span id="user-login"></span>!</h2>
+    <h2>Welcome, <span id="user-login"></span>! <i class="fa-solid fa-arrow-right-from-bracket" id="logout-btn"></i></h2>
 
     <div class="dashboard-wrapper">
       <section class="actions">
