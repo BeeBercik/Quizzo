@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByLogin(String login);
 
-    @Query("select  distinct u from User u join u.attempts a where a.quiz = :quiz")
-    List<User> findDistinctByAttempts_Quiz(@Param("quiz") Quiz quiz);
+    @Query("select distinct u from User u join u.attempts a where a.quiz = :quiz")
+    List<User> findDistinctByAttemptsOfQuiz(@Param("quiz") Quiz quiz);
 }
