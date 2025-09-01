@@ -1,0 +1,100 @@
+#summary-main {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#summary-main .summary-wrapper {
+    width: 100%;
+    max-width: 800px;
+    padding: 0 16px;
+}
+
+#summary-main .page-title {
+    margin: 24px 0 18px 0;
+    font-size: 30px;
+    text-align: center;
+}
+
+#summary-main #quiz-title {
+    font-size: 30px;
+}
+
+#summary-main .section {
+    margin: 35px 0;
+    padding: 18px;
+    border: 2px solid #6203ab;
+    border-radius: 10px;
+}
+
+#summary-main legend {
+    padding: 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+#summary-main .summary-table {
+    width: 100%;
+    margin-top: 12px;
+    border-collapse: collapse;
+}
+
+#summary-main .summary-table th,
+#summary-main .summary-table td {
+    padding: 12px 14px;
+    border: 1px solid #3e036e;
+    text-align: left;
+}
+
+#summary-main .summary-table thead {
+    background: #6203ab;
+}
+
+#summary-main .summary-table tbody tr:nth-child(even) {
+    background: #3a035c;
+}
+
+#summary-main #participants thead th:nth-child(1) {
+    width: 28%;
+    min-width: 160px;
+}
+
+#summary-main #participants thead th:nth-child(2) {
+    width: 52%;
+}
+
+#summary-main #participants thead th:nth-child(3) {
+    width: 20%;
+    text-align: center;
+}
+
+#summary-main #participants tbody td:nth-child(3) {
+    text-align: center;
+}
+
+#summary-main .row-details .cell-details {
+    padding: 12px 14px;
+    border: 1px solid #3e036e;
+    background: #2a0341;
+}
+#summary-main .attempt-history {
+    opacity: .9;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+#summary-main .attempts-list {
+    margin: 0 0 0 18px;
+    padding-left: 16px;
+}
+#summary-main .attempts-list li {
+    margin: 4px 0;
+}
+
+#summary-main .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    background: #444;
+    color: #fff;
+}

@@ -109,8 +109,7 @@ export async function deleteQuiz(code) {
 
 export async function getQuizSummary(code) {
     const response = await fetch(`/api/quizzes/summary/${code}`);
-
-    if(response.status !== 204) {
+    if(response.status !== 200) {
         generateError('Quiz summary cannot be shown');
         return;
     }
