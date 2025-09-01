@@ -51,7 +51,8 @@ async function initDeleteQuiz(tdDelete) {
     const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
     if(!code) return;
 
-    await deleteQuiz(code);
+    if(await deleteQuiz(code))
+        initView('dashboard');
 }
 
 function getSummaryQuizCode(tdSummary) {

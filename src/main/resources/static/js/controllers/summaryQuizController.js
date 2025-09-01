@@ -3,6 +3,6 @@ import generateSummaryView from "../views/summaryView.js";
 
 export default async function initQuizSummary(code) {
     const summary = await getQuizSummary(code);
-    generateSummaryView(summary);
+    if(summary) generateSummaryView(summary);
     console.log(summary);
 }

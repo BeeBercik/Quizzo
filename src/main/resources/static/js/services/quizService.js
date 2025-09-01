@@ -7,7 +7,6 @@ export async function getQuizAttemptDetails(code) {
 
     const json = await response.json();
     console.log(json)
-
     return json;
 }
 
@@ -17,7 +16,6 @@ export async function getQuiz(code) {
 
     const json = await response.json();
     console.log(json);
-
     return json;
 }
 
@@ -31,10 +29,10 @@ export async function sendAnswers(answers) {
 
     if(response.status !== 200) {
         generateError('Error during submitting quiz');
-        return 0;
+        return false;
     }
 
-    initView("dashboard");
+    return true;
 }
 
 export async function sendCreatedTest(test) {
@@ -48,10 +46,10 @@ export async function sendCreatedTest(test) {
 
     if(response.status !== 200) {
         generateError('Error during saving to database');
-        return 0;
+        return false;
     }
 
-    initView("dashboard");
+    return true;
 }
 
 export async function sendLoginData(data) {
@@ -101,17 +99,17 @@ export async function deleteQuiz(code) {
 
     if(response.status !== 204) {
         generateError('This specific quiz cannot be removed');
-        return;
+        return false;
     }
 
-    initView('dashboard');
+    return true;
 }
 
 export async function getQuizSummary(code) {
     const response = await fetch(`/api/quizzes/summary/${code}`);
     if(response.status !== 200) {
         generateError('Quiz summary cannot be shown');
-        return;
+        return null;
     }
 
     return await response.json();

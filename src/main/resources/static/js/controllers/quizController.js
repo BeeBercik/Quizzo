@@ -27,8 +27,9 @@ export default async function initTest(code) {
     renderQuestion(testDetails.questions[currentQuestion]);
     updateNextButton(nextButton, currentQuestion, questionCount);
 
-    function timeUp() {
-        sendAnswers(answers);
+    async function timeUp() {
+        if(await sendAnswers(answers))
+            initView("dashboard");
         initView("dashboard");
     }
     const timeLabel = document.getElementById("time");
@@ -40,7 +41,7 @@ export default async function initTest(code) {
         selectQuestion(optionsContainer, e);
     });
 
-    nextButton.addEventListener("click", function(e) {
+    nextButton.addEventListener("click", async function(e) {
         e.preventDefault();
         const savedAnswers = saveAnswer(testDetails, answers);
         if(!savedAnswers) return currentQuestion;
@@ -52,7 +53,8 @@ export default async function initTest(code) {
             updateNextButton(nextButton, currentQuestion, questionCount);
         } else {
             stopTimer();
-            sendAnswers(answers);
+            if(await sendAnswers(answers))
+                initView("dashboard");
         }
     });
 

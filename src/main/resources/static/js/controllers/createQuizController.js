@@ -44,7 +44,7 @@ function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) 
     }
 }
 
-function submitTest(title, testDuration,
+async function submitTest(title, testDuration,
                     eliminationQuantity) {
     if(testDuration.value === "" || testDuration.value < 1) {
         generateError("Minimum duration time for test is 1 minute");
@@ -66,7 +66,8 @@ function submitTest(title, testDuration,
         questionsData: questionsData
     }
     console.log(finalTestData);
-    sendCreatedTest(finalTestData);
+    if(await sendCreatedTest(finalTestData))
+        initView("dashboard");
 }
 
 function generateQuestion() {
