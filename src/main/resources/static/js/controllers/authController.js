@@ -1,6 +1,7 @@
 import generateAuthView from "../views/authView.js";
 import {sendLoginData, sendRegisterData} from "../services/quizService.js";
 import generateError from "../ui/errorBar.js";
+import initView from "../router";
 
 
 export function initAuth() {
@@ -22,8 +23,10 @@ export function initAuth() {
             login: loginFormLogin.value,
             password: loginFormPassword.value
         };
-        if(await sendLoginData(authData) === null)
-            generateError("Incorrect login data");
+
+        const userData = await sendLoginData(authData);
+        if(userData === null) generateError("Incorrect login data");
+        else initView("dashboard", null, userData);
     });
 
     document.getElementById("register-form").addEventListener("submit", function(e) {

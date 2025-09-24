@@ -1,4 +1,3 @@
-import initView from "../router.js";
 import generateError from "../ui/errorBar.js";
 
 export async function getQuizAttemptDetails(code) {
@@ -61,8 +60,7 @@ export async function sendLoginData(data) {
 
     if(response.status !== 200) return null;
 
-    const json = await response.json();
-    initView("dashboard", null, json);
+    return await response.json();
 }
 
 export async function sendRegisterData(data) {
