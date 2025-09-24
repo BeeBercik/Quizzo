@@ -158,7 +158,7 @@ public class QuizService {
     public QuizSummaryResponse getQuizSummary(String code, HttpSession session) {
         Quiz quiz = getSpecificUserQuiz(code, session);
 
-        List<User> users = userRepository.findDistinctByAttemptsOfQuiz(quiz);
+        List<User> users = userRepository.findDistinctByAttemptsOfQuiz(quiz.getId());
 
         List<UserAttemptsSummaryResponse> userSummaries = users.stream()
                 .map(u -> {

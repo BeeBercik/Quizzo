@@ -33,7 +33,7 @@ export default function generateSummaryView(summary) {
 
     main.innerHTML = `
   <div class="summary-wrapper">
-    <h2 class="page-title">Summary — <span id="quiz-title"></span></h2>
+    <h2 class="page-title">Summary - <span id="quiz-title"></span></h2>
 
     <section class="summary">
       <fieldset class="section">

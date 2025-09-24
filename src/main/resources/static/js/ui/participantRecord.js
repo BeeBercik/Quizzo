@@ -38,7 +38,7 @@ export function generateParticipantRow(user, fmt) {
         for(let i = 0; i < attempts.length; i++) {
             const a = attempts[i];
             const li = document.createElement("li");
-            li.textContent = `${a.score} % — ${fmt(a.attemptTime)}`;
+            li.textContent = `${a.score} % - ${fmt(a.attemptTime)}`;
             ul.appendChild(li);
         }
 
