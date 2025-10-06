@@ -1,10 +1,11 @@
 package com.quizzo.controller;
 
+import com.quizzo.config.AppUserPrincipal;
 import com.quizzo.dto.*;
 import com.quizzo.service.QuizService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -34,34 +35,34 @@ public class QuizController {
     }
 
     @PostMapping("/create")
-    ResponseEntity<?> createQuiz(@RequestBody CreatedQuizRequest createdQuiz, HttpSession session) {
-        quizService.saveQuiz(createdQuiz, session);
+    ResponseEntity<?> createQuiz(@RequestBody CreatedQuizRequest createdQuiz, @AuthenticationPrincipal AppUserPrincipal user) {
+        quizService.saveQuiz(createdQuiz, user.getId());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
     @PostMapping("/submit")
-    ResponseEntity<?> submitQuiz(@RequestBody AttemptRequest attemptRequest, HttpSession session) {
-        quizService.submitQuizAttempt(attemptRequest, session);
+    ResponseEntity<?> submitQuiz(@RequestBody AttemptRequest attemptRequest, @AuthenticationPrincipal AppUserPrincipal user) {
+        quizService.submitQuizAttempt(attemptRequest, user.getId());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
 
     @DeleteMapping("/{code}")
-    ResponseEntity<?> removeQuiz(@PathVariable(name = "code") String code, HttpSession session) {
-        quizService.deleteQuiz(code, session);
+    ResponseEntity<?> removeQuiz(@PathVariable(name = "code") String code,@AuthenticationPrincipal AppUserPrincipal user) {
+        quizService.deleteQuiz(code, user.getId());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 
     @GetMapping("/summary/{code}")
-    ResponseEntity<QuizSummaryResponse> summaryQuiz(@PathVariable(name = "code") String code, HttpSession session) {
+    ResponseEntity<QuizSummaryResponse> summaryQuiz(@PathVariable(name = "code") String code, @AuthenticationPrincipal AppUserPrincipal user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(quizService.getQuizSummary(code, session));
+                .body(quizService.getQuizSummary(code, user.getId()));
     }
 
     @GetMapping("/check/option/{id}")

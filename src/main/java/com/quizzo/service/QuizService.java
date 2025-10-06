@@ -7,7 +7,6 @@ import com.quizzo.exception.QuizNotFoundException;
 import com.quizzo.exception.UserNotLoggedException;
 import com.quizzo.model.*;
 import com.quizzo.repository.*;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -81,7 +80,7 @@ public class QuizService {
         );
     }
 
-    public void saveQuiz(CreatedQuizRequest createdQuiz, HttpSession session) {
+    public void saveQuiz(CreatedQuizRequest createdQuiz, Integer userId) {
         Quiz quiz = new Quiz();
 
         quiz.setTitle(capitalizeFirstLetter(createdQuiz.title()));
@@ -105,7 +104,7 @@ public class QuizService {
                                 a.setCorrect(aDto.correct());
                                 a.setQuestion(q);
                                 return a;
-                    }).collect(Collectors.toList());
+                            }).collect(Collectors.toList());
 
                     q.setAnswers(answers);
                     return q;
@@ -113,14 +112,13 @@ public class QuizService {
 
         quiz.setQuestions(questions);
 
-        UserIdentityDto userIdentityDto = (UserIdentityDto) session.getAttribute("user");
-        User user = userRepository.findById(userIdentityDto.id()).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
 
         quiz.setOwner(user);
         quizRepository.save(quiz);
     }
 
-    public void submitQuizAttempt(AttemptRequest attempt, HttpSession session) {
+    public void submitQuizAttempt(AttemptRequest attempt, Integer userId) {
         Integer quizId = attempt.quizId();
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException("Quiz not found"));
 
@@ -128,8 +126,7 @@ public class QuizService {
         attemptEntity.setQuiz(quiz);
         attemptEntity.setAttemptTime(LocalDateTime.now());
 
-        UserIdentityDto userIdentityDto = (UserIdentityDto) session.getAttribute("user");
-        User user = userRepository.findById(userIdentityDto.id()).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
         attemptEntity.setUser(user);
 
         int goodAnswers = 0;
@@ -148,15 +145,15 @@ public class QuizService {
         attemptRepository.save(attemptEntity);
     }
 
-    public void deleteQuiz(String code, HttpSession session) {
-        Quiz quiz = getSpecificUserQuiz(code, session);
+    public void deleteQuiz(String code, Integer userId) {
+        Quiz quiz = getSpecificUserQuiz(code, userId);
         quiz.setActive(false);
 
         quizRepository.save(quiz);
     }
 
-    public QuizSummaryResponse getQuizSummary(String code, HttpSession session) {
-        Quiz quiz = getSpecificUserQuiz(code, session);
+    public QuizSummaryResponse getQuizSummary(String code, Integer userId) {
+        Quiz quiz = getSpecificUserQuiz(code, userId);
 
         List<User> users = userRepository.findDistinctByAttemptsOfQuiz(quiz.getId());
 
@@ -182,15 +179,12 @@ public class QuizService {
                 quiz.getCreateTime());
     }
 
-    private Quiz getSpecificUserQuiz(String code, HttpSession session) {
-        UserIdentityDto user = (UserIdentityDto) session.getAttribute("user");
-        if(user == null) throw new UserNotLoggedException("User not logged in");
-
-        User userEntity = userRepository.findById(user.id())
-                .orElseThrow(() -> new UserNotLoggedException("User does not exist"));
+    private Quiz getSpecificUserQuiz(String code, Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotLoggedException("User not logged in"));
 
         Quiz quiz = getQuiz(code);
-        if(!userEntity.getCreatedQuizzes().contains(quiz))
+        if(!user.getCreatedQuizzes().contains(quiz))
             throw new IllegalArgumentException("Quiz does not belong to the logged user");
 
         return quiz;

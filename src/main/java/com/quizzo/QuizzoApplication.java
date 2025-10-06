@@ -30,7 +30,7 @@ public class QuizzoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User user = new User("rokan", "rokan123", "robert.kania@onet.pl", LocalDateTime.now());
+        User user = new User("rokan", "$2a$12$xfVtryzg3YSW3fezzEb/YOjZT1WKXs0Px92sLeRSxgF/k9WBRAKf6", "robert.kania@onet.pl", LocalDateTime.now());
 
         Quiz quiz = new Quiz();
         quiz.setTitle("Quiz about animals");

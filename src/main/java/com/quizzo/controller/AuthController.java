@@ -1,48 +1,108 @@
 package com.quizzo.controller;
 
+import com.quizzo.config.JwtService;
 import com.quizzo.dto.LoginRequest;
-import com.quizzo.dto.UserIdentityDto;
 import com.quizzo.dto.UserProfileResponse;
-import com.quizzo.service.AuthService;
+import com.quizzo.repository.UserRepository;
 import com.quizzo.service.UserService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
+
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
     private final UserService userService;
 
-    public AuthController(AuthService authService, UserService userService) {
-        this.authService = authService;
+    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository, UserService userService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.userRepository = userRepository;
         this.userService = userService;
     }
 
     @PostMapping("/login")
-    ResponseEntity<UserProfileResponse> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
-        session.setAttribute("user", authService.login(loginRequest));
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.getUserProfileData(loginRequest));
+    public ResponseEntity<?> login(@RequestBody LoginRequest req, HttpServletResponse res) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(req.login(), req.password())
+        );
+
+        var user = userRepository.findByLogin(req.login())
+                .orElseThrow();
+        String access = jwtService.createAccess(user.getId(), user.getLogin());
+        String refresh = jwtService.createRefresh(
+                user.getId(),
+                user.getLogin(),
+                UUID.randomUUID().toString()
+        );
+
+        var cookie = ResponseCookie.from("refresh", refresh)
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Strict")
+                .path("/api/auth")
+                .maxAge(Duration.ofDays(14))
+                .build();
+        res.addHeader(SET_COOKIE, cookie.toString());
+
+        return ResponseEntity.ok(Map.of(
+                "access", access,
+                "profile", userService.getUserProfileData(req)
+        ));
     }
 
-    @GetMapping
-    ResponseEntity<UserProfileResponse> getLoggedUser(HttpSession session) {
-        UserIdentityDto user = authService.getLoggedUser(session);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.getUserProfileData(user.id()));
+    @GetMapping("/logged")
+    public ResponseEntity<UserProfileResponse> logged(@AuthenticationPrincipal UserDetails principal) {
+        if (principal == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        UserProfileResponse profile = userService.getUserProfileData(principal.getUsername());
+        return ResponseEntity.ok(profile);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@CookieValue(value = "refresh", required = false) String refresh) {
+        if (refresh == null || refresh.isBlank())
+             return ResponseEntity.status(401).build();
+
+        try {
+            var claims = jwtService.parse(refresh);
+            var login = claims.getSubject();
+            var user = userRepository.findByLogin(login).orElseThrow();
+            String access = jwtService.createAccess(user.getId(), user.getLogin());
+
+            return ResponseEntity.ok(Map.of("access", access));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).build();
+        }
     }
 
     @PostMapping("/logout")
-    ResponseEntity<?> logoutUser(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
+    public ResponseEntity<Void> logout(HttpServletResponse res) {
+        var cleared = ResponseCookie.from("refresh", "")
+                .httpOnly(true)
+                .secure(false)
+                .sameSite("Strict")
+                .path("/api/auth").maxAge(0).build();
+
+        res.addHeader(SET_COOKIE, cleared.toString());
+
+        return ResponseEntity.noContent().build();
     }
 }

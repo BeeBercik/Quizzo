@@ -28,13 +28,13 @@ public class UserService {
 
     public UserProfileResponse getUserProfileData(LoginRequest loginRequest) {
         User user = userRepository.findByLogin(loginRequest.login())
-                .orElseThrow(() -> new IncorrectUserDataException("User with such login does not exist"));
+                .orElseThrow(() -> new IncorrectUserDataException("User with such login not found"));
         return buildUserProfile(user);
     }
 
-    public UserProfileResponse getUserProfileData(Integer id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IncorrectUserDataException("User with such login does not exist"));
+    public UserProfileResponse getUserProfileData(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new IncorrectUserDataException("User not found"));
        return buildUserProfile(user);
     }
 
