@@ -1,7 +1,7 @@
 import generateAuthView from "../views/authView.js";
-import {sendLoginData, sendRegisterData} from "../services/quizService.js";
+import {sendLoginData} from "../services/quizService.js";
 import generateError from "../ui/errorBar.js";
-import initView from "../router";
+import initView from "../router.js";
 
 
 export function initAuth() {
@@ -36,6 +36,6 @@ export function initAuth() {
             password: registerFormPassword.value,
             email: registerFormEmail.value
         };
-        sendRegisterData(authData);
+        // sendRegisterData(authData);
     });
 }

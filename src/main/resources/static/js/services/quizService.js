@@ -1,32 +1,108 @@
 import generateError from "../ui/errorBar.js";
 
-export async function getQuizAttemptDetails(code) {
-    const response = await fetch(`/api/quizzes/attempt/${code.toUpperCase()}`);
-    if(response.status !== 200) return null;
+let accessToken = null;
 
-    const json = await response.json();
-    console.log(json)
-    return json;
+export function setAccess(t) {
+    accessToken = t;
+}
+export function getAccess() {
+    return accessToken;
+}
+export function clearAccess() {
+    accessToken = null;
+}
+
+async function call(url, options = {}, withAuth = true) {
+    const headers = new Headers(options.headers || {});
+    if (withAuth && accessToken) {
+        headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+
+    return fetch(url, { ...options, headers, credentials: 'include' });
+}
+
+async function apiFetch(url, options = {}) {
+    let res = await call(url, options, true);
+    if (res.status !== 401)
+        return res;
+
+    const r = await call('/api/auth/refresh', { method: 'POST' }, false);
+
+    if (r.ok) {
+        const { access } = await r.json();
+        setAccess(access);
+        return call(url, options, true);
+    }
+
+    clearAccess();
+    return res;
+}
+
+export async function sendLoginData(data) {
+    const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok)
+        return null;
+
+    const { access, profile } = await response.json();
+    setAccess(access);
+
+    return profile;
+}
+
+export async function logoutUser() {
+    const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        generateError("Error while trying to logout");
+    }
+
+    clearAccess();
+}
+
+export async function bootstrapAuth() {
+    const r = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
+
+    if (r.ok) {
+        const { access } = await r.json();
+        setAccess(access);
+    } else {
+        clearAccess();
+    }
+}
+
+export async function getQuizAttemptDetails(code) {
+    const response = await apiFetch(`/api/quizzes/attempt/${code.toUpperCase()}`);
+    if (response.status !== 200)
+        return null;
+
+    return response.json();
 }
 
 export async function getQuiz(code) {
-    const response = await fetch(`/api/quizzes/${code.toUpperCase()}`);
-    if(response.status !== 200) return null;
+    const response = await apiFetch(`/api/quizzes/${code.toUpperCase()}`);
+    if (response.status !== 200)
+        return null;
 
-    const json = await response.json();
-    console.log(json);
-    return json;
+    return response.json();
 }
 
 export async function sendAnswers(answers) {
-    console.log(answers);
-    const response = await fetch("/api/quizzes/submit", {
+    const response = await apiFetch("/api/quizzes/submit", {
         method: 'POST',
-        headers: { 'content-type': 'application/json'},
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify(answers)
     });
 
-    if(response.status !== 200) {
+    if (response.status !== 200) {
         generateError('Error during submitting quiz');
         return false;
     }
@@ -35,15 +111,13 @@ export async function sendAnswers(answers) {
 }
 
 export async function sendCreatedTest(test) {
-    console.log(test);
-
-    const response = await fetch("/api/quizzes/create", {
+    const response = await apiFetch("/api/quizzes/create", {
         method: 'POST',
-        headers: { 'content-type': 'application/json'},
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify(test)
     });
 
-    if(response.status !== 200) {
+    if (response.status !== 200) {
         generateError('Error during saving to database');
         return false;
     }
@@ -51,51 +125,18 @@ export async function sendCreatedTest(test) {
     return true;
 }
 
-export async function sendLoginData(data) {
-    const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-
-    if(response.status !== 200) return null;
-
-    return await response.json();
-}
-
-export async function sendRegisterData(data) {
-    console.log("REGISTER");
-    console.log(data);
-
-//  ...
-}
-
-export async function logoutUser() {
-    const response = await fetch('api/auth/logout', {
-        method: 'POST'
-    });
-
-    if(response.status !== 204) {
-        generateError("Error while trying to logout");
-    }
-}
-
 export async function getLoggedUserData() {
-    const response = await fetch('api/auth');
+    const response = await apiFetch('/api/auth/logged');
 
-    if(response.status !== 200) {
-        return null;
-    }
+    if (response.status !== 200) return null;
 
-    return await response.json();
+    return response.json();
 }
 
 export async function deleteQuiz(code) {
-    const response = await fetch(`/api/quizzes/${code}`, {
-        method: 'DELETE'
-    });
+    const response = await apiFetch(`/api/quizzes/${code}`, { method: 'DELETE' });
 
-    if(response.status !== 204) {
+    if (response.status !== 204) {
         generateError('This specific quiz cannot be removed');
         return false;
     }
@@ -104,19 +145,20 @@ export async function deleteQuiz(code) {
 }
 
 export async function getQuizSummary(code) {
-    const response = await fetch(`/api/quizzes/summary/${code}`);
-    if(response.status !== 200) {
+    const response = await apiFetch(`/api/quizzes/summary/${code}`);
+
+    if (response.status !== 200) {
         generateError('Quiz summary cannot be shown');
         return null;
     }
 
-    return await response.json();
+    return response.json();
 }
 
 export async function getAnswerCorrectness(id) {
-    const response = await fetch(`/api/quizzes/check/option/${id}`);
+    const response = await apiFetch(`/api/quizzes/check/option/${id}`);
 
-    if(response.status !== 200) {
+    if (response.status !== 200) {
         generateError('Error during option elimination');
         return;
     }
