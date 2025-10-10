@@ -3,8 +3,10 @@ package com.quizzo.controller;
 import com.quizzo.config.JwtService;
 import com.quizzo.dto.LoginRequest;
 import com.quizzo.dto.UserProfileResponse;
+import com.quizzo.model.User;
 import com.quizzo.repository.UserRepository;
 import com.quizzo.service.UserService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
@@ -42,16 +43,17 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(req.login(), req.password())
         );
 
-        var user = userRepository.findByLogin(req.login())
+        User user = userRepository.findByLogin(req.login())
                 .orElseThrow();
-        String access = jwtService.createAccess(user.getId(), user.getLogin());
+        String access = jwtService.createAccess(
+                user.getId(),
+                user.getLogin());
         String refresh = jwtService.createRefresh(
                 user.getId(),
-                user.getLogin(),
-                UUID.randomUUID().toString()
+                user.getLogin()
         );
 
-        var cookie = ResponseCookie.from("refresh", refresh)
+        ResponseCookie cookie = ResponseCookie.from("refresh", refresh)
                 .httpOnly(true)
                 .secure(false)
                 .sameSite("Strict")
@@ -67,12 +69,11 @@ public class AuthController {
     }
 
     @GetMapping("/logged")
-    public ResponseEntity<UserProfileResponse> logged(@AuthenticationPrincipal UserDetails principal) {
-        if (principal == null) {
+    public ResponseEntity<UserProfileResponse> logged(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null)
             return ResponseEntity.status(401).build();
-        }
 
-        UserProfileResponse profile = userService.getUserProfileData(principal.getUsername());
+        UserProfileResponse profile = userService.getUserProfileData(userDetails.getUsername());
         return ResponseEntity.ok(profile);
     }
 
@@ -82,9 +83,9 @@ public class AuthController {
              return ResponseEntity.status(401).build();
 
         try {
-            var claims = jwtService.parse(refresh);
-            var login = claims.getSubject();
-            var user = userRepository.findByLogin(login).orElseThrow();
+            Claims claims = jwtService.parseRefresh(refresh);
+            User user = userRepository.findByLogin(claims.getSubject())
+                    .orElseThrow();
             String access = jwtService.createAccess(user.getId(), user.getLogin());
 
             return ResponseEntity.ok(Map.of("access", access));
@@ -95,11 +96,13 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletResponse res) {
-        var cleared = ResponseCookie.from("refresh", "")
+        ResponseCookie cleared = ResponseCookie.from("refresh", "")
                 .httpOnly(true)
                 .secure(false)
                 .sameSite("Strict")
-                .path("/api/auth").maxAge(0).build();
+                .path("/api/auth")
+                .maxAge(0)
+                .build();
 
         res.addHeader(SET_COOKIE, cleared.toString());
 

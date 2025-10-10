@@ -12,12 +12,14 @@ import java.util.Date;
 @Component
 public class JwtService {
 
-    private final SecretKey key;
+    private final SecretKey accessKey;
+    private final SecretKey refresKey;
     private final Long accessMs;
     private final Long refreshMs;
 
     public JwtService(JwtProperties jwtProperties) {
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.secret()));
+        this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.accessSecret()));
+        this.refresKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.refreshSecret()));
         this.accessMs = jwtProperties.accessMs();
         this.refreshMs = jwtProperties.refreshMs();
     }
@@ -31,27 +33,34 @@ public class JwtService {
                 .claim("userId", userId)
                 .issuedAt(now)
                 .expiration(exp)
-                .signWith(key)
+                .signWith(accessKey)
                 .compact();
     }
 
-    public String createRefresh(Integer userId, String login, String jti) {
+    public String createRefresh(Integer userId, String login) {
         Date now = new Date();
         Date exp = new Date(now.getTime() + refreshMs);
 
         return Jwts.builder()
                 .subject(login)
                 .claim("userId", userId)
-                .id(jti)
                 .issuedAt(now)
                 .expiration(exp)
-                .signWith(key)
+                .signWith(refresKey)
                 .compact();
     }
 
-    public Claims parse(String token) {
+    public Claims parseAccess(String token) {
         return Jwts.parser()
-                .verifyWith(key)
+                .verifyWith(accessKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public Claims parseRefresh(String token) {
+        return Jwts.parser()
+                .verifyWith(refresKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
