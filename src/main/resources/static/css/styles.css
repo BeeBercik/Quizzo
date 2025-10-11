@@ -71,13 +71,12 @@ header nav button:hover {
     background-color: #dd6711;
 }
 
-.error-mess-global {
+.global-message-bar {
     width: 80%;
     margin: 10px auto;
     padding: 5px 0;
     border-radius: 8px;
     text-align: center;
-    background-color: #ad0205;
     font-weight: bold;
     display: none;
 }
