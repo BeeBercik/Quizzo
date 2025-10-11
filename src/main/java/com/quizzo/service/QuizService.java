@@ -4,7 +4,7 @@ import com.quizzo.dto.*;
 import com.quizzo.exception.AnswerNotFoundException;
 import com.quizzo.exception.QuizNotActiveException;
 import com.quizzo.exception.QuizNotFoundException;
-import com.quizzo.exception.UserNotLoggedException;
+import com.quizzo.exception.UnauthorizedException;
 import com.quizzo.model.*;
 import com.quizzo.repository.*;
 import org.springframework.stereotype.Service;
@@ -112,7 +112,7 @@ public class QuizService {
 
         quiz.setQuestions(questions);
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException("User not logged in"));
 
         quiz.setOwner(user);
         quizRepository.save(quiz);
@@ -126,7 +126,7 @@ public class QuizService {
         attemptEntity.setQuiz(quiz);
         attemptEntity.setAttemptTime(LocalDateTime.now());
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException("User not logged in"));
         attemptEntity.setUser(user);
 
         int goodAnswers = 0;
@@ -181,7 +181,7 @@ public class QuizService {
 
     private Quiz getSpecificUserQuiz(String code, Integer userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotLoggedException("User not logged in"));
+                .orElseThrow(() -> new UnauthorizedException("User not logged in"));
 
         Quiz quiz = getQuiz(code);
         if(!user.getCreatedQuizzes().contains(quiz))

@@ -1,36 +1,85 @@
 package com.quizzo.service;
 
+import com.quizzo.config.JwtService;
 import com.quizzo.dto.*;
-import com.quizzo.exception.IncorrectUserDataException;
-import com.quizzo.exception.UserNotLoggedException;
+import com.quizzo.exception.*;
 import com.quizzo.model.User;
 import com.quizzo.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
+import io.jsonwebtoken.Claims;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
-    public UserIdentityDto login(LoginRequest loginRequest) {
-        User user = userRepository.findByLogin(loginRequest.login())
-                .orElseThrow(() -> new IncorrectUserDataException("User with such login does not exist"));
+    public Map<String, String> loginUser(LoginRequest refactor) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(refactor.login(), refactor.password()));
 
-        if(!user.getPassword().equals(loginRequest.password()))
-            throw new IncorrectUserDataException("Incorrect password");
+        User user = userRepository.findByLogin(refactor.login())
+                .orElseThrow(() -> new UserNotFoundException("User with login " + refactor.login() + " not found"));
+        String access = jwtService.createAccess(
+                user.getId(),
+                user.getLogin());
+        String refresh = jwtService.createRefresh(
+                user.getId(),
+                user.getLogin()
+        );
 
-        return new UserIdentityDto(user.getId(), user.getLogin());
+        return Map.of("access", access,
+                "refresh", refresh);
     }
 
-    public UserIdentityDto getLoggedUser(HttpSession session) {
-        UserIdentityDto user = (UserIdentityDto) session.getAttribute("user");
-        if(user == null) throw new UserNotLoggedException("User not logged in");
+    public void registerUser(RegisterRequest request) {
+        if (userRepository.existsByLogin(request.login()))
+            throw new LoginAlreadyTakenException("Login " + request.login() + " already taken");
 
-        return user;
+        if (userRepository.existsByEmail(request.email()))
+            throw new EmailAlreadyTakenException("Email " + request.email() + " already taken");
+
+        User user = new User();
+        user.setLogin(request.login());
+        user.setEmail(request.email());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setCreateTime(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+    public UserProfileResponse getLoggedUserProfileData(UserDetails userDetails) {
+        if (userDetails == null)
+            throw new UnauthorizedException("User not logged in");
+
+        return userService.getUserProfileData(userDetails.getUsername());
+    }
+
+    public String getAccessTokenByRefresh(String refresh) {
+        if (refresh == null || refresh.isBlank())
+            throw new UnauthorizedException("Incorrect refresh token");
+
+        Claims claims = jwtService.parseRefresh(refresh);
+        User user = userRepository.findByLogin(claims.getSubject())
+                .orElseThrow(() -> new UserNotFoundException("User with login " + claims.getSubject() + " not found"));
+
+        return jwtService.createAccess(user.getId(), user.getLogin());
     }
 }

@@ -13,13 +13,13 @@ import java.util.Date;
 public class JwtService {
 
     private final SecretKey accessKey;
-    private final SecretKey refresKey;
+    private final SecretKey refreshKey;
     private final Long accessMs;
     private final Long refreshMs;
 
     public JwtService(JwtProperties jwtProperties) {
         this.accessKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.accessSecret()));
-        this.refresKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.refreshSecret()));
+        this.refreshKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.refreshSecret()));
         this.accessMs = jwtProperties.accessMs();
         this.refreshMs = jwtProperties.refreshMs();
     }
@@ -46,7 +46,7 @@ public class JwtService {
                 .claim("userId", userId)
                 .issuedAt(now)
                 .expiration(exp)
-                .signWith(refresKey)
+                .signWith(refreshKey)
                 .compact();
     }
 
@@ -60,7 +60,7 @@ public class JwtService {
 
     public Claims parseRefresh(String token) {
         return Jwts.parser()
-                .verifyWith(refresKey)
+                .verifyWith(refreshKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

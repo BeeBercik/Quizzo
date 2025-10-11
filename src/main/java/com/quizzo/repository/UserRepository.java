@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             where quiz_id = :quizId
             """)
     List<User> findDistinctByAttemptsOfQuiz(@Param("quizId") Integer quizId);
+
+    Boolean existsByLogin(String login);
+    Boolean existsByEmail(String email);
 }

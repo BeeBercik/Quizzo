@@ -32,8 +32,8 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", ex.getMessage()));
     }
 
-    @ExceptionHandler(UserNotLoggedException.class)
-    ResponseEntity<Map<String, String>> handleUserNotLoggedInException(UserNotLoggedException ex) {
+    @ExceptionHandler(UnauthorizedException.class)
+    ResponseEntity<Map<String, String>> handleUnauthorizedException(UnauthorizedException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", ex.getMessage()));
@@ -57,6 +57,27 @@ public class GlobalExceptionHandler {
     ResponseEntity<Map<String, String>> handleAnswerNotFoundException(AnswerNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    ResponseEntity<Map<String, String>> handleUserNotFoundExceptionException(UserNotFoundException ex) {
+        return ResponseEntity.
+                status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(LoginAlreadyTakenException.class)
+    ResponseEntity<Map<String, String>> handleLoginAlreadyTakenException(LoginAlreadyTakenException ex) {
+        return ResponseEntity.
+                status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(EmailAlreadyTakenException.class)
+    ResponseEntity<Map<String, String>> handleEmailAlreadyTakenException(EmailAlreadyTakenException ex) {
+        return ResponseEntity.
+                status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", ex.getMessage()));
     }
 }
