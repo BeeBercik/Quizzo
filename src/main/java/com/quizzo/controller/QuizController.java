@@ -38,7 +38,7 @@ public class QuizController {
     ResponseEntity<?> createQuiz(@RequestBody CreatedQuizRequest createdQuiz, @AuthenticationPrincipal AppUserPrincipal user) {
         quizService.saveQuiz(createdQuiz, user.getId());
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 

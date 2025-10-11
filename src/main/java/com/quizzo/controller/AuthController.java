@@ -55,7 +55,7 @@ public class AuthController {
 
     @GetMapping("/logged")
     public ResponseEntity<UserProfileResponse> logged(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(authService.getLoggedUserProfileData(userDetails));
+        return ResponseEntity.ok(userService.getLoggedUserProfileData(userDetails));
     }
 
     @PostMapping("/refresh")

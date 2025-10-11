@@ -22,14 +22,12 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
 
-    public AuthService(UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService) {
+    public AuthService(UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
     }
 
     public Map<String, String> loginUser(LoginRequest refactor) {
@@ -63,13 +61,6 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setCreateTime(LocalDateTime.now());
         userRepository.save(user);
-    }
-
-    public UserProfileResponse getLoggedUserProfileData(UserDetails userDetails) {
-        if (userDetails == null)
-            throw new UnauthorizedException("User not logged in");
-
-        return userService.getUserProfileData(userDetails.getUsername());
     }
 
     public String getAccessTokenByRefresh(String refresh) {
