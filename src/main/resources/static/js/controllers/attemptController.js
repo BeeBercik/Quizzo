@@ -2,7 +2,7 @@ import {codeValidation} from "../validators/codeValidator.js";
 import {getQuizAttemptDetails} from "../services/quizService.js";
 import generateAttemptView from "../views/attemptView.js";
 import initView from "../router.js";
-import generateError from "../ui/errorBar.js";
+import {generateError} from "../ui/globalMessageBar.js";
 
 export default async function initAttempt(code) {
     if(!codeValidation(code)) return -1;

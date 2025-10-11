@@ -2,7 +2,7 @@ import initDashboardView from "../views/dashboardView.js";
 import {deleteQuiz, getLoggedUserData, logoutUser} from "../services/quizService.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
-import generateError from "../ui/errorBar.js";
+import {generateError, generateSuccess} from "../ui/globalMessageBar.js";
 
 export default async function initDashboard(userData) {
     userData == null ? userData = await getLoggedUserData() : '';
@@ -17,7 +17,8 @@ export default async function initDashboard(userData) {
 
     document.getElementById("logout-btn").addEventListener("click", async function(e) {
         e.preventDefault();
-        await logoutUser();
+        if(await logoutUser())
+            generateSuccess("Logged out");
         initView("welcome");
     });
 
@@ -51,8 +52,10 @@ async function initDeleteQuiz(tdDelete) {
     const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
     if(!code) return;
 
-    if(await deleteQuiz(code))
+    if(await deleteQuiz(code)) {
         initView('dashboard');
+        generateSuccess("Quiz deleted");
+    }
 }
 
 function getSummaryQuizCode(tdSummary) {

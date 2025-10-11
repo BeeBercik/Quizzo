@@ -1,7 +1,7 @@
 import {getQuiz, sendAnswers} from "../services/quizService.js";
 import {renderQuestion, selectQuestion, updateNextButton} from "../ui/question.js";
 import generateTestView from "../views/quizView.js";
-import generateError from "../ui/errorBar.js";
+import {generateError} from "../ui/globalMessageBar.js";
 import startTimer from "../core/timer.js";
 import eliminateOption from "../ui/optionEliminator.js";
 import initView from "../router.js";

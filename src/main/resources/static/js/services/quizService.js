@@ -1,4 +1,4 @@
-import generateError from "../ui/errorBar.js";
+import {generateError} from "../ui/globalMessageBar.js";
 
 let accessToken = null;
 
@@ -70,13 +70,27 @@ export async function sendLoginData(data) {
     return profile;
 }
 
+export async function sendRegisterData(data) {
+    const response = await apiFetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    return response.ok;
+}
+
+
 export async function logoutUser() {
     const response = await apiFetch('/api/auth/logout', { method: 'POST' });
 
-    if (!response.ok)
+    if (!response.ok) {
         generateError("Error while trying to logout");
+        return false;
+    }
 
     clearAccess();
+    return true;
 }
 
 export async function getQuizAttemptDetails(code) {

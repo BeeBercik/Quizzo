@@ -1,6 +1,6 @@
 import initCreateTestView from "../views/createQuizView.js";
 import {sendCreatedTest} from "../services/quizService.js";
-import generateError from "../ui/errorBar.js";
+import {generateError, generateSuccess} from "../ui/globalMessageBar.js";
 import initView from "../router.js";
 import {createBadOption, createQuestion} from "../ui/createQuizPanel.js";
 
@@ -32,7 +32,7 @@ export default function initCreateTest() {
     document.querySelector("form").addEventListener("submit", function(e) {
         e.preventDefault();
         submitTest(title, testDuration, eliminationQuantity);
-    })
+    });
 }
 
 function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) {
@@ -66,8 +66,10 @@ async function submitTest(title, testDuration,
         questionsData: questionsData
     }
     console.log(finalTestData);
-    if(await sendCreatedTest(finalTestData))
+    if(await sendCreatedTest(finalTestData)) {
         initView("dashboard");
+        generateSuccess("Quiz created");
+    }
 }
 
 function generateQuestion() {

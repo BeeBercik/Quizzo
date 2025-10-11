@@ -1,4 +1,4 @@
-import generateError from "../ui/errorBar.js";
+import {generateError} from "../ui/globalMessageBar.js";
 
 export function codeValidation(code) {
     if(code.length !== 5) {

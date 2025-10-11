@@ -2,7 +2,7 @@ import generateWelcomeView from "../views/welcomeView.js";
 import {codeValidation} from "../validators/codeValidator.js";
 import initView from "../router.js";
 import {getLoggedUserData} from "../services/quizService.js";
-import generateError from "../ui/errorBar.js";
+import {generateError} from "../ui/globalMessageBar.js";
 
 export default async function initWelcome() {
     const isUserLogged = await getLoggedUserData() != null;

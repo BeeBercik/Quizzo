@@ -1,6 +1,6 @@
 import generateAuthView from "../views/authView.js";
-import {sendLoginData} from "../services/quizService.js";
-import generateError from "../ui/errorBar.js";
+import {sendLoginData, sendRegisterData} from "../services/quizService.js";
+import {generateError, generateSuccess} from "../ui/globalMessageBar.js";
 import initView from "../router.js";
 
 
@@ -25,17 +25,25 @@ export function initAuth() {
         };
 
         const userData = await sendLoginData(authData);
-        if(userData === null) generateError("Incorrect login data");
-        else initView("dashboard", null, userData);
+        if(userData === null)
+            generateError("Incorrect login data");
+        else {
+            initView("dashboard", null, userData);
+            generateSuccess("Logged in");
+        }
     });
 
-    document.getElementById("register-form").addEventListener("submit", function(e) {
+    document.getElementById("register-form").addEventListener("submit", async function(e) {
         e.preventDefault();
         authData = {
             login: registerFormLogin.value,
             password: registerFormPassword.value,
             email: registerFormEmail.value
         };
-        // sendRegisterData(authData);
+        const result = await sendRegisterData(authData);
+        if(result)
+            generateSuccess("Success! Now log-in");
+        else
+            generateError("Login or email already taken");
     });
 }
