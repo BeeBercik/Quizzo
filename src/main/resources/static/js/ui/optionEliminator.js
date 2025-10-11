@@ -1,12 +1,24 @@
 import {getAnswerCorrectness} from "../services/quizService.js";
+import {generateError} from "./globalMessageBar.js";
 
 export default async function eliminateOption(testDetails, options, eliminated) {
     let random;
     let answerId;
-    do {
-        random = Math.floor(Math.random() * options.length);
+
+    while(true) {
+        do {
+            random = Math.floor(Math.random() * options.length);
+        } while(eliminated.includes(random));
+
         answerId = options[random].dataset.value;
-    } while(eliminated.includes(random) || await getAnswerCorrectness(answerId));
+        const result = await getAnswerCorrectness(answerId);
+
+        if(result === null)
+            generateError('Error during option elimination');
+
+        if(result === false)
+            break;
+    }
 
     eliminated.push(random);
     options[random].classList.remove("selected");

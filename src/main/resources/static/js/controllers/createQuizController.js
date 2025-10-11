@@ -69,7 +69,8 @@ async function submitTest(title, testDuration,
     if(await sendCreatedTest(finalTestData)) {
         initView("dashboard");
         generateSuccess("Quiz created");
-    }
+    } else
+        generateError('Error during saving to database');
 }
 
 function generateQuestion() {

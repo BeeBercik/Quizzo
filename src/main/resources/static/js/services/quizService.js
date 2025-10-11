@@ -1,4 +1,3 @@
-import {generateError} from "../ui/globalMessageBar.js";
 
 let accessToken = null;
 
@@ -84,10 +83,8 @@ export async function sendRegisterData(data) {
 export async function logoutUser() {
     const response = await apiFetch('/api/auth/logout', { method: 'POST' });
 
-    if (!response.ok) {
-        generateError("Error while trying to logout");
+    if (!response.ok)
         return false;
-    }
 
     clearAccess();
     return true;
@@ -116,12 +113,7 @@ export async function sendAnswers(answers) {
         body: JSON.stringify(answers)
     });
 
-    if (response.status !== 200) {
-        generateError('Error during submitting quiz');
-        return false;
-    }
-
-    return true;
+    return response.status === 200;
 }
 
 export async function sendCreatedTest(test) {
@@ -131,12 +123,7 @@ export async function sendCreatedTest(test) {
         body: JSON.stringify(test)
     });
 
-    if (response.status !== 200) {
-        generateError('Error during saving to database');
-        return false;
-    }
-
-    return true;
+    return response.status === 200;
 }
 
 export async function getLoggedUserData() {
@@ -151,21 +138,14 @@ export async function getLoggedUserData() {
 export async function deleteQuiz(code) {
     const response = await apiFetch(`/api/quizzes/${code}`, { method: 'DELETE' });
 
-    if (response.status !== 204) {
-        generateError('This specific quiz cannot be removed');
-        return false;
-    }
-
-    return true;
+    return response.status === 204;
 }
 
 export async function getQuizSummary(code) {
     const response = await apiFetch(`/api/quizzes/summary/${code}`);
 
-    if (response.status !== 200) {
-        generateError('Quiz summary cannot be shown');
+    if (response.status !== 200)
         return null;
-    }
 
     return response.json();
 }
@@ -173,10 +153,8 @@ export async function getQuizSummary(code) {
 export async function getAnswerCorrectness(id) {
     const response = await apiFetch(`/api/quizzes/check/option/${id}`);
 
-    if (response.status !== 200) {
-        generateError('Error during option elimination');
-        return;
-    }
+    if (response.status !== 200)
+        return null;
 
     return (await response.json()).correct;
 }

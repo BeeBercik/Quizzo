@@ -19,6 +19,8 @@ export default async function initDashboard(userData) {
         e.preventDefault();
         if(await logoutUser())
             generateSuccess("Logged out");
+        else
+            generateError("Error while trying to logout");
         initView("welcome");
     });
 
@@ -55,7 +57,8 @@ async function initDeleteQuiz(tdDelete) {
     if(await deleteQuiz(code)) {
         initView('dashboard');
         generateSuccess("Quiz deleted");
-    }
+    } else
+        generateError('This specific quiz cannot be removed');
 }
 
 function getSummaryQuizCode(tdSummary) {

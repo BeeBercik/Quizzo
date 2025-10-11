@@ -30,6 +30,10 @@ export default async function initTest(code) {
     async function timeUp() {
         if(await sendAnswers(answers))
             initView("dashboard");
+        else {
+            generateError('Error during submitting quiz');
+            return;
+        }
         initView("dashboard");
     }
     const timeLabel = document.getElementById("time");
@@ -55,6 +59,8 @@ export default async function initTest(code) {
             stopTimer();
             if(await sendAnswers(answers))
                 initView("dashboard");
+            else
+                generateError('Error during submitting quiz');
         }
     });
 
