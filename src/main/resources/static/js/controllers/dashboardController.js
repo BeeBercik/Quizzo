@@ -7,7 +7,7 @@ import generateError from "../ui/errorBar.js";
 export default async function initDashboard(userData) {
     userData == null ? userData = await getLoggedUserData() : '';
 
-    if (userData == null) {
+    if(userData == null) {
         generateError("You are not logged in");
         return 0;
     }

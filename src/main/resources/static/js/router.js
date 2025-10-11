@@ -6,7 +6,7 @@ import {initGeneralComponentsListening} from "./controllers/generalLayoutControl
 import initCreateTest from "./controllers/createQuizController.js";
 import { initAuth } from "./controllers/authController.js";
 import initQuizSummary from "./controllers/summaryQuizController.js";
-import {bootstrapAuth} from "./services/quizService.js";
+import {refreshAccess} from "./services/quizService.js";
 
 export default function initView(view, code = null, data = null) {
     switch(view) {
@@ -46,9 +46,10 @@ export default function initView(view, code = null, data = null) {
     }
 }
 
-(async function start() {
-    await bootstrapAuth();
+async function start() {
+    await refreshAccess();
     await initGeneralComponentsListening()
     let view = document.querySelector("main").dataset.view;
     initView(view);
-})();
+}
+await start();

@@ -5,44 +5,59 @@ let accessToken = null;
 export function setAccess(t) {
     accessToken = t;
 }
-export function getAccess() {
-    return accessToken;
-}
+
 export function clearAccess() {
     accessToken = null;
 }
 
-async function call(url, options = {}, withAuth = true) {
+export async function apiFetch(url, options = {}) {
     const headers = new Headers(options.headers || {});
-    if (withAuth && accessToken) {
+    const isAuthEndpoint =
+        url.startsWith("/api/auth/login") ||
+        url.startsWith("/api/auth/refresh") ||
+        url.startsWith("/api/auth/logout");
+
+    if (!isAuthEndpoint && accessToken)
         headers.set("Authorization", `Bearer ${accessToken}`);
+
+    let response = await fetch(url, {
+        ...options,
+        headers,
+        credentials: "include",
+    });
+
+    if (response.status !== 401)
+        return response;
+
+    const refreshed = await refreshAccess();
+    if (refreshed) {
+        headers.set("Authorization", `Bearer ${accessToken}`);
+        return fetch(url, { ...options, headers, credentials: "include" });
     }
 
-    return fetch(url, { ...options, headers, credentials: 'include' });
+    return response;
 }
 
-async function apiFetch(url, options = {}) {
-    let res = await call(url, options, true);
-    if (res.status !== 401)
-        return res;
+export async function refreshAccess() {
+    const response = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        credentials: "include"
+    });
 
-    const r = await call('/api/auth/refresh', { method: 'POST' }, false);
-
-    if (r.ok) {
-        const { access } = await r.json();
+    if (response.ok) {
+        const {access} = await response.json();
         setAccess(access);
-        return call(url, options, true);
+        return true;
     }
 
     clearAccess();
-    return res;
+    return false;
 }
 
 export async function sendLoginData(data) {
-    const response = await fetch('/api/auth/login', {
+    const response = await apiFetch('/api/auth/login', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(data)
     });
 
@@ -56,27 +71,12 @@ export async function sendLoginData(data) {
 }
 
 export async function logoutUser() {
-    const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include'
-    });
+    const response = await apiFetch('/api/auth/logout', { method: 'POST' });
 
-    if (!response.ok) {
+    if (!response.ok)
         generateError("Error while trying to logout");
-    }
 
     clearAccess();
-}
-
-export async function bootstrapAuth() {
-    const r = await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
-
-    if (r.ok) {
-        const { access } = await r.json();
-        setAccess(access);
-    } else {
-        clearAccess();
-    }
 }
 
 export async function getQuizAttemptDetails(code) {
@@ -128,7 +128,8 @@ export async function sendCreatedTest(test) {
 export async function getLoggedUserData() {
     const response = await apiFetch('/api/auth/logged');
 
-    if (response.status !== 200) return null;
+    if (response.status !== 200)
+        return null;
 
     return response.json();
 }
