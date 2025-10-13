@@ -185,7 +185,7 @@ public class QuizService {
 
         Quiz quiz = getQuiz(code);
         if (!user.getCreatedQuizzes().contains(quiz))
-            throw new IllegalArgumentException("Quiz does not belong to the logged user");
+            throw new IllegalArgumentException("Quiz does not belong to the user");
 
         return quiz;
     }
@@ -221,7 +221,7 @@ public class QuizService {
 
     public Boolean checkIfAbleToEliminate(int id) {
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new AnswerNotFoundException("Answer with such id odes not exist"));
+                .orElseThrow(() -> new AnswerNotFoundException("Answer with such id does not exist"));
         return answer.getCorrect();
     }
 }

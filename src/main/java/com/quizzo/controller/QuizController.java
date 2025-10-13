@@ -51,7 +51,7 @@ public class QuizController {
     }
 
     @DeleteMapping("/{code}")
-    ResponseEntity<?> removeQuiz(@PathVariable(name = "code") String code,@AuthenticationPrincipal AppUserPrincipal user) {
+    ResponseEntity<?> removeQuiz(@PathVariable(name = "code") String code, @AuthenticationPrincipal AppUserPrincipal user) {
         quizService.deleteQuiz(code, user.getId());
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

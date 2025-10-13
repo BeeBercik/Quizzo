@@ -123,7 +123,7 @@ export async function sendCreatedTest(test) {
         body: JSON.stringify(test)
     });
 
-    return response.status === 200;
+    return response.status === 201;
 }
 
 export async function getLoggedUserData() {
