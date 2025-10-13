@@ -36,7 +36,7 @@ export default function initCreateTest() {
 }
 
 function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) {
-    if(eliminationOption.checked === true)
+    if (eliminationOption.checked === true)
         eliminationQuantity.disabled = false;
     else {
         eliminationQuantity.disabled = true;
@@ -46,18 +46,18 @@ function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) 
 
 async function submitTest(title, testDuration,
                     eliminationQuantity) {
-    if(testDuration.value === "" || testDuration.value < 1) {
+    if (testDuration.value === "" || testDuration.value < 1) {
         generateError("Minimum duration time for test is 1 minute");
         return;
     }
 
-    if(title.value === "") {
+    if (title.value === "") {
         generateError("Title cannot be empty!");
         return;
     }
 
     const questionsData = [];
-    if(!getQuestionsAndAnswers(questionsData)) return null;
+    if (!getQuestionsAndAnswers(questionsData)) return null;
 
     const finalTestData = {
         title: title.value,
@@ -65,8 +65,8 @@ async function submitTest(title, testDuration,
         eliminations: eliminationQuantity.value === "" ? 0 : eliminationQuantity.value,
         questionsData: questionsData
     }
-    console.log(finalTestData);
-    if(await sendCreatedTest(finalTestData)) {
+
+    if (await sendCreatedTest(finalTestData)) {
         initView("dashboard");
         generateSuccess("Quiz created");
     } else
@@ -82,7 +82,7 @@ function generateQuestion() {
 function generateBadOption(e) {
     const btn = e.currentTarget;
     const question = btn.closest("section.question");
-    if(question.dataset.badOptionCount === "8") {
+    if (question.dataset.badOptionCount === "8") {
         generateError("Limit 8 bad options for question");
         return;
     }
@@ -103,8 +103,8 @@ function getQuestionsAndAnswers(questionsData) {
     const questions = document.querySelectorAll(".question");
     const allInputs = document.querySelectorAll(".question input");
 
-    for(const input of allInputs) {
-        if(input.value.trim() === "") {
+    for (const input of allInputs) {
+        if (input.value.trim() === "") {
             generateError("Input cannot be empty");
             return false;
         }

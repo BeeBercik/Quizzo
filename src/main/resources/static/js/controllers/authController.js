@@ -25,7 +25,7 @@ export function initAuth() {
         };
 
         const userData = await sendLoginData(authData);
-        if(userData === null)
+        if (userData === null)
             generateError("Incorrect login data");
         else {
             initView("dashboard", null, userData);
@@ -41,7 +41,7 @@ export function initAuth() {
             email: registerFormEmail.value
         };
         const result = await sendRegisterData(authData);
-        if(result) {
+        if (result) {
             document.getElementById("register-form").reset();
             generateSuccess("Success! Now log-in");
             document.getElementById("login-login").focus();

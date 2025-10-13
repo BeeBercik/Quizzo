@@ -13,7 +13,7 @@ export default function generateAuthView()
     
                 <form id="login-form">
                     <div class="form-field">
-                        <label htmlFor="login-username">Login</label>
+                        <label for="login-username">Login</label>
                         <input type="text" name="login" id="login-login"/>
                     </div>
     
@@ -33,7 +33,7 @@ export default function generateAuthView()
     
                 <form id="register-form">
                     <div class="form-field">
-                        <label For="register-login">Login</label>
+                        <label for="register-login">Login</label>
                         <input type="text" name="login" id="register-login"/>
                     </div>
     

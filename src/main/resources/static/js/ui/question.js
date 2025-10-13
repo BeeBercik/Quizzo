@@ -17,13 +17,13 @@ export function renderQuestion(q) {
 
 export function selectQuestion(options, e) {
     const previousSelected = options.querySelectorAll("button.selected");
-    for(const element of previousSelected) {
+    for (const element of previousSelected) {
         element.classList.remove("selected");
     }
     e.target.classList.add("selected");
 }
 
 export function updateNextButton(button, current, total) {
-    if(current < total - 1) button.textContent = "Next";
+    if (current < total - 1) button.textContent = "Next";
     else button.textContent = "Finish";
 }

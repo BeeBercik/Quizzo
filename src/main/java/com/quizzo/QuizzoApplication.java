@@ -43,7 +43,7 @@ public class QuizzoApplication implements CommandLineRunner {
         user.getCreatedQuizzes().add(quiz);
 
         String code = generateCode();
-        while(quizRepository.existsByCode(code)) {
+        while (quizRepository.existsByCode(code)) {
             code = generateCode();
         }
         quiz.setCode(code.toUpperCase());

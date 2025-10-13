@@ -8,7 +8,7 @@ import initView from "../router.js";
 
 export default async function initTest(code) {
     const testDetails = await getQuiz(code);
-    if(!testDetails) {
+    if (!testDetails) {
         generateError("Test with such code doesn't exist");
         return -1;
     }
@@ -28,7 +28,7 @@ export default async function initTest(code) {
     updateNextButton(nextButton, currentQuestion, questionCount);
 
     async function timeUp() {
-        if(await sendAnswers(answers))
+        if (await sendAnswers(answers))
             initView("dashboard");
         else {
             generateError('Error during submitting quiz');
@@ -41,23 +41,24 @@ export default async function initTest(code) {
 
     optionsContainer.addEventListener("click", function(e) {
         e.preventDefault();
-        if(e.target.disabled) return;
+        if (e.target.disabled) return;
         selectQuestion(optionsContainer, e);
     });
 
     nextButton.addEventListener("click", async function(e) {
         e.preventDefault();
         const savedAnswers = saveAnswer(testDetails, answers);
-        if(!savedAnswers) return currentQuestion;
+        if (!savedAnswers)
+            return currentQuestion;
 
-        if(currentQuestion < questionCount - 1) {
+        if (currentQuestion < questionCount - 1) {
             currentQuestion++;
             eliminated.length = 0;
             renderQuestion(testDetails.questions[currentQuestion]);
             updateNextButton(nextButton, currentQuestion, questionCount);
         } else {
             stopTimer();
-            if(await sendAnswers(answers))
+            if (await sendAnswers(answers))
                 initView("dashboard");
             else
                 generateError('Error during submitting quiz');
@@ -67,11 +68,11 @@ export default async function initTest(code) {
     document.getElementById("eliminate-option").addEventListener("click", function() {
         const options = document.querySelectorAll(".options .option");
 
-        if(testDetails.eliminationsCount < 1) {
+        if (testDetails.eliminationsCount < 1) {
             generateError("You do not have any eliminations left");
             return;
         }
-        if(eliminated.length === options.length - 1) {
+        if (eliminated.length === options.length - 1) {
             generateError("Cannot eliminate all answers");
             return;
         }
@@ -81,7 +82,7 @@ export default async function initTest(code) {
 
 function saveAnswer(testDetails, answers) {
     const selected = document.querySelector(".options button.selected");
-    if(!selected) {
+    if (!selected) {
         generateError("Choose the answer");
         return false;
     }

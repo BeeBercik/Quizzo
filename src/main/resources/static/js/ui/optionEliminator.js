@@ -5,18 +5,18 @@ export default async function eliminateOption(testDetails, options, eliminated) 
     let random;
     let answerId;
 
-    while(true) {
+    while (true) {
         do {
             random = Math.floor(Math.random() * options.length);
-        } while(eliminated.includes(random));
+        } while (eliminated.includes(random));
 
         answerId = options[random].dataset.value;
         const result = await getAnswerCorrectness(answerId);
 
-        if(result === null)
+        if (result === null)
             generateError('Error during option elimination');
 
-        if(result === false)
+        if (result === false)
             break;
     }
 

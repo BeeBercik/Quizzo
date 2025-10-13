@@ -8,9 +8,9 @@ export default function generateSummaryView(summary) {
     const { title, code, creationDate, users = [] } = summary;
 
     let attempts = [];
-    for (const u of users) {
-        if (u.attempts) {
-            for (const a of u.attempts) {
+    for (const user of users) {
+        if (user.attempts) {
+            for (const a of user.attempts) {
                 attempts.push(a);
                 }
         }
@@ -70,6 +70,6 @@ export default function generateSummaryView(summary) {
 `;
 
     document.getElementById("quiz-title").textContent = title;
-    if(users.length)
+    if (users.length)
         users.forEach((u) => generateParticipantRow(u, dateFormat));
 }

@@ -135,8 +135,8 @@ public class QuizService {
             Integer questionId = submittedAnswer.questionId();
 
             List<Answer> answers = questionRepository.findById(questionId).orElseThrow().getAnswers();
-            for(Answer a : answers) {
-                if(a.getId().equals(submittedAnswerId) && a.getCorrect())
+            for (Answer a : answers) {
+                if (a.getId().equals(submittedAnswerId) && a.getCorrect())
                     goodAnswers++;
             }
         }
@@ -184,7 +184,7 @@ public class QuizService {
                 .orElseThrow(() -> new UnauthorizedException("User not logged in"));
 
         Quiz quiz = getQuiz(code);
-        if(!user.getCreatedQuizzes().contains(quiz))
+        if (!user.getCreatedQuizzes().contains(quiz))
             throw new IllegalArgumentException("Quiz does not belong to the logged user");
 
         return quiz;
@@ -213,7 +213,7 @@ public class QuizService {
         Quiz quiz = quizRepository.findByCode(code.trim().toUpperCase())
                 .orElseThrow(() -> new QuizNotFoundException("Quiz " + code + " not found"));
 
-        if(!quiz.getActive())
+        if (!quiz.getActive())
             throw new QuizNotActiveException("Quz not active");
 
         return quiz;

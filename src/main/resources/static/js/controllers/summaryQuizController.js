@@ -4,9 +4,8 @@ import {generateError} from "../ui/globalMessageBar.js";
 
 export default async function initQuizSummary(code) {
     const summary = await getQuizSummary(code);
-    if(summary)
+    if (summary)
         generateSummaryView(summary);
     else
         generateError('Quiz summary cannot be shown');
-    console.log(summary);
 }

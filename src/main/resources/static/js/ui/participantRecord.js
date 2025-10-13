@@ -20,7 +20,7 @@ export function generateParticipantRow(user, fmt) {
     tr.append(tdLogin, tdEmail, tdCount);
     tbody.appendChild(tr);
 
-    if(attempts.length) {
+    if (attempts.length) {
         const trDetails = document.createElement("tr");
         trDetails.className = "row-details";
 
@@ -35,7 +35,7 @@ export function generateParticipantRow(user, fmt) {
         const ul = document.createElement("ul");
         ul.className = "attempts-list";
 
-        for(let i = 0; i < attempts.length; i++) {
+        for (let i = 0; i < attempts.length; i++) {
             const a = attempts[i];
             const li = document.createElement("li");
             li.textContent = `${a.score} % - ${fmt(a.attemptTime)}`;

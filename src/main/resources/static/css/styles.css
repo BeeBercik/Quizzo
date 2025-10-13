@@ -81,6 +81,11 @@ header nav button:hover {
     display: none;
 }
 
+header #welcome-btn {
+    background-color: transparent;
+    font-size: 30px;
+}
+
 main {
     display: flex;
     flex: 1;

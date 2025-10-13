@@ -25,7 +25,7 @@ export default function generateWelcomeView(isUserLogged) {
                 </p>
             </section>
         `;
-    if(!isUserLogged) {
+    if (!isUserLogged) {
         document.getElementById("login-option").innerHTML = `.. or <span id="auth-forms">log in</span>`;
     }
 }

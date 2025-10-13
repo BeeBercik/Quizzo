@@ -7,7 +7,7 @@ import {generateError, generateSuccess} from "../ui/globalMessageBar.js";
 export default async function initDashboard(userData) {
     userData == null ? userData = await getLoggedUserData() : '';
 
-    if(userData == null) {
+    if (userData == null) {
         generateError("You are not logged in");
         return 0;
     }
@@ -15,7 +15,7 @@ export default async function initDashboard(userData) {
 
     document.getElementById("logout-btn").addEventListener("click", async function(e) {
         e.preventDefault();
-        if(await logoutUser())
+        if (await logoutUser())
             generateSuccess("Logged out");
         else
             generateError("Error while trying to logout");
@@ -25,7 +25,7 @@ export default async function initDashboard(userData) {
     document.querySelector("form").addEventListener("submit", function(e) {
         e.preventDefault();
         const code = document.querySelector("form .code").value.trim();
-        if(!codeValidation(code)) return -1;
+        if (!codeValidation(code)) return -1;
         initView("attempt", code);
     });
 
@@ -37,10 +37,10 @@ export default async function initDashboard(userData) {
     const tbody = document.querySelector('#createdTests tbody');
     tbody.addEventListener('click', async (e) => {
         const tdDelete = e.target.closest('.q-delete');
-        if(tdDelete) await initDeleteQuiz(tdDelete)
+        if (tdDelete) await initDeleteQuiz(tdDelete)
 
         const tdSummary = e.target.closest('.q-summary');
-        if(tdSummary) {
+        if (tdSummary) {
             const code = getSummaryQuizCode(tdSummary);
             initView('summary', code);
         }
@@ -50,9 +50,9 @@ export default async function initDashboard(userData) {
 async function initDeleteQuiz(tdDelete) {
     const row = tdDelete.closest('tr');
     const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
-    if(!code) return;
+    if (!code) return;
 
-    if(await deleteQuiz(code)) {
+    if (await deleteQuiz(code)) {
         initView('dashboard');
         generateSuccess("Quiz deleted");
     } else
@@ -62,7 +62,7 @@ async function initDeleteQuiz(tdDelete) {
 function getSummaryQuizCode(tdSummary) {
     const row = tdSummary.closest('tr');
     const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
-    if(!code) return;
+    if (!code) return;
 
     return code;
 }

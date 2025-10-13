@@ -13,9 +13,9 @@ export default async function initWelcome() {
 
         const code = document.querySelector("form .code").value.trim();
 
-        if(!codeValidation(code))
+        if (!codeValidation(code))
             return 0;
-        else if(!isUserLogged) {
+        else if (!isUserLogged) {
             generateError("You are not logged in");
             return 0;
         }
@@ -23,7 +23,7 @@ export default async function initWelcome() {
         initView("attempt", code);
     });
 
-    if(!isUserLogged) {
+    if (!isUserLogged) {
         document.getElementById("auth-forms").addEventListener("click", async function() {
             initView("auth-forms");
         });

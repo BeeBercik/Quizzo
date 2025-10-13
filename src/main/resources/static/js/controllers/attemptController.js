@@ -5,10 +5,10 @@ import initView from "../router.js";
 import {generateError} from "../ui/globalMessageBar.js";
 
 export default async function initAttempt(code) {
-    if(!codeValidation(code)) return -1;
+    if (!codeValidation(code)) return -1;
 
     const quizInfo = await getQuizAttemptDetails(code);
-    if(!quizInfo) {
+    if (!quizInfo) {
         generateError("Test with such code doesn't exist");
         return -1;
     }

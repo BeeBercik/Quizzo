@@ -14,36 +14,26 @@ export default async function initView(view, code = null, data = null) {
     switch(view) {
         case "welcome":
             initWelcome();
-            console.log("welcome view");
             break;
         case "attempt":
-            console.log(code);
             initAttempt(code);
-            console.log("attempt view");
             break;
         case "test":
-            console.log(code);
             initTest(code);
-            console.log("test view");
             break;
         case "dashboard":
             initDashboard(data);
-            console.log("dashboard view");
             break;
         case "create-test":
             initCreateTest();
-            console.log("create-test view");
             break;
         case "auth-forms":
             initAuth();
-            console.log("auth-forms view");
             break;
         case "summary":
             initQuizSummary(code);
-            console.log("quiz summary view");
             break;
         default:
-            console.log("Unknown view");
             break;
     }
 }
