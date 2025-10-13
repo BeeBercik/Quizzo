@@ -11,8 +11,6 @@ export default async function initDashboard(userData) {
         generateError("You are not logged in");
         return 0;
     }
-
-    document.getElementById('dashboard-btn').textContent = `${userData.login}'s panel`;
     initDashboardView(userData);
 
     document.getElementById("logout-btn").addEventListener("click", async function(e) {

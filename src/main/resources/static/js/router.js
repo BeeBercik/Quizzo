@@ -7,8 +7,10 @@ import initCreateTest from "./controllers/createQuizController.js";
 import { initAuth } from "./controllers/authController.js";
 import initQuizSummary from "./controllers/summaryQuizController.js";
 import {refreshAccess} from "./services/quizService.js";
+import updateDashboardButton from "./ui/globalDashboardButton.js";
 
-export default function initView(view, code = null, data = null) {
+export default async function initView(view, code = null, data = null) {
+    await updateDashboardButton();
     switch(view) {
         case "welcome":
             initWelcome();

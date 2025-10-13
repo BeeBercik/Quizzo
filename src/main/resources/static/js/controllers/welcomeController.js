@@ -7,8 +7,6 @@ import {generateError} from "../ui/globalMessageBar.js";
 export default async function initWelcome() {
     const isUserLogged = await getLoggedUserData() != null;
     generateWelcomeView(isUserLogged);
-    if(!isUserLogged)
-        document.getElementById('dashboard-btn').textContent = "User's dashboard";
 
     document.querySelector("form").addEventListener("submit", (e) => {
         e.preventDefault();
