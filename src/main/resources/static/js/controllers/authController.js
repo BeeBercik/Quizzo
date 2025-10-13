@@ -41,8 +41,11 @@ export function initAuth() {
             email: registerFormEmail.value
         };
         const result = await sendRegisterData(authData);
-        if(result)
+        if(result) {
+            document.getElementById("register-form").reset();
             generateSuccess("Success! Now log-in");
+            document.getElementById("login-login").focus();
+        }
         else
             generateError("Login or email already taken");
     });
