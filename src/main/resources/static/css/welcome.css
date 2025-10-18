@@ -87,7 +87,6 @@
 
     #welcome-main .entry-code form {
         flex-direction: column;
-        gap: 20px;
         margin-bottom: 25px;
     }
 }

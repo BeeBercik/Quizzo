@@ -134,3 +134,71 @@
 #dashboard-main .summary .q-summary:hover {
     background-color: #0294fa;
 }
+
+@media (max-width: 1050px) {
+    #dashboard-main h2,
+    #dashboard-main #user-login {
+        font-size: 25px;
+    }
+
+    #dashboard-main .actions {
+        width: 80%;
+        flex-direction: column;
+        text-align: center;
+        margin: 30px auto 0;
+    }
+
+    #dashboard-main .actions input,
+    #dashboard-main .actions button {
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    #dashboard-main .actions #create-test {
+        margin-top: 30px;
+    }
+
+    #dashboard-main .summary {
+        flex-direction: column;
+        width: 80%;
+        margin: 50px auto 30px;
+        gap: 30px;
+    }
+
+    #dashboard-main .summary fieldset {
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+
+    #dashboard-main .summary legend {
+        font-size: 20px;
+    }
+
+    #dashboard-main .summary table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    #dashboard-main .summary table thead th,
+    #dashboard-main .summary table tbody td {
+        padding: 10px;
+        font-size: 14px;
+        word-break: break-word;
+    }
+
+    #dashboard-main .summary table thead th:nth-child(1),
+    #dashboard-main .summary table tbody td:nth-child(1),
+    #dashboard-main .summary table tbody td:nth-child(2) {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        text-align: left;
+    }
+
+    #dashboard-main .summary fieldset {
+        overflow-x: auto;
+    }
+}
