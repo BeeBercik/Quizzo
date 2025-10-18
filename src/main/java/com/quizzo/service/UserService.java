@@ -6,6 +6,7 @@ import com.quizzo.dto.CreatedQuizDetailsResponse;
 import com.quizzo.dto.UserProfileResponse;
 import com.quizzo.exception.IncorrectUserDataException;
 import com.quizzo.exception.UnauthorizedException;
+import com.quizzo.exception.UserNotFoundException;
 import com.quizzo.model.Attempt;
 import com.quizzo.model.Quiz;
 import com.quizzo.model.User;
@@ -33,13 +34,13 @@ public class UserService {
             throw new UnauthorizedException("User not logged in");
 
         User user = userRepository.findByLogin(userDetails.getUsername())
-                .orElseThrow(() -> new IncorrectUserDataException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         return buildUserProfile(user);
     }
 
     public UserProfileResponse getUserProfileData(LoginRequest loginRequest) {
         User user = userRepository.findByLogin(loginRequest.login())
-                .orElseThrow(() -> new IncorrectUserDataException("User with such login not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with such login not found"));
         return buildUserProfile(user);
     }
 

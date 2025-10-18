@@ -19,6 +19,12 @@ export function initAuth() {
     document.getElementById("login-form").addEventListener("submit", async function(e) {
         e.preventDefault();
 
+        if (!loginFormLogin.value ||
+            !loginFormPassword.value) {
+            generateError("Login data cannot be empty");
+            return;
+        }
+
         authData = {
             login: loginFormLogin.value,
             password: loginFormPassword.value
@@ -35,18 +41,29 @@ export function initAuth() {
 
     document.getElementById("register-form").addEventListener("submit", async function(e) {
         e.preventDefault();
+
+        if (!registerFormLogin.value ||
+            !registerFormPassword.value ||
+            !registerFormEmail.value) {
+            generateError("Register data cannot be empty");
+            return;
+        }
+
         authData = {
             login: registerFormLogin.value,
             password: registerFormPassword.value,
             email: registerFormEmail.value
         };
+
         const result = await sendRegisterData(authData);
-        if (result) {
-            document.getElementById("register-form").reset();
+        if (result.status === 200) {
             generateSuccess("Success! Now log-in");
+            document.getElementById("register-form").reset();
             document.getElementById("login-login").focus();
         }
-        else
+        else if(result.status === 409)
             generateError("Login or email already taken");
+        else
+            generateError("Invalid registration data");
     });
 }

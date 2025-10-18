@@ -31,11 +31,17 @@ public class AuthService {
     }
 
     public Map<String, String> loginUser(LoginRequest refactor) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(refactor.login(), refactor.password()));
+        User user;
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(refactor.login(), refactor.password()));
 
-        User user = userRepository.findByLogin(refactor.login())
-                .orElseThrow(() -> new UserNotFoundException("User with login " + refactor.login() + " not found"));
+            user = userRepository.findByLogin(refactor.login())
+                    .orElseThrow(() -> new UserNotFoundException("User with login " + refactor.login() + " not found"));
+        } catch (Exception ex) {
+            throw new IncorrectLoginDataException(ex.getMessage());
+        }
+
         String access = jwtService.createAccess(
                 user.getId(),
                 user.getLogin());
@@ -49,6 +55,11 @@ public class AuthService {
     }
 
     public void registerUser(RegisterRequest request) {
+        if(request.login() == null || request.login().isBlank() ||
+        request.password() == null || request.password().isBlank() ||
+        request.email() == null || request.email().isBlank())
+            throw new IncorrectUserDataException("Incorrect register data");
+
         if (userRepository.existsByLogin(request.login()))
             throw new LoginAlreadyTakenException("Login " + request.login() + " already taken");
 

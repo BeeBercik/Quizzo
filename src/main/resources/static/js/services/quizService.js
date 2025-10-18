@@ -76,7 +76,7 @@ export async function sendRegisterData(data) {
         body: JSON.stringify(data)
     });
 
-    return response.ok;
+    return { status: response.status };
 }
 
 

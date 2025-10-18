@@ -70,14 +70,29 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(LoginAlreadyTakenException.class)
     ResponseEntity<Map<String, String>> handleLoginAlreadyTakenException(LoginAlreadyTakenException ex) {
         return ResponseEntity.
-                status(HttpStatus.BAD_REQUEST)
+                status(HttpStatus.CONFLICT)
                 .body(Map.of("message", ex.getMessage()));
     }
 
     @ExceptionHandler(EmailAlreadyTakenException.class)
     ResponseEntity<Map<String, String>> handleEmailAlreadyTakenException(EmailAlreadyTakenException ex) {
         return ResponseEntity.
-                status(HttpStatus.BAD_REQUEST)
+                status(HttpStatus.CONFLICT)
                 .body(Map.of("message", ex.getMessage()));
     }
+
+    @ExceptionHandler(IncorrectLoginDataException.class)
+    ResponseEntity<Map<String, String>> handleIncorrectLoginDataException(IncorrectLoginDataException ex) {
+        return ResponseEntity.
+                status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(IncorrectRegisterDataException.class)
+    ResponseEntity<Map<String, String>> handleIncorrectRegisterDataException(IncorrectRegisterDataException ex) {
+        return ResponseEntity.
+                status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", ex.getMessage()));
+    }
+
 }

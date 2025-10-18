@@ -47,7 +47,7 @@
     background-color: #320a50;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 880px) {
     #auth-main section {
         margin: 0 15px;
     }
