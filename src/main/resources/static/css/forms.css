@@ -46,3 +46,32 @@
     padding: 50px;
     background-color: #320a50;
 }
+
+@media (max-width: 800px) {
+    #auth-main section {
+        margin: 0 15px;
+    }
+
+    #auth-main section {
+        margin: 0 15px;
+    }
+
+    #auth-main fieldset {
+        padding: 30px 25px;
+    }
+}
+
+@media (max-width: 650px) {
+    #auth-main {
+        flex-direction: column;
+    }
+
+    #auth-main section {
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    #auth-main fieldset {
+        padding: 20px 15px;
+    }
+}
