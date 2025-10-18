@@ -150,8 +150,8 @@ h2 {
 
 @media (max-width: 430px) {
     header nav {
-        justify-content: center;
         flex-direction: column;
+        justify-content: center;
     }
 
     #dashboard-btn {
