@@ -147,3 +147,15 @@ h2 {
     cursor: pointer;
     color: #ff0101;
 }
+
+@media (max-width: 430px) {
+    header nav {
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #dashboard-btn {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
