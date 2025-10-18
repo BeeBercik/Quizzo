@@ -30,14 +30,18 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Map<String, String> loginUser(LoginRequest refactor) {
+    public Map<String, String> loginUser(LoginRequest request) {
+        if(request.login() == null || request.login().isBlank() ||
+                request.password() == null || request.password().isBlank())
+            throw new IncorrectLoginDataException("Login data cannot be empty or null");
+
         User user;
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(refactor.login(), refactor.password()));
+                    new UsernamePasswordAuthenticationToken(request.login(), request.password()));
 
-            user = userRepository.findByLogin(refactor.login())
-                    .orElseThrow(() -> new UserNotFoundException("User with login " + refactor.login() + " not found"));
+            user = userRepository.findByLogin(request.login())
+                    .orElseThrow(() -> new UserNotFoundException("User with login " + request.login() + " not found"));
         } catch (Exception ex) {
             throw new IncorrectLoginDataException(ex.getMessage());
         }
