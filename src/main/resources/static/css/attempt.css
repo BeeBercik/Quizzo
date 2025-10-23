@@ -80,3 +80,14 @@
     font-weight: bold;
     margin-right: 5px;
 }
+
+@media (max-width: 450px) {
+    #attempt-main .description {
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    #attempt-main .info {
+        margin-bottom: 30px;
+    }
+}

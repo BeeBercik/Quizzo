@@ -48,12 +48,13 @@
 }
 
 @media (max-width: 880px) {
-    #auth-main section {
-        margin: 0 15px;
+    #auth-main {
+        flex-direction: column;
     }
 
     #auth-main section {
-        margin: 0 15px;
+        width: 60%;
+        margin: 25px 0;
     }
 
     #auth-main fieldset {
@@ -62,12 +63,8 @@
 }
 
 @media (max-width: 650px) {
-    #auth-main {
-        flex-direction: column;
-    }
-
     #auth-main section {
-        width: 80%;
+        width: 70%;
         margin: 20px auto;
     }
 

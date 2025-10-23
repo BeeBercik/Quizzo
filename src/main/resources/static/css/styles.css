@@ -148,14 +148,14 @@ h2 {
     color: #ff0101;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 650px) {
     header nav {
         flex-direction: column;
         justify-content: center;
     }
 
     #dashboard-btn {
-        width: 80%;
+        width: 60%;
         margin: 0 auto;
     }
 }
