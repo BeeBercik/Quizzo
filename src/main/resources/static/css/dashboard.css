@@ -142,7 +142,7 @@
     }
 
     #dashboard-main .actions {
-        width: 60%;
+        width: 40%;
         flex-direction: column;
         text-align: center;
         margin: 30px auto 0;
@@ -162,7 +162,7 @@
 
     #dashboard-main .summary {
         flex-direction: column;
-        width: 60%;
+        width: 70%;
         margin: 50px auto 30px;
         gap: 30px;
     }
@@ -205,7 +205,7 @@
 
 @media (max-width: 650px) {
     #dashboard-main .actions {
-        width: 80%;
+        width: 50%;
     }
 
     #dashboard-main .summary {

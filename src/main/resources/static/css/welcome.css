@@ -67,35 +67,21 @@
     #welcome-main .entry-code form {
         flex-direction: row;
         gap: 10px;
-        margin-bottom: 25px;
     }
 }
 
 @media (max-width: 650px) {
-    #welcome-main .entry-code h2 {
-        margin-bottom: 30px;
-        font-size: 50px;
-    }
-
-    #welcome-main .entry-code form {
-        flex-direction: column;
-    }
-
-    #welcome-main .about {
-        width: 70%;
-        margin: 30px 0 30px 0;
-        line-height: 1.5;
-        font-size: 18px;
-        text-align: left;
-    }
-
     #welcome-main .entry-code {
         width: 100%;
     }
 
+    #welcome-main .entry-code h2 {
+        font-size: 50px;
+    }
+
     #welcome-main .entry-code form {
         width: 60%;
-        margin-bottom: 25px;
+        flex-direction: column;
     }
 
     #welcome-main .entry-code form input {
@@ -105,5 +91,13 @@
 
     #welcome-main .entry-code form button {
         width: 100%;
+    }
+
+    #welcome-main .about {
+        width: 70%;
+        margin: 30px 0 30px 0;
+        line-height: 1.5;
+        font-size: 18px;
+        text-align: left;
     }
 }
