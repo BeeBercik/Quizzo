@@ -136,11 +136,6 @@
 }
 
 @media (max-width: 1050px) {
-    #dashboard-main h2,
-    #dashboard-main #user-login {
-        font-size: 25px;
-    }
-
     #dashboard-main .actions {
         width: 40%;
         flex-direction: column;
@@ -200,6 +195,13 @@
 
     #dashboard-main .summary fieldset {
         overflow-x: auto;
+    }
+}
+
+@media (max-width: 880px) {
+    #dashboard-main h2,
+    #dashboard-main #user-login {
+        font-size: 25px;
     }
 }
 
