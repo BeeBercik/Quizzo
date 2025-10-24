@@ -139,3 +139,26 @@
     transform: scale(1.02);
     cursor: pointer;
 }
+
+@media (max-width: 880px) {
+    #create-main h2 {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 650px) {
+    #create-main form {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 450px) {
+    #create-main .options {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #create-main #q-title {
+        margin-bottom: 30px;
+    }
+}
