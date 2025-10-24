@@ -32,7 +32,6 @@ export default function generateSummaryView(summary) {
             : "-";
 
     main.innerHTML = `
-  <div class="summary-wrapper">
     <h2 class="page-title">Summary - <span id="quiz-title"></span></h2>
 
     <section class="summary">
@@ -66,7 +65,6 @@ export default function generateSummaryView(summary) {
         `}
       </fieldset>
     </section>
-  </div>
 `;
 
     document.getElementById("quiz-title").textContent = title;

@@ -161,4 +161,8 @@
     #create-main #q-title {
         margin-bottom: 30px;
     }
+
+    #create-main form h3 {
+        font-size: 20px;
+    }
 }

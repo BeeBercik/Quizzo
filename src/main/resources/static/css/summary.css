@@ -1,13 +1,8 @@
 #summary-main {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    justify-content: center;
-}
-
-#summary-main .summary-wrapper {
-    width: 100%;
-    max-width: 800px;
-    padding: 0 16px;
 }
 
 #summary-main .page-title {
@@ -20,8 +15,13 @@
     font-size: 30px;
 }
 
+#summary-main .summary {
+    width: 80%;
+}
+
 #summary-main .section {
-    margin: 35px 0;
+    width: 80%;
+    margin: 50px auto;
     padding: 18px;
     border: 2px solid #6203ab;
     border-radius: 10px;
@@ -56,7 +56,6 @@
 
 #summary-main #participants thead th:nth-child(1) {
     width: 28%;
-    min-width: 160px;
 }
 
 #summary-main #participants thead th:nth-child(2) {
@@ -97,4 +96,36 @@
     font-size: 12px;
     background: #444;
     color: #fff;
+}
+
+@media (max-width: 1050px) {
+    #summary-main .summary table thead th,
+    #summary-main .summary table tbody th,
+    #summary-main .summary table tbody td {
+        font-size: 14px;
+    }
+
+    #summary-main .summary table tbody td {
+        padding: 10px;
+        word-break: break-word;
+    }
+}
+
+@media (max-width: 880px) {
+    #summary-main {
+        justify-content: center;
+    }
+
+    #summary-main .page-title {
+        font-size: 25px;
+    }
+
+    #summary-main #quiz-title {
+        font-size: 25px;
+    }
+
+    .cell-details .attempt-history,
+    .cell-details ul li {
+        font-size: 15px;
+    }
 }
