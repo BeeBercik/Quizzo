@@ -12,6 +12,10 @@
     flex: 1;
 }
 
+#dashboard-main h2 {
+    word-break: break-word;
+}
+
 #dashboard-main #user-login {
     font-size: 30px;
 }
@@ -212,5 +216,11 @@
 
     #dashboard-main .summary {
         width: 80%;
+    }
+}
+
+@media (max-width: 450px) {
+    #dashboard-main h2 {
+        text-align: center;
     }
 }
