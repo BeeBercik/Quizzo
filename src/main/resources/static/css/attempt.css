@@ -12,6 +12,7 @@
     background-color: #452a65;
     border-radius: 5px;
     padding: 20px 30px;
+    word-break: break-word;
 }
 
 #attempt-main .description {

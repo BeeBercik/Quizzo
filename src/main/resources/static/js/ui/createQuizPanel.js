@@ -7,10 +7,10 @@ export function createQuestion(qCount) {
         <h3>Question #${qCount} <i class="fa-solid fa-trash delete-icon"></i></h3>
 
         <label for="q${qCount}">Q:</label>
-        <input type="text" id="q${qCount}" name="q${qCount}"/>
+        <input type="text" id="q${qCount}" name="q${qCount}" maxlength="70"/>
 
         <label for="correct${qCount}">Correct option:</label>
-        <input type="text" id="correct${qCount}" name="correct${qCount}"/>
+        <input type="text" id="correct${qCount}" name="correct${qCount}" maxlength="70"/>
 
         <div class="bad-options">
           <h4>Bad options</h4>
@@ -35,7 +35,7 @@ export function createBadOption(container, optCount) {
 
     div.innerHTML = `
       <label for="bad${optCount}">${optCount}. <i class="fa-solid fa-trash delete-icon"></i></label>
-      <input type="text" id="bad${optCount}" name="bad${optCount}"/>
+      <input type="text" id="bad${optCount}" name="bad${optCount}" maxlength="70"/>
     `;
 
     container.appendChild(div);

@@ -9,7 +9,7 @@ export default function initCreateTestView() {
 
     <form>
       <label for="q-title">Title:</label>
-      <input type="text" id="q-title" maxlength="30">
+      <input type="text" id="q-title" maxlength="40">
       
       <section class="options">
         <div class="add-opt-wrapper">
