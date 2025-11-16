@@ -211,7 +211,7 @@ public class QuizService {
 
     private Quiz getQuiz(String code) {
         Quiz quiz = quizRepository.findByCode(code.trim().toUpperCase())
-                .orElseThrow(() -> new QuizNotFoundException("Quiz " + code + " not found"));
+                .orElseThrow(() -> new QuizNotFoundException("Quiz " + code.toUpperCase() + " not found"));
 
         if (!quiz.getActive())
             throw new QuizNotActiveException("Quz not active");

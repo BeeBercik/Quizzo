@@ -34,7 +34,7 @@ public class QuizController {
                 .body(quizService.getQuizAttemptDetails(code));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     ResponseEntity<?> createQuiz(@RequestBody CreatedQuizRequest createdQuiz, @AuthenticationPrincipal AppUserPrincipal user) {
         quizService.saveQuiz(createdQuiz, user.getId());
         return ResponseEntity
@@ -58,15 +58,15 @@ public class QuizController {
                 .build();
     }
 
-    @GetMapping("/summary/{code}")
+    @GetMapping("/{code}/summary")
     ResponseEntity<QuizSummaryResponse> summaryQuiz(@PathVariable(name = "code") String code, @AuthenticationPrincipal AppUserPrincipal user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(quizService.getQuizSummary(code, user.getId()));
     }
 
-    @GetMapping("/check/option/{id}")
-    ResponseEntity<Map<String , Boolean>> checkToEliminate(@PathVariable(name = "id") int optionId) {
+    @GetMapping("/option/{id}/can-eliminate")
+    ResponseEntity<Map<String, Boolean>> checkToEliminate(@PathVariable(name = "id") int optionId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Map.of("correct", quizService.checkIfAbleToEliminate(optionId)));
