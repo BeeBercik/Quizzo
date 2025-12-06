@@ -27,6 +27,14 @@ public class QuizController {
                 .body(quizService.getQuizByCode(code));
     }
 
+    @GetMapping("/{code}/edit")
+    ResponseEntity<QuizDetailsResponse> getQuizToEdit(@PathVariable(name = "code") String code,
+                                                      @AuthenticationPrincipal AppUserPrincipal user) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(quizService.getQuizDetailsForOwner(code, user.getId()));
+    }
+
     @GetMapping("/attempt/{code}")
     ResponseEntity<QuizAttemptDetailsResponse> getQuizAttemptDetails(@PathVariable(name = "code") String code) {
         return ResponseEntity
@@ -34,11 +42,21 @@ public class QuizController {
                 .body(quizService.getQuizAttemptDetails(code));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     ResponseEntity<?> createQuiz(@RequestBody CreatedQuizRequest createdQuiz, @AuthenticationPrincipal AppUserPrincipal user) {
         quizService.saveQuiz(createdQuiz, user.getId());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    @PutMapping("/{code}")
+    ResponseEntity<?> updateQuiz(@PathVariable(name = "code") String code,
+                                 @RequestBody CreatedQuizRequest updatedQuiz,
+                                 @AuthenticationPrincipal AppUserPrincipal user) {
+        quizService.updateQuiz(code, updatedQuiz, user.getId());
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 
@@ -58,15 +76,15 @@ public class QuizController {
                 .build();
     }
 
-    @GetMapping("/summary/{code}")
+    @GetMapping("/{code}/summary")
     ResponseEntity<QuizSummaryResponse> summaryQuiz(@PathVariable(name = "code") String code, @AuthenticationPrincipal AppUserPrincipal user) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(quizService.getQuizSummary(code, user.getId()));
     }
 
-    @GetMapping("/check/option/{id}")
-    ResponseEntity<Map<String , Boolean>> checkToEliminate(@PathVariable(name = "id") int optionId) {
+    @GetMapping("/option/{id}/can-eliminate")
+    ResponseEntity<Map<String, Boolean>> checkToEliminate(@PathVariable(name = "id") int optionId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Map.of("correct", quizService.checkIfAbleToEliminate(optionId)));
