@@ -3,7 +3,7 @@ import initAttempt from "./controllers/attemptController.js";
 import initWelcome from "./controllers/welcomeController.js";
 import initDashboard from "./controllers/dashboardController.js";
 import {initGeneralComponentsListening} from "./controllers/generalLayoutController.js";
-import initCreateTest from "./controllers/createQuizController.js";
+import initCreateTest, { initEditTest } from "./controllers/createQuizController.js";
 import { initAuth } from "./controllers/authController.js";
 import initQuizSummary from "./controllers/summaryQuizController.js";
 import {refreshAccess} from "./services/quizService.js";
@@ -26,6 +26,9 @@ export default async function initView(view, code = null, data = null) {
             break;
         case "create-test":
             initCreateTest();
+            break;
+        case "edit-test":
+            await initEditTest(code);
             break;
         case "auth-forms":
             initAuth();

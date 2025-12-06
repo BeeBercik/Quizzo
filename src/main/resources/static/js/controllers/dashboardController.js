@@ -39,9 +39,15 @@ export default async function initDashboard(userData) {
         const tdDelete = e.target.closest('.q-delete');
         if (tdDelete) await initDeleteQuiz(tdDelete)
 
+        const tdEdit = e.target.closest('.q-edit');
+        if (tdEdit) {
+            const code = getQuizCode(tdEdit);
+            initView('edit-test', code);
+        }
+
         const tdSummary = e.target.closest('.q-summary');
         if (tdSummary) {
-            const code = getSummaryQuizCode(tdSummary);
+            const code = getQuizCode(tdSummary);
             initView('summary', code);
         }
     });
@@ -59,8 +65,8 @@ async function initDeleteQuiz(tdDelete) {
         generateError('This specific quiz cannot be removed');
 }
 
-function getSummaryQuizCode(tdSummary) {
-    const row = tdSummary.closest('tr');
+function getQuizCode(tdElement) {
+    const row = tdElement.closest('tr');
     const code = row.querySelector('.code-td').textContent.trim().toUpperCase();
     if (!code) return;
 

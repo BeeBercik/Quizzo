@@ -1,11 +1,16 @@
 
-export default function initCreateTestView() {
+export default function initCreateTestView(mode = "create", code = null) {
     const main = document.querySelector("main");
-    main.dataset.view = "create-test";
+    main.dataset.view = mode === "edit" ? "edit-test" : "create-test";
     main.id = "create-main";
 
+    const heading = mode === "edit" ? "Edit your test / quiz" : "Create your own test / quiz";
+    const submitLabel = mode === "edit" ? "Save changes" : "Create";
+    const codeInfo = mode === "edit" && code ? `<p class="quiz-code">Code: <span>${code}</span></p>` : "";
+
     main.innerHTML = `
-    <h2>Create your own test / quiz</h2>
+    <h2>${heading}</h2>
+    ${codeInfo}
 
     <form>
       <label for="q-title">Title:</label>
@@ -36,7 +41,7 @@ export default function initCreateTestView() {
       
       <button id="new-question-btn" type="button">Add new question</button>
 
-      <button type="submit">Create</button>
+      <button type="submit">${submitLabel}</button>
     </form>
     `;
 }

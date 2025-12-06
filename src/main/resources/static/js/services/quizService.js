@@ -91,7 +91,7 @@ export async function logoutUser() {
 }
 
 export async function getQuizAttemptDetails(code) {
-    const response = await apiFetch(`/api/quizzes/attempt/${code.toUpperCase()}`);
+    const response = await apiFetch(`/api/quizzes/attempt/${code}`);
     if (response.status !== 200)
         return null;
 
@@ -99,7 +99,15 @@ export async function getQuizAttemptDetails(code) {
 }
 
 export async function getQuiz(code) {
-    const response = await apiFetch(`/api/quizzes/${code.toUpperCase()}`);
+    const response = await apiFetch(`/api/quizzes/${code}`);
+    if (response.status !== 200)
+        return null;
+
+    return response.json();
+}
+
+export async function getQuizForEdit(code) {
+    const response = await apiFetch(`/api/quizzes/${code}/edit`);
     if (response.status !== 200)
         return null;
 
@@ -117,13 +125,23 @@ export async function sendAnswers(answers) {
 }
 
 export async function sendCreatedTest(test) {
-    const response = await apiFetch("/api/quizzes/create", {
+    const response = await apiFetch("/api/quizzes", {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(test)
     });
 
     return response.status === 201;
+}
+
+export async function updateQuiz(code, test) {
+    const response = await apiFetch(`/api/quizzes/${code}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(test)
+    });
+
+    return response.status === 204;
 }
 
 export async function getLoggedUserData() {
@@ -142,7 +160,7 @@ export async function deleteQuiz(code) {
 }
 
 export async function getQuizSummary(code) {
-    const response = await apiFetch(`/api/quizzes/summary/${code}`);
+    const response = await apiFetch(`/api/quizzes/${code}/summary`);
 
     if (response.status !== 200)
         return null;
@@ -151,7 +169,7 @@ export async function getQuizSummary(code) {
 }
 
 export async function getAnswerCorrectness(id) {
-    const response = await apiFetch(`/api/quizzes/check/option/${id}`);
+    const response = await apiFetch(`/api/quizzes/option/${id}/can-eliminate`);
 
     if (response.status !== 200)
         return null;

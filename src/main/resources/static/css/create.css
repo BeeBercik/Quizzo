@@ -4,6 +4,17 @@
     align-items: center;
 }
 
+#create-main .quiz-code {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#create-main .quiz-code span {
+    color: #f2b705;
+    letter-spacing: 1px;
+}
+
 #create-main h2 {
     margin-bottom: 20px;
     text-align: center;

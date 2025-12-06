@@ -1,11 +1,27 @@
 import initCreateTestView from "../views/createQuizView.js";
-import {sendCreatedTest} from "../services/quizService.js";
+import {getQuizForEdit, sendCreatedTest, updateQuiz} from "../services/quizService.js";
 import {generateError, generateSuccess} from "../ui/globalMessageBar.js";
 import initView from "../router.js";
 import {createBadOption, createQuestion} from "../ui/createQuizPanel.js";
 
 export default function initCreateTest() {
-    initCreateTestView();
+    initQuizForm("create");
+}
+
+export async function initEditTest(code) {
+    const quizData = await getQuizForEdit(code);
+
+    if (quizData == null) {
+        generateError("Quiz not found or you cannot edit it");
+        initView("dashboard");
+        return;
+    }
+
+    initQuizForm("edit", quizData);
+}
+
+function initQuizForm(mode = "create", quizData = null) {
+    initCreateTestView(mode, quizData?.code);
 
     const questionsArea = document.getElementById("questions");
     questionsArea.addEventListener("click", onQuestionsClick);
@@ -17,13 +33,18 @@ export default function initCreateTest() {
 
     eliminationOption.checked = false;
     eliminationQuantity.disabled = true;
+    eliminationQuantity.value = "";
 
     eliminationOption.addEventListener("change", function() {
         handleOptionEliminationsChange(eliminationOption, eliminationQuantity);
     });
 
-    generateQuestion();
-    bindListenersToBadOptionBtn();
+    if (quizData)
+        populateQuizForm(quizData, title, testDuration, eliminationOption, eliminationQuantity);
+    else {
+        generateQuestion();
+        bindListenersToBadOptionBtn();
+    }
 
     document.getElementById("new-question-btn").addEventListener("click", function() {
         generateQuestion();
@@ -31,8 +52,64 @@ export default function initCreateTest() {
 
     document.querySelector("form").addEventListener("submit", function(e) {
         e.preventDefault();
-        submitTest(title, testDuration, eliminationQuantity);
+        submitTest(title, testDuration, eliminationQuantity, mode, quizData?.code);
     });
+}
+
+function populateQuizForm(quizData, title, testDuration, eliminationOption, eliminationQuantity) {
+    title.value = quizData.title ?? "";
+    testDuration.value = quizData.durationTime ?? "";
+
+    const eliminations = quizData.eliminationsCount ?? 0;
+    if (eliminations > 0) {
+        eliminationOption.checked = true;
+        eliminationQuantity.disabled = false;
+        eliminationQuantity.value = eliminations;
+    } else {
+        eliminationOption.checked = false;
+        eliminationQuantity.disabled = true;
+        eliminationQuantity.value = "";
+    }
+
+    populateQuestions(quizData.questions);
+}
+
+function populateQuestions(questions = []) {
+    if (!questions || questions.length === 0) {
+        generateQuestion();
+        bindListenersToBadOptionBtn();
+        return;
+    }
+
+    questions.forEach((question, id) => {
+        createQuestion(id + 1);
+        const section = document.querySelectorAll('section.question')[id];
+        section.dataset.badOptionCount = "0";
+
+        const qInput = section.querySelector(`#q${id + 1}`);
+        if (qInput)
+            qInput.value = question.value ?? '';
+
+        const correctInput = section.querySelector(`#correct${id + 1}`);
+        const correctAnswer = (question.answers || []).find(a => a.correct);
+        if (correctInput && correctAnswer)
+            correctInput.value = correctAnswer.value ?? '';
+
+        const badOptions = (question.answers || []).filter(a => !a.correct);
+        const elContainer = section.querySelector(".elements");
+        let badCount = 0;
+        badOptions.forEach(a => {
+            badCount++;
+            createBadOption(elContainer, badCount);
+            const input = elContainer.querySelector(`#bad${badCount}`);
+            if (input)
+                input.value = a.value ?? '';
+        });
+
+        section.dataset.badOptionCount = String(badCount);
+    });
+
+    bindListenersToBadOptionBtn();
 }
 
 function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) {
@@ -44,8 +121,7 @@ function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) 
     }
 }
 
-async function submitTest(title, testDuration,
-                    eliminationQuantity) {
+async function submitTest(title, testDuration, eliminationQuantity, mode, quizCode) {
     if (testDuration.value === "" || testDuration.value < 1) {
         generateError("Minimum duration time for test is 1 minute");
         return;
@@ -66,11 +142,21 @@ async function submitTest(title, testDuration,
         questionsData: questionsData
     }
 
-    if (await sendCreatedTest(finalTestData)) {
-        initView("dashboard");
-        generateSuccess("Quiz created");
+    let success = false;
+    if (mode === "edit") {
+        if (!quizCode) {
+            generateError("Missing quiz code to update");
+            return;
+        }
+        success = await updateQuiz(quizCode, finalTestData);
     } else
-        generateError('Error during saving to database');
+        success = await sendCreatedTest(finalTestData);
+
+    if (success) {
+        initView("dashboard");
+        generateSuccess(mode === "edit" ? "Quiz updated" : "Quiz created");
+    } else
+        generateError(mode === "edit" ? "Cannot update quiz" : "Error during saving to database");
 }
 
 function generateQuestion() {
