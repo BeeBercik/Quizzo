@@ -51,7 +51,7 @@ export default function generateSummaryView(summary) {
 
       <fieldset class="section">
         <legend>Participants</legend>
-        ${users.length === 0 ? `<p>Brak uczestników.</p>` : `
+        ${users.length === 0 ? `<p>No participants</p>` : `
           <table id="participants" class="summary-table">
             <thead>
               <tr>
