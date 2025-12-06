@@ -193,7 +193,6 @@
     }
 
     #dashboard-main .summary {
-        flex-direction: column;
         width: 70%;
         margin: 50px auto 30px;
         gap: 30px;
