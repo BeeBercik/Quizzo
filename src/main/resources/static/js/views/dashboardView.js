@@ -35,6 +35,7 @@ export default function initDashboardView(userData) {
             <tr>
               <th>Title</th>
               <th>Result</th>
+              <th>Date</th>
             </tr>
             </thead>
             <tbody>
@@ -52,7 +53,9 @@ export default function initDashboardView(userData) {
             <tr>
               <th>Title</th>
               <th>Code</th>
-<!--           delete and summary options       -->
+              <th>Edit</th>
+              <th>Summary</th>
+              <th>Delete</th>
             </tr>
             </thead>
             <tbody>

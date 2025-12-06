@@ -6,8 +6,15 @@ export function generateAttendedTestRecord(data) {
     tdTitle.textContent = data.quizTitle;
     const tdResult = document.createElement("td");
     tdResult.textContent = `${data.score} %`;
+    const tdDate = document.createElement("td");
+    let formattedDate = "-";
+    if (data.attemptTime) {
+        const parsedDate = new Date(data.attemptTime);
+        formattedDate = isNaN(parsedDate.getTime()) ? data.attemptTime : parsedDate.toLocaleString();
+    }
+    tdDate.textContent = formattedDate;
 
-    tr.append(tdTitle, tdResult);
+    tr.append(tdTitle, tdResult, tdDate);
     document.querySelector("#attendedTests tbody").appendChild(tr);
 }
 
@@ -19,6 +26,9 @@ export function generateCreatedTestRecord(data) {
     const tdCode = document.createElement("td");
     tdCode.textContent = data.code;
     tdCode.classList.add('code-td');
+    const tdEdit = document.createElement("td");
+    tdEdit.textContent = 'E';
+    tdEdit.classList.add('q-edit');
     const tdDelete = document.createElement("td");
     tdDelete.textContent = 'D';
     tdDelete.classList.add('q-delete');
@@ -26,6 +36,6 @@ export function generateCreatedTestRecord(data) {
     tdSummary.textContent = 'S';
     tdSummary.classList.add('q-summary');
 
-    tr.append(tdTitle, tdCode, tdDelete, tdSummary);
+    tr.append(tdTitle, tdCode, tdEdit, tdSummary, tdDelete);
     document.querySelector("#createdTests tbody").appendChild(tr);
 }

@@ -66,7 +66,8 @@ public class UserService {
         return new AttemptResponse(
                 attempt.getId(),
                 attempt.getQuiz().getTitle(),
-                attempt.getScore()
+                attempt.getScore(),
+                attempt.getAttemptTime()
         );
     }
 

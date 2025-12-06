@@ -66,16 +66,19 @@
 /* ******* SUMMARYY *******/
 
 #dashboard-main .summary {
-    width: 100%;
+    width: 90%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    margin: 100px 0 50px 0;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin: 100px auto 50px;
 }
 
 #dashboard-main .summary fieldset {
+    flex: 1 1 420px;
     padding: 30px;
-    margin: 0 50px;
+    margin: 0;
 }
 
 #dashboard-main .summary table {
@@ -98,17 +101,35 @@
     border: 1px solid #ddd;
 }
 
-#dashboard-main .summary table thead th:nth-child(1) {
-    width: 250px;
+#dashboard-main .summary #attendedTests thead th:nth-child(1) {
+    width: 230px;
 }
 
-#dashboard-main .summary table tbody td:nth-child(1) {
+#dashboard-main .summary #attendedTests tbody td:nth-child(1) {
     min-width: 200px;
 }
 
-#dashboard-main .summary table tbody td:nth-child(2) {
-    max-width: 55px;
+#dashboard-main .summary #attendedTests tbody td:nth-child(2) {
+    max-width: 80px;
     text-align: center;
+}
+
+#dashboard-main .summary #attendedTests tbody td:nth-child(3) {
+    min-width: 160px;
+}
+
+#dashboard-main .summary #createdTests thead th:nth-child(1) {
+    width: 220px;
+}
+
+#dashboard-main .summary #createdTests tbody td:nth-child(2) {
+    width: 80px;
+    text-align: center;
+}
+
+#dashboard-main .summary #createdTests tbody td:nth-child(n+3) {
+    text-align: center;
+    width: 80px;
 }
 
 #dashboard-main .summary table tbody tr:nth-child(even) {
@@ -123,6 +144,14 @@
     transition: background-color 0.3s ease-in-out;
 }
 
+#dashboard-main .summary .q-edit {
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    background-color: #0a9d60;
+    transition: background-color 0.3s ease-in-out;
+}
+
 #dashboard-main .summary .q-summary {
     cursor: pointer;
     text-align: center;
@@ -133,6 +162,10 @@
 
 #dashboard-main .summary .q-delete:hover {
     background-color: #fd0202;
+}
+
+#dashboard-main .summary .q-edit:hover {
+    background-color: #0cc57b;
 }
 
 #dashboard-main .summary .q-summary:hover {
@@ -190,7 +223,8 @@
 
     #dashboard-main .summary table thead th:nth-child(1),
     #dashboard-main .summary table tbody td:nth-child(1),
-    #dashboard-main .summary table tbody td:nth-child(2) {
+    #dashboard-main .summary table tbody td:nth-child(2),
+    #dashboard-main .summary table tbody td:nth-child(3) {
         width: auto !important;
         min-width: 0 !important;
         max-width: none !important;
