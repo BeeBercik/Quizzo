@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -34,40 +35,12 @@ public class QuizService {
     }
 
     public QuizDetailsResponse getQuizByCode(String code) {
-        Quiz quiz = getQuiz(code);
+        return mapQuizToDetailsResponse(getQuiz(code), true);
+    }
 
-        List<Question> questionsCopy = new ArrayList<>(quiz.getQuestions());
-        Collections.shuffle(questionsCopy);
-
-        List<QuestionResponse> questionResponses = new ArrayList<>();
-
-        for (Question q : questionsCopy) {
-            List<Answer> answersCopy = new ArrayList<>(q.getAnswers());
-            Collections.shuffle(answersCopy);
-
-            List<AnswerResponse> answerDtos = answersCopy.stream()
-                            .map(adto -> new AnswerResponse(
-                                    adto.getId(),
-                                    adto.getValue(),
-                                    adto.getCorrect()
-                            )).toList();
-
-            questionResponses.add(new QuestionResponse(
-                    q.getId(),
-                    q.getValue(),
-                    answerDtos
-            ));
-        }
-
-        return new QuizDetailsResponse(
-                quiz.getId(),
-                quiz.getTitle(),
-                quiz.getCode(),
-                quiz.getCreateTime(),
-                quiz.getDurationTime(),
-                quiz.getEliminationsCount(),
-                questionResponses
-        );
+    public QuizDetailsResponse getQuizDetailsForOwner(String code, Integer userId) {
+        Quiz quiz = getSpecificUserQuiz(code, userId);
+        return mapQuizToDetailsResponse(quiz, false);
     }
 
     public QuizAttemptDetailsResponse getQuizAttemptDetails(String code) {
@@ -91,26 +64,7 @@ public class QuizService {
         quiz.setDurationTime(Float.parseFloat(createdQuiz.time()));
         quiz.setEliminationsCount(createdQuiz.eliminations());
 
-        List<Question> questions = createdQuiz.questionsData().stream()
-                .map(qDto -> {
-                    Question q = new Question();
-                    q.setValue(capitalizeFirstLetter(qDto.question()));
-                    q.setQuiz(quiz);
-
-                    List<Answer> answers = qDto.answers().stream()
-                            .map(aDto -> {
-                                Answer a = new Answer();
-                                a.setValue(aDto.value());
-                                a.setCorrect(aDto.correct());
-                                a.setQuestion(q);
-                                return a;
-                            }).collect(Collectors.toList());
-
-                    q.setAnswers(answers);
-                    return q;
-                }).collect(Collectors.toList());
-
-        quiz.setQuestions(questions);
+        quiz.setQuestions(buildQuestions(createdQuiz.questionsData(), quiz));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException("User not logged in"));
 
@@ -152,6 +106,21 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    public void updateQuiz(String code, CreatedQuizRequest updatedQuiz, Integer userId) {
+        Quiz quiz = getSpecificUserQuiz(code, userId);
+
+        quiz.setTitle(capitalizeFirstLetter(updatedQuiz.title()));
+        quiz.setDurationTime(Float.parseFloat(updatedQuiz.time()));
+        quiz.setEliminationsCount(updatedQuiz.eliminations());
+
+        List<Question> questions = buildQuestions(updatedQuiz.questionsData(), quiz);
+
+        quiz.getQuestions().clear();
+        quiz.getQuestions().addAll(questions);
+
+        quizRepository.save(quiz);
+    }
+
     public QuizSummaryResponse getQuizSummary(String code, Integer userId) {
         Quiz quiz = getSpecificUserQuiz(code, userId);
 
@@ -177,6 +146,68 @@ public class QuizService {
                 quiz.getCode(),
                 userSummaries,
                 quiz.getCreateTime());
+    }
+
+    private List<Question> buildQuestions(List<QuestionRequest> questionRequests, Quiz quiz) {
+        return questionRequests.stream()
+                .map(qDto -> {
+                    Question question = new Question();
+                    question.setValue(capitalizeFirstLetter(qDto.question()));
+                    question.setQuiz(quiz);
+
+                    List<Answer> answers = qDto.answers().stream()
+                            .map(aDto -> {
+                                Answer answer = new Answer();
+                                answer.setValue(aDto.value());
+                                answer.setCorrect(aDto.correct());
+                                answer.setQuestion(question);
+                                return answer;
+                            }).collect(Collectors.toList());
+
+                    question.setAnswers(answers);
+                    return question;
+                }).collect(Collectors.toList());
+    }
+
+    private QuizDetailsResponse mapQuizToDetailsResponse(Quiz quiz, boolean shuffle) {
+        List<Question> questionsCopy = new ArrayList<>(quiz.getQuestions());
+        if (shuffle)
+            Collections.shuffle(questionsCopy);
+        else
+            questionsCopy.sort(Comparator.comparing(Question::getId));
+
+        List<QuestionResponse> questionResponses = new ArrayList<>();
+
+        for (Question q : questionsCopy) {
+            List<Answer> answersCopy = new ArrayList<>(q.getAnswers());
+            if (shuffle)
+                Collections.shuffle(answersCopy);
+            else
+                answersCopy.sort(Comparator.comparing(Answer::getId));
+
+            List<AnswerResponse> answerDtos = answersCopy.stream()
+                    .map(adto -> new AnswerResponse(
+                            adto.getId(),
+                            adto.getValue(),
+                            adto.getCorrect()
+                    )).toList();
+
+            questionResponses.add(new QuestionResponse(
+                    q.getId(),
+                    q.getValue(),
+                    answerDtos
+            ));
+        }
+
+        return new QuizDetailsResponse(
+                quiz.getId(),
+                quiz.getTitle(),
+                quiz.getCode(),
+                quiz.getCreateTime(),
+                quiz.getDurationTime(),
+                quiz.getEliminationsCount(),
+                questionResponses
+        );
     }
 
     private Quiz getSpecificUserQuiz(String code, Integer userId) {
@@ -211,7 +242,7 @@ public class QuizService {
 
     private Quiz getQuiz(String code) {
         Quiz quiz = quizRepository.findByCode(code.trim().toUpperCase())
-                .orElseThrow(() -> new QuizNotFoundException("Quiz " + code + " not found"));
+                .orElseThrow(() -> new QuizNotFoundException("Quiz " + code.toUpperCase() + " not found"));
 
         if (!quiz.getActive())
             throw new QuizNotActiveException("Quz not active");
