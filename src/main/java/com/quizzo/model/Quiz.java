@@ -35,7 +35,6 @@ public class Quiz {
             cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
 
-
     public Quiz() {
     }
 

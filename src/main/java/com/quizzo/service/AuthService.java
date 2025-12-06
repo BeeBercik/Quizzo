@@ -71,6 +71,7 @@ public class AuthService {
             throw new EmailAlreadyTakenException("Email " + request.email() + " already taken");
 
         User user = new User();
+        
         user.setLogin(request.login());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));

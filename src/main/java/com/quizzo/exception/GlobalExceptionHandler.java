@@ -94,5 +94,4 @@ public class GlobalExceptionHandler {
                 status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", ex.getMessage()));
     }
-
 }
