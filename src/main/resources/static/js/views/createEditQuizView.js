@@ -1,5 +1,5 @@
 
-export default function initCreateTestView(mode = "create", code = null) {
+export default function initCreateEditTestView(mode = "create", code = null) {
     const main = document.querySelector("main");
     main.dataset.view = mode === "edit" ? "edit-test" : "create-test";
     main.id = "create-main";
