@@ -129,6 +129,8 @@ public class QuizService {
         List<UserAttemptsSummaryResponse> userSummaries = users.stream()
                 .map(u -> {
                     List<UserResultSummaryResponse> attemptResponses = u.getAttempts().stream()
+                            .filter(attempt -> attempt.getQuiz() != null && attempt.getQuiz().getId().equals(quiz.getId()))
+                            .sorted(Comparator.comparing(Attempt::getAttemptTime).reversed())
                             .map(attempt -> new UserResultSummaryResponse(
                                     attempt.getScore(),
                                     attempt.getAttemptTime()
