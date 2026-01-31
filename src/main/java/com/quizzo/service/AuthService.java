@@ -14,9 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Service
 public class AuthService {
+
+    private final static Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9]+([.#+_-][a-zA-Z0-9]+)*@([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\\.)+[a-zA-Z]{2,}$");
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -59,14 +62,17 @@ public class AuthService {
     }
 
     public void registerUser(RegisterRequest request) {
-        if(request.login() == null || request.login().isBlank() ||
-        request.password() == null || request.password().isBlank() ||
-        request.email() == null || request.email().isBlank())
+        if (request.login() == null || request.login().isBlank() ||
+            request.password() == null || request.password().isBlank() ||
+            request.email() == null || request.email().isBlank())
             throw new IncorrectUserDataException("Incorrect register data");
-
+        if (request.login().length() < 8 ||
+           request.password().length() < 10)
+            throw new IncorrectUserDataException("Login must be at least 8 and password at least 10 characters long");
+        if(!EMAIL_PATTERN.matcher(request.email()).matches())
+            throw new IncorrectUserDataException("Invalid email format");
         if (userRepository.existsByLogin(request.login()))
             throw new LoginAlreadyTakenException("Login " + request.login() + " already taken");
-
         if (userRepository.existsByEmail(request.email()))
             throw new EmailAlreadyTakenException("Email " + request.email() + " already taken");
 
