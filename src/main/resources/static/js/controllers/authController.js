@@ -6,6 +6,7 @@ import initView from "../router.js";
 
 export function initAuth() {
     generateAuthView();
+    const emailRegex = /^[a-zA-Z0-9]+([.#+_-][a-zA-Z0-9]+)*@([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/;
 
     const loginFormLogin = document.getElementById("login-login");
     const loginFormPassword = document.getElementById("login-password");
@@ -46,6 +47,13 @@ export function initAuth() {
             !registerFormPassword.value ||
             !registerFormEmail.value) {
             generateError("Register data cannot be empty");
+            return;
+        } else if (registerFormLogin.value.length < 8 ||
+            registerFormPassword.value.length < 10) {
+            generateError("Login must be at least 8 and password at least 10 characters long");
+            return;
+        } else if (!emailRegex.test(registerFormEmail.value)) {
+            generateError("Invalid email format");
             return;
         }
 
