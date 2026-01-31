@@ -8,7 +8,6 @@ import com.quizzo.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,20 +61,7 @@ public class AuthService {
     }
 
     public void registerUser(RegisterRequest request) {
-        if (request.login() == null || request.login().isBlank() ||
-            request.password() == null || request.password().isBlank() ||
-            request.email() == null || request.email().isBlank())
-            throw new IncorrectUserDataException("Incorrect register data");
-        if (request.login().length() < 8 ||
-           request.password().length() < 10)
-            throw new IncorrectUserDataException("Login must be at least 8 and password at least 10 characters long");
-        if(!EMAIL_PATTERN.matcher(request.email()).matches())
-            throw new IncorrectUserDataException("Invalid email format");
-        if (userRepository.existsByLogin(request.login()))
-            throw new LoginAlreadyTakenException("Login " + request.login() + " already taken");
-        if (userRepository.existsByEmail(request.email()))
-            throw new EmailAlreadyTakenException("Email " + request.email() + " already taken");
-
+        checkRegisterData(request);
         User user = new User();
         
         user.setLogin(request.login());
@@ -94,5 +80,23 @@ public class AuthService {
                 .orElseThrow(() -> new UserNotFoundException("User with login " + claims.getSubject() + " not found"));
 
         return jwtService.createAccess(user.getId(), user.getLogin());
+    }
+
+    private void checkRegisterData(RegisterRequest request) {
+        if (request.login() == null || request.login().isBlank() ||
+                request.password() == null || request.password().isBlank() ||
+                request.email() == null || request.email().isBlank())
+            throw new IncorrectUserDataException("Incorrect register data");
+
+        if (request.login().length() < 8 ||
+                request.password().length() < 10)
+            throw new IncorrectUserDataException("Login must be at least 8 and password at least 10 characters long");
+
+        if(!EMAIL_PATTERN.matcher(request.email()).matches())
+            throw new IncorrectUserDataException("Invalid email format");
+        if (userRepository.existsByLogin(request.login()))
+            throw new LoginAlreadyTakenException("Login " + request.login() + " already taken");
+        if (userRepository.existsByEmail(request.email()))
+            throw new EmailAlreadyTakenException("Email " + request.email() + " already taken");
     }
 }
