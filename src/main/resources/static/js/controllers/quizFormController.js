@@ -2,6 +2,9 @@ import initCreateEditTestView from "../views/createEditQuizView.js";
 import { generateError } from "../ui/globalMessageBar.js";
 import { createBadOption, createQuestion } from "../ui/createQuizPanel.js";
 
+const MAX_QUESTIONS = 100;
+const MAX_BAD_OPTIONS = 8;
+
 export function initQuizForm(mode = "create", quizData = null, submitAction = null) {
     initCreateEditTestView(mode, quizData === null ? null : quizData.code);
 
@@ -131,16 +134,21 @@ function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) 
 }
 
 function generateQuestion() {
-    const questionsCount = document.querySelectorAll("section.question").length + 1;
-    createQuestion(questionsCount);
+    const questionsCount = document.querySelectorAll("section.question").length;
+    if (questionsCount >= MAX_QUESTIONS) {
+        generateError(`Limit ${MAX_QUESTIONS} questions per quiz`);
+        return;
+    }
+    createQuestion(questionsCount + 1);
     bindListenersToBadOptionBtn();
 }
 
 function generateBadOption(e) {
     const btn = e.currentTarget;
     const question = btn.closest("section.question");
-    if (question.dataset.badOptionCount === "8") {
-        generateError("Limit 8 bad options for question");
+    const badOptionCount = Number(question.dataset.badOptionCount ?? 0);
+    if (badOptionCount >= MAX_BAD_OPTIONS) {
+        generateError(`Limit ${MAX_BAD_OPTIONS} bad options for question`);
         return;
     }
     question.dataset.badOptionCount++;
@@ -160,6 +168,11 @@ function getQuestionsAndAnswers(questionsData) {
     const questions = document.querySelectorAll(".question");
     const allInputs = document.querySelectorAll(".question input");
 
+    if (questions.length > MAX_QUESTIONS) {
+        generateError("Limit 100 questions per quiz");
+        return false;
+    }
+
     for (const input of allInputs) {
         if (input.value.trim() === "") {
             generateError("Input cannot be empty");
@@ -168,10 +181,15 @@ function getQuestionsAndAnswers(questionsData) {
     }
 
     let i = 1;
-    questions.forEach(q => {
+    for (const q of questions) {
         const question = q.querySelector(`#q${i}`).value;
         const correctAnswer = q.querySelector(`#correct${i}`).value;
         const badOptionsElements = q.querySelectorAll(".bad-options .elements input");
+
+        if (badOptionsElements.length < 1) {
+            generateError("Question must have at least 1 bad option");
+            return false;
+        }
 
         const badOptions = [];
         badOptionsElements.forEach(b => {
@@ -189,7 +207,7 @@ function getQuestionsAndAnswers(questionsData) {
 
         questionsData.push(questionData);
         i++;
-    });
+    }
     return true;
 }
 

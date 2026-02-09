@@ -25,7 +25,7 @@ export default function initCreateEditTestView(mode = "create", code = null) {
 
           <div class="option">
             <label for="quantity">How many eliminations</label>
-            <input type="number" id="quantity" min="1">
+            <input type="number" id="quantity" min="1" max="99">
           </div>
         </div>
 
