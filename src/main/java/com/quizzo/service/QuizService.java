@@ -1,12 +1,11 @@
 package com.quizzo.service;
 
 import com.quizzo.dto.*;
-import com.quizzo.exception.AnswerNotFoundException;
-import com.quizzo.exception.QuizNotActiveException;
-import com.quizzo.exception.QuizNotFoundException;
-import com.quizzo.exception.UnauthorizedException;
+import com.quizzo.exception.*;
 import com.quizzo.model.*;
 import com.quizzo.repository.*;
+import com.quizzo.validators.QuizDataValidator;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +18,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
+
+    private final Integer MAX_QUIZ_CODE_LENGTH = 5;
 
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
@@ -54,6 +55,7 @@ public class QuizService {
     }
 
     public void saveQuiz(CreatedQuizRequest createdQuiz, Integer userId) {
+        QuizDataValidator.validateQuizData(createdQuiz);
         Quiz quiz = new Quiz();
 
         quiz.setTitle(capitalizeFirstLetter(createdQuiz.title()));
@@ -63,11 +65,9 @@ public class QuizService {
 
         quiz.setDurationTime(Float.parseFloat(createdQuiz.time()));
         quiz.setEliminationsCount(createdQuiz.eliminations());
-
         quiz.setQuestions(buildQuestions(createdQuiz.questionsData(), quiz));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException("User not logged in"));
-
         quiz.setOwner(user);
         quizRepository.save(quiz);
     }
@@ -107,6 +107,7 @@ public class QuizService {
     }
 
     public void updateQuiz(String code, CreatedQuizRequest updatedQuiz, Integer userId) {
+        QuizDataValidator.validateQuizData(updatedQuiz);
         Quiz quiz = getSpecificUserQuiz(code, userId);
 
         quiz.setTitle(capitalizeFirstLetter(updatedQuiz.title()));
@@ -148,6 +149,12 @@ public class QuizService {
                 quiz.getCode(),
                 userSummaries,
                 quiz.getCreateTime());
+    }
+
+    public Boolean checkIfAbleToEliminate(int id) {
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new AnswerNotFoundException("Answer with such id does not exist"));
+        return answer.getCorrect();
     }
 
     private List<Question> buildQuestions(List<QuestionRequest> questionRequests, Quiz quiz) {
@@ -224,11 +231,10 @@ public class QuizService {
     }
 
     private String generateCode() {
-        int length = 5;
         String positions = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder(length);
+        StringBuilder code = new StringBuilder(MAX_QUIZ_CODE_LENGTH);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < MAX_QUIZ_CODE_LENGTH; i++) {
             char r = positions.charAt(new Random().nextInt(positions.length()));
             code.append(r);
         }
@@ -250,11 +256,5 @@ public class QuizService {
             throw new QuizNotActiveException("Quz not active");
 
         return quiz;
-    }
-
-    public Boolean checkIfAbleToEliminate(int id) {
-        Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new AnswerNotFoundException("Answer with such id does not exist"));
-        return answer.getCorrect();
     }
 }
