@@ -94,4 +94,11 @@ public class GlobalExceptionHandler {
                 status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", ex.getMessage()));
     }
+
+    @ExceptionHandler(IncorrectQuizDataException.class)
+    ResponseEntity<Map<String, String>> handleIncorrectQuizDataException(IncorrectQuizDataException ex) {
+        return ResponseEntity.
+                status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", ex.getMessage()));
+    }
 }
