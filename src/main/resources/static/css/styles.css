@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 @import "welcome.css";
-@import "forms.css";
+@import "authForms.css";
 @import "dashboard.css";
-@import "create.css";
+@import "quizForm.css";
 @import "attempt.css";
 @import "test.css";
 @import "summary.css";

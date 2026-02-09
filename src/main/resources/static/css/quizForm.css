@@ -109,6 +109,21 @@
     background-color: #dd6711;
 }
 
+#create-main #cancel-quiz-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4c2f6b;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+#create-main #cancel-quiz-btn:hover {
+    background-color: #5f3d82;
+}
+
 #create-main .center-btn {
     display: flex;
     flex-direction: column;

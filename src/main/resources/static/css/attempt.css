@@ -40,24 +40,20 @@
 }
 
 #attempt-main .cancel-btn {
-    background-color: #b54b04;
+    background-color: #4c2f6b;
 }
 
 #attempt-main .cancel-btn:hover {
-    background-color: #dd6711;
+    background-color: #5f3d82;
 }
 
 #attempt-main .enter-btn {
-    background-color: #3a035c;
-    border-radius: 8px;
-    font-weight: bold;
-    border: 2px solid #6203ab;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    background-color: #b54b04;
+    border: none;
 }
 
 #attempt-main .enter-btn:hover {
-    background-color: #6203ab;
-    transform: scale(1.02);
+    background-color: #dd6711;
 }
 
 .info {

@@ -1,6 +1,7 @@
 import initCreateEditTestView from "../views/createEditQuizView.js";
 import { generateError } from "../ui/globalMessageBar.js";
 import { createBadOption, createQuestion } from "../ui/createQuizPanel.js";
+import initView from "../router.js";
 
 const MAX_QUESTIONS = 100;
 const MAX_BAD_OPTIONS = 8;
@@ -15,6 +16,7 @@ export function initQuizForm(mode = "create", quizData = null, submitAction = nu
     const eliminationQuantity = document.getElementById("quantity");
     const testDuration = document.getElementById("duration");
     const title = document.getElementById("q-title");
+    const cancelBtn = document.getElementById("cancel-quiz-btn");
 
     resetEliminationInputs(eliminationOption, eliminationQuantity);
     eliminationOption.addEventListener("change", function() {
@@ -31,6 +33,12 @@ export function initQuizForm(mode = "create", quizData = null, submitAction = nu
     document.getElementById("new-question-btn").addEventListener("click", function() {
         generateQuestion();
     });
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", function() {
+            initView("dashboard");
+        });
+    }
 
     document.querySelector("form").addEventListener("submit", async function(e) {
         e.preventDefault();

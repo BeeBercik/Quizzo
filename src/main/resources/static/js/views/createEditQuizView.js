@@ -41,6 +41,7 @@ export default function initCreateEditTestView(mode = "create", code = null) {
       
       <button id="new-question-btn" type="button">Add new question</button>
 
+      <button id="cancel-quiz-btn" type="button">Cancel</button>
       <button type="submit">${submitLabel}</button>
     </form>
     `;
