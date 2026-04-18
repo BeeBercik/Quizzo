@@ -44,7 +44,8 @@
     padding: 10px 13px;
 }
 
-#dashboard-main .actions #create-test {
+#dashboard-main .actions #create-test,
+#dashboard-main .actions #admin-panel {
     background-color: #3a035c;
     border-radius: 8px;
     font-weight: bold;
@@ -52,13 +53,15 @@
     transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
-#dashboard-main .actions #create-test:hover {
+#dashboard-main .actions #create-test:hover,
+#dashboard-main .actions #admin-panel:hover {
     background-color: #6203ab;
     transform: scale(1.02);
     cursor: pointer;
 }
 
-#dashboard-main .actions #create-test:active {
+#dashboard-main .actions #create-test:active,
+#dashboard-main .actions #admin-panel:active {
     transform: scale(0.98);
 }
 
@@ -188,7 +191,8 @@
         margin-bottom: 10px;
     }
 
-    #dashboard-main .actions #create-test {
+    #dashboard-main .actions #create-test,
+    #dashboard-main .actions #admin-panel {
         margin-top: 30px;
     }
 

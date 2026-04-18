@@ -7,6 +7,7 @@
 @import "attempt.css";
 @import "test.css";
 @import "summary.css";
+@import "admin.css";
 
 * {
     font-family: "Roboto Light", sans-serif;
