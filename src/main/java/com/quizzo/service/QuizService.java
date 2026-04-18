@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,18 +85,30 @@ public class QuizService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException("User not logged in"));
         attemptEntity.setUser(user);
 
+        List<SubmittedAnswerRequest> submittedAnswers = attempt.answers();
+        if (submittedAnswers == null || submittedAnswers.isEmpty()) {
+            attemptEntity.setScore(0);
+            attemptRepository.save(attemptEntity);
+            return;
+        }
+
         int goodAnswers = 0;
-        for (SubmittedAnswerRequest submittedAnswer : attempt.answers()) {
-            Integer submittedAnswerId = submittedAnswer.selectedAnswerId();
+        for (SubmittedAnswerRequest submittedAnswer : submittedAnswers) {
             Integer questionId = submittedAnswer.questionId();
 
             List<Answer> answers = questionRepository.findById(questionId).orElseThrow().getAnswers();
-            for (Answer a : answers) {
-                if (a.getId().equals(submittedAnswerId) && a.getCorrect())
-                    goodAnswers++;
-            }
+            Set<Integer> selectedAnswerIds = submittedAnswer.selectedAnswerIds() == null
+                    ? Set.of()
+                    : new HashSet<>(submittedAnswer.selectedAnswerIds());
+            Set<Integer> correctAnswerIds = answers.stream()
+                    .filter(Answer::getCorrect)
+                    .map(Answer::getId)
+                    .collect(Collectors.toSet());
+
+            if (selectedAnswerIds.equals(correctAnswerIds))
+                goodAnswers++;
         }
-        attemptEntity.setScore(Math.round(goodAnswers * 100f / attempt.answers().size()));
+        attemptEntity.setScore(Math.round(goodAnswers * 100f / submittedAnswers.size()));
 
         attemptRepository.save(attemptEntity);
     }
