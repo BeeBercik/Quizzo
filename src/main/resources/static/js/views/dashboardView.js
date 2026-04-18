@@ -24,6 +24,12 @@ export default function initDashboardView(userData) {
           <button id="create-test"><a href="create.html">Create test/quiz</a></button>
         </div>
 
+        ${userData.role === "ADMIN" ? `
+        <div>
+          <button id="admin-panel" type="button">Admin panel</button>
+        </div>
+        ` : ""}
+
       </section>
 
       <section class="summary">

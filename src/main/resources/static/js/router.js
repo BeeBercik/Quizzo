@@ -9,6 +9,7 @@ import { initAuth } from "./controllers/authController.js";
 import initQuizSummary from "./controllers/summaryQuizController.js";
 import {refreshAccess} from "./services/quizService.js";
 import updateDashboardButton from "./ui/globalDashboardButton.js";
+import initAdmin from "./controllers/adminController.js";
 
 export default async function initView(view, code = null, data = null) {
     await updateDashboardButton();
@@ -36,6 +37,9 @@ export default async function initView(view, code = null, data = null) {
             break;
         case "summary":
             initQuizSummary(code);
+            break;
+        case "admin":
+            initAdmin();
             break;
         default:
             break;

@@ -34,6 +34,14 @@ export default async function initDashboard(userData) {
         initView("create-test");
     });
 
+    const adminPanelButton = document.getElementById("admin-panel");
+    if (adminPanelButton) {
+        adminPanelButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            initView("admin");
+        });
+    }
+
     const tbody = document.querySelector('#createdTests tbody');
     tbody.addEventListener('click', async (e) => {
         const tdDelete = e.target.closest('.q-delete');
