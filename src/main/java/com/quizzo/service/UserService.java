@@ -4,11 +4,11 @@ import com.quizzo.dto.AttemptResponse;
 import com.quizzo.dto.LoginRequest;
 import com.quizzo.dto.CreatedQuizDetailsResponse;
 import com.quizzo.dto.UserProfileResponse;
-import com.quizzo.exception.IncorrectUserDataException;
 import com.quizzo.exception.UnauthorizedException;
 import com.quizzo.exception.UserNotFoundException;
 import com.quizzo.model.Attempt;
 import com.quizzo.model.Quiz;
+import com.quizzo.model.Role;
 import com.quizzo.model.User;
 import com.quizzo.repository.AttemptRepository;
 import com.quizzo.repository.UserRepository;
@@ -57,6 +57,7 @@ public class UserService {
         return new UserProfileResponse(
                 user.getId(),
                 user.getLogin(),
+                user.getRole() == null ? Role.USER.name() : user.getRole().name(),
                 attemptResponses,
                 createdQuizzes
         );
