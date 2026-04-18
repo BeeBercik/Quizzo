@@ -19,9 +19,12 @@ export default function generateAttemptView(quizInfo) {
                 </p>
                 <p>
                     <span>Bad options elimination:</span>${quizInfo.eliminationsCount === 0 ? "No" : "Yes"} </p>
+                <p>
+                    <span>Multiple choice:</span>${quizInfo.multipleChoice ? "Yes" : "No"}
+                </p>
             </div>
 
-            <p class="description">Test / quiz contains single-choice questions. There is no possibility to go back to a previous question. The timer starts as soon as the test begins. Good luck!</p>
+            <p class="description">There is no possibility to go back to a previous question. The timer starts as soon as the test begins. Good luck!</p>
 
             <section class="actions">
                 <button class="cancel-btn">Cancel</button>

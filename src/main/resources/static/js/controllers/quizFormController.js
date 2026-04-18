@@ -48,13 +48,13 @@ export function initQuizForm(mode = "create", quizData = null, submitAction = nu
 
     document.querySelector("form").addEventListener("submit", async function(e) {
         e.preventDefault();
-        const finalTestData = buildQuizPayload(title, testDuration, eliminationQuantity);
+        const finalTestData = buildQuizPayload(title, testDuration, eliminationQuantity, multipleCorrectOption);
         if (!finalTestData || !submitAction) return;
         await submitAction(finalTestData);
     });
 }
 
-function buildQuizPayload(title, testDuration, eliminationQuantity) {
+function buildQuizPayload(title, testDuration, eliminationQuantity, multipleCorrectOption) {
     if (testDuration.value === "" || testDuration.value < 1) {
         generateError("Minimum duration time for test is 1 minute");
         return null;
@@ -72,6 +72,7 @@ function buildQuizPayload(title, testDuration, eliminationQuantity) {
         title: title.value,
         time: testDuration.value,
         eliminations: eliminationQuantity.value === "" ? 0 : eliminationQuantity.value,
+        multipleChoice: multipleCorrectOption.checked,
         questionsData: questionsData
     };
 }
@@ -91,7 +92,7 @@ function populateQuizForm(quizData, title, testDuration, eliminationOption, elim
         eliminationQuantity.value = "";
     }
 
-    multipleCorrectOption.checked = hasMultipleCorrectAnswers(quizData.questions);
+    multipleCorrectOption.checked = quizData.multipleChoice === true;
     populateQuestions(quizData.questions);
     updateCorrectOptionControls(multipleCorrectOption.checked);
 }
@@ -222,12 +223,6 @@ function removeAdditionalCorrectOptions() {
         question.querySelectorAll(".correct-options .element:not(:first-child)").forEach(element => element.remove());
         question.dataset.correctOptionCount = "1";
     });
-}
-
-function hasMultipleCorrectAnswers(questions = []) {
-    return (questions || []).some(question =>
-        (question.answers || []).filter(answer => answer.correct).length > 1
-    );
 }
 
 function getQuestionsAndAnswers(questionsData) {
