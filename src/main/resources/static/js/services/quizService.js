@@ -176,3 +176,55 @@ export async function getAnswerCorrectness(id) {
 
     return (await response.json()).correct;
 }
+
+export async function getAdminUsers() {
+    const response = await apiFetch('/api/admin/users');
+
+    if (response.status !== 200)
+        return null;
+
+    return response.json();
+}
+
+export async function getAdminQuizzes() {
+    const response = await apiFetch('/api/admin/quizzes');
+
+    if (response.status !== 200)
+        return null;
+
+    return response.json();
+}
+
+export async function updateAdminUserRole(id, role) {
+    const response = await apiFetch(`/api/admin/users/${id}/role`, {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({role: role})
+    });
+
+    return response.status === 204;
+}
+
+export async function deactivateAdminUser(id) {
+    const response = await apiFetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+
+    return response.status === 204;
+}
+
+export async function activateAdminUser(id) {
+    const response = await apiFetch(`/api/admin/users/${id}/activate`, { method: 'PATCH' });
+
+    return response.status === 204;
+}
+
+export async function deactivateAdminQuiz(code) {
+    const response = await apiFetch(`/api/admin/quizzes/${code}`, { method: 'DELETE' });
+
+    return response.status === 204;
+}
+
+export async function activateAdminQuiz(code) {
+    const response = await apiFetch(`/api/admin/quizzes/${code}/activate`, { method: 'PATCH' });
+
+    return response.status === 204;
+}
