@@ -5,7 +5,7 @@ export default function generateSummaryView(summary) {
     main.id = "summary-main";
     main.dataset.view = "summary";
 
-    const { title, code, creationDate, users = [] } = summary;
+    const { title, code, creationDate, multipleChoice, users = [] } = summary;
 
     let attempts = [];
     for (const user of users) {
@@ -41,6 +41,7 @@ export default function generateSummaryView(summary) {
           <tbody>
             <tr><th>Title</th><td>${title}</td></tr>
             <tr><th>Code</th><td><strong>${code}</strong></td></tr>
+            <tr><th>Multiple choice</th><td>${multipleChoice ? "Yes" : "No"}</td></tr>
             <tr><th>Created</th><td>${dateFormat(creationDate)}</td></tr>
             <tr><th>Users</th><td>${users.length}</td></tr>
             <tr><th>Attempts</th><td>${attempts.length}</td></tr>

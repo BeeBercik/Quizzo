@@ -164,6 +164,7 @@ public class QuizService {
         return new QuizSummaryResponse(
                 quiz.getTitle(),
                 quiz.getCode(),
+                quiz.getMultipleChoice(),
                 userSummaries,
                 quiz.getCreateTime());
     }

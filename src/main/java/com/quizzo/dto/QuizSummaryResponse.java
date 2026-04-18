@@ -6,6 +6,7 @@ import java.util.List;
 public record QuizSummaryResponse(
         String title,
         String code,
+        Boolean multipleChoice,
         List<UserAttemptsSummaryResponse> users,
         LocalDateTime creationDate) {
 }
