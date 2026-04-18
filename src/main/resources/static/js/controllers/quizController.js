@@ -14,7 +14,7 @@ export default async function initTest(code) {
     }
     generateTestView(testDetails);
 
-    const answers = {
+    const attempt = {
         quizId: testDetails.id,
         answers: []
     };
@@ -28,7 +28,7 @@ export default async function initTest(code) {
     updateNextButton(nextButton, currentQuestion, questionCount);
 
     async function timeUp() {
-        if (await sendAnswers(answers))
+        if (await sendAnswers(attempt))
             initView("dashboard");
         else {
             generateError('Error during submitting quiz');
@@ -41,13 +41,14 @@ export default async function initTest(code) {
 
     optionsContainer.addEventListener("click", function(e) {
         e.preventDefault();
-        if (e.target.disabled) return;
+        const selected = e.target.closest("button.option");
+        if (!selected || selected.disabled) return;
         selectQuestion(optionsContainer, e);
     });
 
     nextButton.addEventListener("click", async function(e) {
         e.preventDefault();
-        const savedAnswers = saveAnswer(testDetails, answers);
+        const savedAnswers = saveAnswer(attempt);
         if (!savedAnswers)
             return currentQuestion;
 
@@ -58,7 +59,7 @@ export default async function initTest(code) {
             updateNextButton(nextButton, currentQuestion, questionCount);
         } else {
             stopTimer();
-            if (await sendAnswers(answers))
+            if (await sendAnswers(attempt))
                 initView("dashboard");
             else
                 generateError('Error during submitting quiz');
@@ -72,24 +73,31 @@ export default async function initTest(code) {
             generateError("You do not have any eliminations left");
             return;
         }
-        if (eliminated.length === options.length - 1) {
-            generateError("Cannot eliminate all answers");
+        const badOptionsCount = testDetails.questions[currentQuestion].answers
+            .filter(answer => answer.correct === false).length;
+        if (eliminated.length >= badOptionsCount) {
+            generateError("Cannot eliminate more bad answers");
             return;
         }
         eliminateOption(testDetails, options, eliminated);
     });
 }
 
-function saveAnswer(testDetails, answers) {
-    const selected = document.querySelector(".options button.selected");
-    if (!selected) {
+function saveAnswer(attempt) {
+    const selected = document.querySelectorAll(".options button.selected");
+    if (selected.length === 0) {
         generateError("Choose the answer");
         return false;
     }
     const question = document.querySelector(".question p");
-    answers.answers.push({
+    const selectedAnswerIds = [];
+    selected.forEach(answer => {
+        selectedAnswerIds.push(answer.dataset.value);
+    });
+
+    attempt.answers.push({
         questionId: question.dataset.id,
-        selectedAnswerId: selected.dataset.value
+        selectedAnswerIds: selectedAnswerIds
     });
     return true;
 }
