@@ -38,6 +38,13 @@
     text-align: center;
 }
 
+#admin-main #admin-users th:last-child,
+#admin-main #admin-users td:last-child,
+#admin-main #admin-quizzes th:last-child,
+#admin-main #admin-quizzes td:last-child {
+    width: 140px;
+}
+
 #admin-main thead {
     background-color: #6203ab;
 }
@@ -64,6 +71,7 @@
     background-color: #b54b04;
     cursor: pointer;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 #admin-main button:hover {

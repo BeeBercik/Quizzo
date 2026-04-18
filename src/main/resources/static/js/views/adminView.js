@@ -19,7 +19,7 @@ export default function generateAdminView(users, quizzes, currentUserId) {
                             <th>Created</th>
                             <th>Attempts</th>
                             <th>Quizzes</th>
-                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -40,7 +40,7 @@ export default function generateAdminView(users, quizzes, currentUserId) {
                             <th>Multiple choice</th>
                             <th>Questions</th>
                             <th>Attempts</th>
-                            <th>Deactivate</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
