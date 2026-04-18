@@ -17,6 +17,7 @@ export default function generateTestView(testDetails) {
 
             <section class="q-nav-container">
                 <div class="question">
+                    <span id="answer-mode"></span>
                     <p></p>
                 </div>
                 <nav>

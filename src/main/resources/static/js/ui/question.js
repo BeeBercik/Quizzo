@@ -5,7 +5,14 @@ export function renderQuestion(q) {
     question.dataset.id = q.id;
 
     const options = document.querySelector(".options");
+    const multipleAnswers = hasMultipleCorrectAnswers(q);
+    options.dataset.multiple = String(multipleAnswers);
     options.innerHTML = "";
+
+    const answerMode = document.getElementById("answer-mode");
+    if (answerMode)
+        answerMode.textContent = multipleAnswers ? "Choose all correct answers" : "Choose one answer";
+
     for (let i = 0; i < q.answers.length; i++) {
         const button = document.createElement("button");
         button.classList.add("option");
@@ -16,14 +23,30 @@ export function renderQuestion(q) {
 }
 
 export function selectQuestion(options, e) {
-    const previousSelected = options.querySelectorAll("button.selected");
-    for (const element of previousSelected) {
-        element.classList.remove("selected");
+    const selected = e.target.closest("button.option");
+    if (!selected) return;
+
+    if (options.dataset.multiple === "true") {
+        selected.classList.toggle("selected");
+        return;
     }
-    e.target.classList.add("selected");
+
+    const previousSelected = options.querySelectorAll("button.selected");
+    previousSelected.forEach(element => element.classList.remove("selected"));
+    selected.classList.add("selected");
 }
 
 export function updateNextButton(button, current, total) {
     if (current < total - 1) button.textContent = "Next";
     else button.textContent = "Finish";
+}
+
+function hasMultipleCorrectAnswers(question) {
+    let correctAnswers = 0;
+    question.answers.forEach(answer => {
+        if (answer.correct)
+            correctAnswers++;
+    });
+
+    return correctAnswers > 1;
 }

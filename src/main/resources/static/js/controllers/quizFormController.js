@@ -1,10 +1,11 @@
 import initCreateEditTestView from "../views/createEditQuizView.js";
 import { generateError } from "../ui/globalMessageBar.js";
-import { createBadOption, createQuestion } from "../ui/createQuizPanel.js";
+import { createBadOption, createCorrectOption, createQuestion } from "../ui/createQuizPanel.js";
 import initView from "../router.js";
 
 const MAX_QUESTIONS = 100;
 const MAX_BAD_OPTIONS = 8;
+const MAX_CORRECT_OPTIONS = 8;
 
 export function initQuizForm(mode = "create", quizData = null, submitAction = null) {
     initCreateEditTestView(mode, quizData === null ? null : quizData.code);
@@ -17,21 +18,26 @@ export function initQuizForm(mode = "create", quizData = null, submitAction = nu
     const testDuration = document.getElementById("duration");
     const title = document.getElementById("q-title");
     const cancelBtn = document.getElementById("cancel-quiz-btn");
+    const multipleCorrectOption = document.getElementById("multiple-correct");
 
     resetEliminationInputs(eliminationOption, eliminationQuantity);
     eliminationOption.addEventListener("change", function() {
         handleOptionEliminationsChange(eliminationOption, eliminationQuantity);
     });
+    multipleCorrectOption.addEventListener("change", function() {
+        handleMultipleCorrectChange(multipleCorrectOption.checked);
+    });
 
     if (quizData)
-        populateQuizForm(quizData, title, testDuration, eliminationOption, eliminationQuantity);
+        populateQuizForm(quizData, title, testDuration, eliminationOption, eliminationQuantity, multipleCorrectOption);
     else {
         generateQuestion();
-        bindListenersToBadOptionBtn();
+        updateCorrectOptionControls(false);
     }
 
     document.getElementById("new-question-btn").addEventListener("click", function() {
         generateQuestion();
+        updateCorrectOptionControls(multipleCorrectOption.checked);
     });
 
     if (cancelBtn) {
@@ -70,7 +76,7 @@ function buildQuizPayload(title, testDuration, eliminationQuantity) {
     };
 }
 
-function populateQuizForm(quizData, title, testDuration, eliminationOption, eliminationQuantity) {
+function populateQuizForm(quizData, title, testDuration, eliminationOption, eliminationQuantity, multipleCorrectOption) {
     title.value = quizData.title ?? "";
     testDuration.value = quizData.durationTime ?? "";
 
@@ -85,37 +91,55 @@ function populateQuizForm(quizData, title, testDuration, eliminationOption, elim
         eliminationQuantity.value = "";
     }
 
+    multipleCorrectOption.checked = hasMultipleCorrectAnswers(quizData.questions);
     populateQuestions(quizData.questions);
+    updateCorrectOptionControls(multipleCorrectOption.checked);
 }
 
 function populateQuestions(questions = []) {
     if (!questions || questions.length === 0) {
         generateQuestion();
-        bindListenersToBadOptionBtn();
         return;
     }
 
     questions.forEach((question, id) => {
         createQuestion(id + 1);
         const section = document.querySelectorAll("section.question")[id];
-        section.dataset.badOptionCount = "0";
+        section.dataset.badOptionCount = "1";
+        section.dataset.correctOptionCount = "1";
 
         const qInput = section.querySelector(`#q${id + 1}`);
         if (qInput)
             qInput.value = question.value ?? "";
 
+        const correctAnswers = (question.answers || []).filter(a => a.correct);
         const correctInput = section.querySelector(`#correct${id + 1}`);
-        const correctAnswer = (question.answers || []).find(a => a.correct);
-        if (correctInput && correctAnswer)
-            correctInput.value = correctAnswer.value ?? "";
+        if (correctInput && correctAnswers.length > 0)
+            correctInput.value = correctAnswers[0].value ?? "";
+
+        const correctContainer = section.querySelector(".correct-options .elements");
+        for (let i = 1; i < correctAnswers.length; i++) {
+            const correctCount = i + 1;
+            createCorrectOption(correctContainer, id + 1, correctCount);
+            const input = correctContainer.querySelector(`#correct${id + 1}-${correctCount}`);
+            if (input)
+                input.value = correctAnswers[i].value ?? "";
+            section.dataset.correctOptionCount = String(correctCount);
+        }
 
         const badOptions = (question.answers || []).filter(a => !a.correct);
-        const elContainer = section.querySelector(".elements");
-        let badCount = 0;
-        badOptions.forEach(a => {
+        const elContainer = section.querySelector(".bad-options .elements");
+        let badCount = 1;
+        if (badOptions.length > 0) {
+            const firstBadInput = elContainer.querySelector(`#bad${id + 1}-1`);
+            if (firstBadInput)
+                firstBadInput.value = badOptions[0].value ?? "";
+        }
+
+        badOptions.slice(1).forEach(a => {
             badCount++;
-            createBadOption(elContainer, badCount);
-            const input = elContainer.querySelector(`#bad${badCount}`);
+            createBadOption(elContainer, id + 1, badCount);
+            const input = elContainer.querySelector(`#bad${id + 1}-${badCount}`);
             if (input)
                 input.value = a.value ?? "";
         });
@@ -123,7 +147,6 @@ function populateQuestions(questions = []) {
         section.dataset.badOptionCount = String(badCount);
     });
 
-    bindListenersToBadOptionBtn();
 }
 
 function resetEliminationInputs(eliminationOption, eliminationQuantity) {
@@ -133,9 +156,11 @@ function resetEliminationInputs(eliminationOption, eliminationQuantity) {
 }
 
 function handleOptionEliminationsChange(eliminationOption, eliminationQuantity) {
-    if (eliminationOption.checked === true)
+    if (eliminationOption.checked === true) {
         eliminationQuantity.disabled = false;
-    else {
+        if (eliminationQuantity.value === "")
+            eliminationQuantity.value = "1";
+    } else {
         eliminationQuantity.disabled = true;
         eliminationQuantity.value = "";
     }
@@ -148,11 +173,16 @@ function generateQuestion() {
         return;
     }
     createQuestion(questionsCount + 1);
-    bindListenersToBadOptionBtn();
 }
 
-function generateBadOption(e) {
-    const btn = e.currentTarget;
+function handleMultipleCorrectChange(multipleCorrect) {
+    if (!multipleCorrect)
+        removeAdditionalCorrectOptions();
+
+    updateCorrectOptionControls(multipleCorrect);
+}
+
+function generateBadOption(btn) {
     const question = btn.closest("section.question");
     const badOptionCount = Number(question.dataset.badOptionCount ?? 0);
     if (badOptionCount >= MAX_BAD_OPTIONS) {
@@ -160,16 +190,44 @@ function generateBadOption(e) {
         return;
     }
     question.dataset.badOptionCount++;
-    const elContainer = question.querySelector(".elements");
-    createBadOption(elContainer, question.dataset.badOptionCount);
+    const questionNumber = getQuestionNumber(question);
+    const elContainer = question.querySelector(".bad-options .elements");
+    createBadOption(elContainer, questionNumber, question.dataset.badOptionCount);
 }
 
-function bindListenersToBadOptionBtn() {
-    const badOptionBtns = document.querySelectorAll(".bad-option-btn");
-    badOptionBtns.forEach(btn => {
-        btn.removeEventListener("click", generateBadOption);
-        btn.addEventListener("click", generateBadOption);
+function generateCorrectOption(btn) {
+    const question = btn.closest("section.question");
+    let correctOptionCount = Number(question.dataset.correctOptionCount ?? 1);
+    if (correctOptionCount >= MAX_CORRECT_OPTIONS) {
+        generateError(`Limit ${MAX_CORRECT_OPTIONS} correct options for question`);
+        return;
+    }
+    correctOptionCount++;
+    question.dataset.correctOptionCount = String(correctOptionCount);
+    const questionNumber = getQuestionNumber(question);
+    const elContainer = question.querySelector(".correct-options .elements");
+    createCorrectOption(elContainer, questionNumber, correctOptionCount);
+}
+
+function updateCorrectOptionControls(multipleCorrect) {
+    const correctOptionBtns = document.querySelectorAll(".correct-option-btn");
+    correctOptionBtns.forEach(btn => {
+        btn.hidden = !multipleCorrect;
     });
+}
+
+function removeAdditionalCorrectOptions() {
+    const questions = document.querySelectorAll("section.question");
+    questions.forEach(question => {
+        question.querySelectorAll(".correct-options .element:not(:first-child)").forEach(element => element.remove());
+        question.dataset.correctOptionCount = "1";
+    });
+}
+
+function hasMultipleCorrectAnswers(questions = []) {
+    return (questions || []).some(question =>
+        (question.answers || []).filter(answer => answer.correct).length > 1
+    );
 }
 
 function getQuestionsAndAnswers(questionsData) {
@@ -191,8 +249,13 @@ function getQuestionsAndAnswers(questionsData) {
     let i = 1;
     for (const q of questions) {
         const question = q.querySelector(`#q${i}`).value;
-        const correctAnswer = q.querySelector(`#correct${i}`).value;
+        const correctOptionsElements = q.querySelectorAll(".correct-options .elements input");
         const badOptionsElements = q.querySelectorAll(".bad-options .elements input");
+
+        if (correctOptionsElements.length < 1) {
+            generateError("Question must have at least 1 correct option");
+            return false;
+        }
 
         if (badOptionsElements.length < 1) {
             generateError("Question must have at least 1 bad option");
@@ -206,7 +269,15 @@ function getQuestionsAndAnswers(questionsData) {
                 correct: false
             });
         });
-        const answers = [...badOptions, { value: correctAnswer, correct: true }];
+
+        const correctOptions = [];
+        correctOptionsElements.forEach(c => {
+            correctOptions.push({
+                value: c.value,
+                correct: true
+            });
+        });
+        const answers = [...badOptions, ...correctOptions];
 
         const questionData = {
             question: question,
@@ -220,10 +291,30 @@ function getQuestionsAndAnswers(questionsData) {
 }
 
 function onQuestionsClick(e) {
+    const badOptionBtn = e.target.closest(".bad-option-btn");
+    if (badOptionBtn) {
+        generateBadOption(badOptionBtn);
+        return;
+    }
+
+    const correctOptionBtn = e.target.closest(".correct-option-btn");
+    if (correctOptionBtn) {
+        generateCorrectOption(correctOptionBtn);
+        return;
+    }
+
     const trash = e.target.closest(".delete-icon");
     if (!trash) return;
 
-    const badOptionEl = trash.closest(".element");
+    const correctOptionEl = trash.closest(".correct-options .element");
+    if (correctOptionEl) {
+        const section = trash.closest("section.question");
+        correctOptionEl.remove();
+        renumberCorrectOptions(section);
+        return;
+    }
+
+    const badOptionEl = trash.closest(".bad-options .element");
     if (badOptionEl) {
         const section = trash.closest("section.question");
         badOptionEl.remove();
@@ -233,6 +324,8 @@ function onQuestionsClick(e) {
 
     const questionSection = trash.closest("section.question");
     if (questionSection) {
+        if (getQuestionNumber(questionSection) === 1)
+            return;
         questionSection.remove();
         renumberQuestions();
     }
@@ -246,7 +339,7 @@ function renumberQuestions() {
         const h3 = sec.querySelector("h3");
         if (h3) {
             const icon = h3.querySelector(".delete-icon");
-            h3.innerHTML = `Question #${n} ${icon ? icon.outerHTML : ""}`;
+            h3.innerHTML = `Question #${n} ${n === 1 ? "" : icon ? icon.outerHTML : '<i class="fa-solid fa-trash delete-icon"></i>'}`;
         }
 
         const qLabel = sec.querySelector('label[for^="q"]');
@@ -254,32 +347,66 @@ function renumberQuestions() {
         if (qLabel) qLabel.setAttribute("for", `q${n}`);
         if (qInput) { qInput.id = `q${n}`; qInput.name = `q${n}`; }
 
-        const cLabel = sec.querySelector('label[for^="correct"]');
-        const cInput = sec.querySelector('input[id^="correct"]');
-        if (cLabel) cLabel.setAttribute("for", `correct${n}`);
-        if (cInput) { cInput.id = `correct${n}`; cInput.name = `correct${n}`; }
-
+        renumberCorrectOptions(sec, n);
         renumberBadOptions(sec);
     });
 }
 
-function renumberBadOptions(section) {
-    const optionEls = section.querySelectorAll(".elements .element");
-    section.dataset.badOptionCount = String(optionEls.length);
+function renumberCorrectOptions(section, questionNumber = getQuestionNumber(section)) {
+    const optionEls = section.querySelectorAll(".correct-options .elements .element");
+    section.dataset.correctOptionCount = String(optionEls.length);
 
     optionEls.forEach((el, idx) => {
         const n = idx + 1;
         const label = el.querySelector("label");
         const input = el.querySelector("input");
+        const inputId = n === 1 ? `correct${questionNumber}` : `correct${questionNumber}-${n}`;
 
         if (label) {
             const icon = label.querySelector(".delete-icon");
-            label.setAttribute("for", `bad${n}`);
+            label.setAttribute("for", inputId);
             label.innerHTML = `${n}. ${icon ? icon.outerHTML : ""}`;
         }
         if (input) {
-            input.id = `bad${n}`;
-            input.name = `bad${n}`;
+            input.id = inputId;
+            input.name = inputId;
         }
     });
+}
+
+function renumberBadOptions(section) {
+    const optionEls = section.querySelectorAll(".bad-options .elements .element");
+    section.dataset.badOptionCount = String(optionEls.length);
+    const questionNumber = getQuestionNumber(section);
+
+    optionEls.forEach((el, idx) => {
+        const n = idx + 1;
+        const label = el.querySelector("label");
+        const input = el.querySelector("input");
+        const inputId = `bad${questionNumber}-${n}`;
+
+        if (label) {
+            const icon = label.querySelector(".delete-icon");
+            label.setAttribute("for", inputId);
+            label.innerHTML = `${n}. ${n === 1 ? "" : icon ? icon.outerHTML : '<i class="fa-solid fa-trash delete-icon"></i>'}`;
+        }
+        if (input) {
+            input.id = inputId;
+            input.name = inputId;
+        }
+    });
+}
+
+function getQuestionNumber(question) {
+    const sections = document.querySelectorAll("section.question");
+    let questionNumber = 1;
+
+    for (const section of sections) {
+        if (section === question)
+            return questionNumber;
+
+        questionNumber++;
+    }
+
+    return 0;
 }

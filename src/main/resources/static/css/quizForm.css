@@ -143,9 +143,17 @@
     background-color: #7c3fbd;
 }
 
+#create-main form .correct-options .elements,
 #create-main form .bad-options .elements {
     display: flex;
     flex-direction: column;
+}
+
+#create-main form .correct-options .element label,
+#create-main form .bad-options .element label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #create-main #new-question-btn {

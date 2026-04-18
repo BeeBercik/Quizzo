@@ -24,6 +24,11 @@ export default function initCreateEditTestView(mode = "create", code = null) {
           </div>
 
           <div class="option">
+            <label for="multiple-correct">Multiple correct answers</label>
+            <input type="checkbox" id="multiple-correct">
+          </div>
+
+          <div class="option">
             <label for="quantity">How many eliminations</label>
             <input type="number" id="quantity" min="1" max="99">
           </div>
