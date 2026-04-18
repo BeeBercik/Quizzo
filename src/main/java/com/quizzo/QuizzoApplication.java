@@ -38,6 +38,7 @@ public class QuizzoApplication implements CommandLineRunner {
         quiz.setDurationTime(20.5f);
         quiz.setEliminationsCount(3);
         quiz.setActive(true);
+        quiz.setMultipleChoice(false);
 
         quiz.setOwner(user);
         user.getCreatedQuizzes().add(quiz);

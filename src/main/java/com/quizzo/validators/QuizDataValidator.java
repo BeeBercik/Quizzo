@@ -75,6 +75,8 @@ public class QuizDataValidator {
                 throw new IncorrectQuizDataException("Question must have at least 1 bad option");
             if (correctOptions == 0)
                 throw new IncorrectQuizDataException("Question must have at least 1 correct option");
+            if (!updatedQuiz.multipleChoice() && correctOptions > 1)
+                throw new IncorrectQuizDataException("Question cannot have more than 1 correct option in single-choice quiz");
             if (correctOptions > MAX_CORRECT_OPTIONS_COUNT)
                 throw new IncorrectQuizDataException("Max correct options count per question is " + MAX_CORRECT_OPTIONS_COUNT);
         });

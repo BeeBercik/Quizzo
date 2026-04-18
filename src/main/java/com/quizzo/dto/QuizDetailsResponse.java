@@ -10,5 +10,6 @@ public record QuizDetailsResponse(Integer id,
                                   LocalDateTime createTime,
                                   Float durationTime,
                                   Integer eliminationsCount,
+                                  Boolean multipleChoice,
                                   List<QuestionResponse> questions) {
 }

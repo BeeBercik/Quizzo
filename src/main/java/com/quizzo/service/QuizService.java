@@ -52,7 +52,8 @@ public class QuizService {
                 q.getTitle(),
                 q.getDurationTime(),
                 q.getQuestions().size(),
-                q.getEliminationsCount()
+                q.getEliminationsCount(),
+                q.getMultipleChoice()
         );
     }
 
@@ -67,6 +68,7 @@ public class QuizService {
 
         quiz.setDurationTime(Float.parseFloat(createdQuiz.time()));
         quiz.setEliminationsCount(createdQuiz.eliminations());
+        quiz.setMultipleChoice(createdQuiz.multipleChoice());
         quiz.setQuestions(buildQuestions(createdQuiz.questionsData(), quiz));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new UnauthorizedException("User not logged in"));
@@ -127,6 +129,7 @@ public class QuizService {
         quiz.setTitle(capitalizeFirstLetter(updatedQuiz.title()));
         quiz.setDurationTime(Float.parseFloat(updatedQuiz.time()));
         quiz.setEliminationsCount(updatedQuiz.eliminations());
+        quiz.setMultipleChoice(updatedQuiz.multipleChoice());
 
         List<Question> questions = buildQuestions(updatedQuiz.questionsData(), quiz);
 
@@ -229,6 +232,7 @@ public class QuizService {
                 quiz.getCreateTime(),
                 quiz.getDurationTime(),
                 quiz.getEliminationsCount(),
+                quiz.getMultipleChoice(),
                 questionResponses
         );
     }

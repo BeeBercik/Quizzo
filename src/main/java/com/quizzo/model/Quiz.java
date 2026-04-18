@@ -20,6 +20,7 @@ public class Quiz {
     private LocalDateTime createTime;
     private Float durationTime;
     private Integer eliminationsCount;
+    private Boolean multipleChoice;
     private Boolean active;
 
     @ManyToOne
@@ -48,6 +49,14 @@ public class Quiz {
 
     public void setEliminationsCount(Integer eliminationsCount) {
         this.eliminationsCount = eliminationsCount;
+    }
+
+    public Boolean getMultipleChoice() {
+        return multipleChoice;
+    }
+
+    public void setMultipleChoice(Boolean multipleChoice) {
+        this.multipleChoice = multipleChoice;
     }
 
     public void setId(Integer id) {
@@ -127,6 +136,7 @@ public class Quiz {
                 ", createTime=" + createTime +
                 ", durationTime=" + durationTime +
                 ", eliminationsCount=" + eliminationsCount +
+                ", multipleChoice=" + multipleChoice +
                 ", active=" + active +
                 ", owner=" + owner.getId()   +
                 ", userAttempts=" + userAttempts.size() +
