@@ -7,16 +7,20 @@
 #admin-main .admin-section {
     width: 90%;
     margin: 30px auto;
+    box-sizing: border-box;
 }
 
 #admin-main fieldset {
     padding: 20px;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 #admin-main table {
     width: 100%;
     margin-top: 15px;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 #admin-main th,
@@ -25,6 +29,13 @@
     border: 1px solid #3e036e;
     text-align: left;
     word-break: break-word;
+}
+
+#admin-main #admin-users th:nth-child(n+3),
+#admin-main #admin-users td:nth-child(n+3),
+#admin-main #admin-quizzes th:nth-child(n+4),
+#admin-main #admin-quizzes td:nth-child(n+4) {
+    text-align: center;
 }
 
 #admin-main thead {
@@ -36,6 +47,8 @@
 }
 
 #admin-main select {
+    width: 100%;
+    box-sizing: border-box;
     padding: 8px;
     border: none;
     border-radius: 5px;
@@ -43,6 +56,8 @@
 }
 
 #admin-main button {
+    width: 100%;
+    box-sizing: border-box;
     padding: 8px 10px;
     border: none;
     border-radius: 5px;
@@ -56,13 +71,112 @@
 }
 
 @media (max-width: 880px) {
+    #admin-main h2 {
+        font-size: 25px;
+    }
+
     #admin-main .admin-section {
         width: 95%;
+        margin: 20px auto;
+    }
+
+    #admin-main fieldset {
+        padding: 12px;
+    }
+
+    #admin-main legend {
+        font-size: 19px;
     }
 
     #admin-main th,
     #admin-main td {
-        padding: 8px;
+        padding: 8px 6px;
+        font-size: 14px;
+    }
+
+    #admin-main select,
+    #admin-main button {
+        padding: 7px 6px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 700px) {
+    #admin-main .admin-section {
+        width: 95%;
+        box-sizing: border-box;
+    }
+
+    #admin-main fieldset {
+        padding: 12px;
+    }
+
+    #admin-main table {
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0 14px;
+        table-layout: auto;
+    }
+
+    #admin-main thead {
+        display: none;
+    }
+
+    #admin-main tbody,
+    #admin-main tr,
+    #admin-main td {
+        display: block;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    #admin-main tbody tr {
+        padding: 10px;
+        border: 2px solid #6203ab;
+        border-radius: 8px;
+        background-color: #2a0341;
+    }
+
+    #admin-main tbody tr:nth-child(even) {
+        background-color: #3a035c;
+    }
+
+    #admin-main td {
+        display: block;
+        min-height: 34px;
+        padding: 10px 0;
+        border: none;
+        border-bottom: 1px solid #3e036e;
+        text-align: left !important;
+    }
+
+    #admin-main td:last-child {
+        border-bottom: none;
+    }
+
+    #admin-main td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        text-align: left;
+        opacity: .85;
+    }
+
+    #admin-main select,
+    #admin-main button {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@media (max-width: 420px) {
+    #admin-main select,
+    #admin-main button {
+        font-size: 14px;
+    }
+
+    #admin-main td {
         font-size: 14px;
     }
 }

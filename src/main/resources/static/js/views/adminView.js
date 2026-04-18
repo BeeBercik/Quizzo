@@ -62,12 +62,15 @@ function renderUsers(users, currentUserId) {
         tr.dataset.userId = user.id;
 
         const tdLogin = document.createElement("td");
+        tdLogin.dataset.label = "Login";
         tdLogin.textContent = user.login;
 
         const tdEmail = document.createElement("td");
+        tdEmail.dataset.label = "Email";
         tdEmail.textContent = user.email;
 
         const tdRole = document.createElement("td");
+        tdRole.dataset.label = "Role";
         const roleSelect = document.createElement("select");
         roleSelect.classList.add("role-select");
         roleSelect.innerHTML = `
@@ -79,18 +82,23 @@ function renderUsers(users, currentUserId) {
         tdRole.appendChild(roleSelect);
 
         const tdActive = document.createElement("td");
+        tdActive.dataset.label = "Active";
         tdActive.textContent = user.active ? "Yes" : "No";
 
         const tdCreated = document.createElement("td");
+        tdCreated.dataset.label = "Created";
         tdCreated.textContent = formatDate(user.createTime);
 
         const tdAttempts = document.createElement("td");
+        tdAttempts.dataset.label = "Attempts";
         tdAttempts.textContent = user.attemptsCount;
 
         const tdQuizzes = document.createElement("td");
+        tdQuizzes.dataset.label = "Quizzes";
         tdQuizzes.textContent = user.createdQuizzesCount;
 
         const tdStatus = document.createElement("td");
+        tdStatus.dataset.label = "Status";
         if (user.id === currentUserId)
             tdStatus.textContent = "Current user";
         else {
@@ -116,27 +124,35 @@ function renderQuizzes(quizzes) {
         tr.dataset.code = quiz.code;
 
         const tdTitle = document.createElement("td");
+        tdTitle.dataset.label = "Title";
         tdTitle.textContent = quiz.title;
 
         const tdCode = document.createElement("td");
+        tdCode.dataset.label = "Code";
         tdCode.textContent = quiz.code;
 
         const tdOwner = document.createElement("td");
+        tdOwner.dataset.label = "Owner";
         tdOwner.textContent = quiz.ownerLogin;
 
         const tdActive = document.createElement("td");
+        tdActive.dataset.label = "Active";
         tdActive.textContent = quiz.active ? "Yes" : "No";
 
         const tdMultipleChoice = document.createElement("td");
+        tdMultipleChoice.dataset.label = "Multiple choice";
         tdMultipleChoice.textContent = quiz.multipleChoice ? "Yes" : "No";
 
         const tdQuestions = document.createElement("td");
+        tdQuestions.dataset.label = "Questions";
         tdQuestions.textContent = quiz.questionsCount;
 
         const tdAttempts = document.createElement("td");
+        tdAttempts.dataset.label = "Attempts";
         tdAttempts.textContent = quiz.attemptsCount;
 
         const tdDeactivate = document.createElement("td");
+        tdDeactivate.dataset.label = "Status";
         const button = document.createElement("button");
         button.classList.add("toggle-quiz-status-btn");
         button.type = "button";
