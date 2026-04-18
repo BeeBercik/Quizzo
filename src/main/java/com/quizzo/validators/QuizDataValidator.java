@@ -8,9 +8,9 @@ public class QuizDataValidator {
 
     private static final Integer MAX_QUESTIONS_COUNT = 100;
     private static final Integer MAX_BAD_OPTIONS_COUNT = 8;
+    private static final Integer MAX_CORRECT_OPTIONS_COUNT = 8;
     private static final Integer MAX_QUIZ_TIME = 300;
     private static final Integer MAX_ELIMINATIONS_COUNT = 99;
-    private static final Integer MAX_CORRECT_OPTION_COUNT = 1;
 
     public static void validateQuizData(CreatedQuizRequest updatedQuiz) {
         if (updatedQuiz == null)
@@ -73,8 +73,10 @@ public class QuizDataValidator {
                 throw new IncorrectQuizDataException("Max bad options count per question is " + MAX_BAD_OPTIONS_COUNT);
             if (badOptions == 0)
                 throw new IncorrectQuizDataException("Question must have at least 1 bad option");
-            if (correctOptions != MAX_CORRECT_OPTION_COUNT)
-                throw new IncorrectQuizDataException("Question must have exactly " + MAX_CORRECT_OPTION_COUNT + " correct option");
+            if (correctOptions == 0)
+                throw new IncorrectQuizDataException("Question must have at least 1 correct option");
+            if (correctOptions > MAX_CORRECT_OPTIONS_COUNT)
+                throw new IncorrectQuizDataException("Max correct options count per question is " + MAX_CORRECT_OPTIONS_COUNT);
         });
     }
 
