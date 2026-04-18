@@ -5,7 +5,11 @@ export default function generateSummaryView(summary) {
     main.id = "summary-main";
     main.dataset.view = "summary";
 
-    const { title, code, creationDate, multipleChoice, users = [] } = summary;
+    const title = summary.title;
+    const code = summary.code;
+    const creationDate = summary.creationDate;
+    const multipleChoice = summary.multipleChoice;
+    const users = summary.users || [];
 
     let attempts = [];
     for (const user of users) {
@@ -16,12 +20,14 @@ export default function generateSummaryView(summary) {
         }
     }
 
-    const scoreAvg = attempts.length
-        ? Math.round(attempts.reduce((sum, currEl) => sum + (currEl.score || 0), 0) / attempts.length)
-        : 0;
+    let scoreAvg = 0;
+    let scoreSum = 0;
+    for (const attempt of attempts) {
+        scoreSum += attempt.score || 0;
+    }
+    if (attempts.length > 0) scoreAvg = Math.round(scoreSum / attempts.length);
 
-    const dateFormat = (iso) =>
-        iso
+    const dateFormat = (iso) => iso
             ? new Date(iso).toLocaleString([], {
                 year: "numeric",
                 month: "2-digit",
