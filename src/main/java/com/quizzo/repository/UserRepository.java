@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @NativeQuery(
         value = """
-            select distinct users.id, login, email, password, create_time
+            select distinct users.id, login, email, password, create_time, active, role
             from users
             inner join attempts
             on users.id = attempts.user_id

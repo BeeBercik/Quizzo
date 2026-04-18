@@ -3,10 +3,12 @@ package com.quizzo.service;
 import com.quizzo.config.JwtService;
 import com.quizzo.dto.*;
 import com.quizzo.exception.*;
+import com.quizzo.model.Role;
 import com.quizzo.model.User;
 import com.quizzo.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,8 @@ public class AuthService {
 
             user = userRepository.findByLogin(request.login())
                     .orElseThrow(() -> new UserNotFoundException("User with login " + request.login() + " not found"));
+        } catch (DisabledException ex) {
+            throw new IncorrectLoginDataException("User account not activated");
         } catch (Exception ex) {
             throw new IncorrectLoginDataException(ex.getMessage());
         }
@@ -68,6 +72,8 @@ public class AuthService {
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setCreateTime(LocalDateTime.now());
+        user.setActive(true);
+        user.setRole(userRepository.count() == 0 ? Role.ADMIN : Role.USER);
         userRepository.save(user);
     }
 
@@ -78,6 +84,9 @@ public class AuthService {
         Claims claims = jwtService.parseRefresh(refresh);
         User user = userRepository.findByLogin(claims.getSubject())
                 .orElseThrow(() -> new UserNotFoundException("User with login " + claims.getSubject() + " not found"));
+
+        if (Boolean.FALSE.equals(user.getActive()))
+            throw new UnauthorizedException("User account not activated");
 
         return jwtService.createAccess(user.getId(), user.getLogin());
     }

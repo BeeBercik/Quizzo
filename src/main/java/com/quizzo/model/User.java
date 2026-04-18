@@ -18,6 +18,10 @@ public class User {
     private String password;
     private String email;
     private LocalDateTime createTime;
+    private Boolean active;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "owner",
             cascade = CascadeType.ALL,
@@ -32,11 +36,13 @@ public class User {
     public User() {
     }
 
-    public User(String login, String password, String email, LocalDateTime createTime) {
+    public User(String login, String password, String email, LocalDateTime createTime, Boolean active, Role role) {
         this.login = login;
         this.password = password;
         this.email = email;
         this.createTime = createTime;
+        this.active = active;
+        this.role = role;
     }
 
     public Integer getId() {
@@ -79,6 +85,22 @@ public class User {
         this.createTime = createTime;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public List<Quiz> getCreatedQuizzes() {
         return createdQuizzes;
     }
@@ -103,6 +125,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", createTime=" + createTime +
+                ", active=" + active +
+                ", role=" + role +
                 '}';
     }
 }
