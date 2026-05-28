@@ -61,6 +61,6 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !Boolean.FALSE.equals(active);
+        return active;
     }
 }
