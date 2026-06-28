@@ -52,8 +52,8 @@ public class QuizDataValidator {
         } catch (NumberFormatException e) {
             throw new IncorrectQuizDataException("Quiz time must be a number");
         }
-        if (parsedTime > MAX_QUIZ_TIME || parsedTime < 0)
-            throw new IncorrectQuizDataException("Quiz should be between 0 and " + MAX_QUIZ_TIME + " minutes");
+        if (parsedTime > MAX_QUIZ_TIME || parsedTime < 1)
+            throw new IncorrectQuizDataException("Quiz should be between 1 and " + MAX_QUIZ_TIME + " minutes");
     }
 
     private static void validateAnswers(CreatedQuizRequest updatedQuiz) {
