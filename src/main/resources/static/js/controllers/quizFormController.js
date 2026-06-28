@@ -60,8 +60,13 @@ function buildQuizPayload(title, testDuration, eliminationQuantity, multipleCorr
         return null;
     }
 
-    if (title.value === "") {
+    const titleValue = title.value.trim();
+    if (titleValue === "") {
         generateError("Title cannot be empty!");
+        return null;
+    }
+    if (titleValue.length < 3) {
+        generateError("Title must have at least 3 characters");
         return null;
     }
 
@@ -69,7 +74,7 @@ function buildQuizPayload(title, testDuration, eliminationQuantity, multipleCorr
     if (!getQuestionsAndAnswers(questionsData)) return null;
 
     return {
-        title: title.value,
+        title: titleValue,
         time: testDuration.value,
         eliminations: eliminationQuantity.value === "" ? 0 : eliminationQuantity.value,
         multipleChoice: multipleCorrectOption.checked,
