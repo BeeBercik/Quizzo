@@ -26,7 +26,10 @@ public class Attempt {
     @JsonIgnore
     private Quiz quiz;
 
+    @Column(nullable = false)
     private Integer score;
+
+    @Column(nullable = false)
     private LocalDateTime attemptTime;
 
     public Attempt(User user, Quiz quiz, Integer score, LocalDateTime attemptTime) {

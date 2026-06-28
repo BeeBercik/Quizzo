@@ -6,17 +6,21 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "answers")
 public class Answer {
+    public static final int VALUE_MAX_LENGTH = 70;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = VALUE_MAX_LENGTH, nullable = false)
     private String value;
+
+    @Column(nullable = false)
     private Boolean correct;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
     public Answer() {

@@ -11,6 +11,7 @@ import com.quizzo.model.User;
 import com.quizzo.repository.QuizRepository;
 import com.quizzo.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +27,7 @@ public class AdminService {
         this.quizRepository = quizRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<AdminUserResponse> getUsers() {
         return userRepository.findAll().stream()
                 .sorted(Comparator.comparing(User::getId))
@@ -33,6 +35,7 @@ public class AdminService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<AdminQuizResponse> getQuizzes() {
         return quizRepository.findAll().stream()
                 .sorted(Comparator.comparing(Quiz::getCreateTime).reversed())

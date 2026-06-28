@@ -9,16 +9,18 @@ import java.util.List;
 @Entity
 @Table(name = "questions")
 public class Question {
+    public static final int VALUE_MAX_LENGTH = 70;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = VALUE_MAX_LENGTH, nullable = false)
     private String value;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
     @OneToMany(mappedBy = "question",

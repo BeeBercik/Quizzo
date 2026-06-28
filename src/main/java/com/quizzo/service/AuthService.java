@@ -97,9 +97,14 @@ public class AuthService {
                 request.email() == null || request.email().isBlank())
             throw new IncorrectUserDataException("Incorrect register data");
 
-        if (request.login().length() < 8 ||
-                request.password().length() < 10)
+        if (request.login().length() < User.LOGIN_MIN_LENGTH ||
+                request.password().length() < User.PASSWORD_MIN_LENGTH)
             throw new IncorrectUserDataException("Login must be at least 8 and password at least 10 characters long");
+
+        if (request.login().length() > User.LOGIN_MAX_LENGTH ||
+                request.password().length() > User.PASSWORD_MAX_LENGTH ||
+                request.email().length() > User.EMAIL_MAX_LENGTH)
+            throw new IncorrectUserDataException("Register data exceeds maximum length");
 
         if(!EMAIL_PATTERN.matcher(request.email()).matches())
             throw new IncorrectUserDataException("Invalid email format");

@@ -9,18 +9,34 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+    public static final int LOGIN_MIN_LENGTH = 8;
+    public static final int LOGIN_MAX_LENGTH = 20;
+    public static final int PASSWORD_MIN_LENGTH = 10;
+    public static final int PASSWORD_MAX_LENGTH = 40;
+    public static final int PASSWORD_HASH_LENGTH = 60;
+    public static final int EMAIL_MAX_LENGTH = 40;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = LOGIN_MAX_LENGTH, nullable = false, unique = true)
     private String login;
+
+    @Column(length = PASSWORD_HASH_LENGTH, nullable = false)
     private String password;
+
+    @Column(length = EMAIL_MAX_LENGTH, nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private LocalDateTime createTime;
+
+    @Column(nullable = false)
     private Boolean active;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
     private Role role;
 
     @OneToMany(mappedBy = "owner",

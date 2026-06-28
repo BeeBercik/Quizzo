@@ -5,8 +5,8 @@ import com.quizzo.exception.*;
 import com.quizzo.model.*;
 import com.quizzo.repository.*;
 import com.quizzo.validators.QuizDataValidator;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
-
-    private final Integer MAX_QUIZ_CODE_LENGTH = 5;
 
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
@@ -37,15 +35,18 @@ public class QuizService {
         this.answerRepository = answerRepository;
     }
 
+    @Transactional(readOnly = true)
     public QuizDetailsResponse getQuizByCode(String code) {
         return mapQuizToDetailsResponse(getQuiz(code), true);
     }
 
+    @Transactional(readOnly = true)
     public QuizDetailsResponse getQuizDetailsForOwner(String code, Integer userId) {
         Quiz quiz = getSpecificUserQuiz(code, userId);
         return mapQuizToDetailsResponse(quiz, false);
     }
 
+    @Transactional(readOnly = true)
     public QuizAttemptDetailsResponse getQuizAttemptDetails(String code) {
         Quiz q = getQuiz(code);
         return new QuizAttemptDetailsResponse(
@@ -57,6 +58,7 @@ public class QuizService {
         );
     }
 
+    @Transactional
     public void saveQuiz(CreatedQuizRequest createdQuiz, Integer userId) {
         QuizDataValidator.validateQuizData(createdQuiz);
         Quiz quiz = new Quiz();
@@ -76,6 +78,7 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    @Transactional
     public void submitQuizAttempt(AttemptRequest attempt, Integer userId) {
         Integer quizId = attempt.quizId();
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException("Quiz not found"));
@@ -115,6 +118,7 @@ public class QuizService {
         attemptRepository.save(attemptEntity);
     }
 
+    @Transactional
     public void deleteQuiz(String code, Integer userId) {
         Quiz quiz = getSpecificUserQuiz(code, userId);
         quiz.setActive(false);
@@ -122,6 +126,7 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    @Transactional
     public void updateQuiz(String code, CreatedQuizRequest updatedQuiz, Integer userId) {
         QuizDataValidator.validateQuizData(updatedQuiz);
         Quiz quiz = getSpecificUserQuiz(code, userId);
@@ -139,6 +144,7 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    @Transactional(readOnly = true)
     public QuizSummaryResponse getQuizSummary(String code, Integer userId) {
         Quiz quiz = getSpecificUserQuiz(code, userId);
 
@@ -251,13 +257,20 @@ public class QuizService {
 
     private String generateCode() {
         String positions = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder(MAX_QUIZ_CODE_LENGTH);
+        String code;
 
-        for (int i = 0; i < MAX_QUIZ_CODE_LENGTH; i++) {
-            char r = positions.charAt(new Random().nextInt(positions.length()));
-            code.append(r);
-        }
-        return code.toString().toUpperCase();
+        do {
+            StringBuilder generatedCode = new StringBuilder(Quiz.CODE_LENGTH);
+
+            for (int i = 0; i < Quiz.CODE_LENGTH; i++) {
+                char r = positions.charAt(new Random().nextInt(positions.length()));
+                generatedCode.append(r);
+            }
+
+            code = generatedCode.toString().toUpperCase();
+        } while (quizRepository.existsByCode(code));
+
+        return code;
     }
 
     private String capitalizeFirstLetter(String text) {

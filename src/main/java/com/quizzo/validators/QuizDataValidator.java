@@ -3,6 +3,9 @@ package com.quizzo.validators;
 import com.quizzo.dto.AnswerRequest;
 import com.quizzo.dto.CreatedQuizRequest;
 import com.quizzo.exception.IncorrectQuizDataException;
+import com.quizzo.model.Answer;
+import com.quizzo.model.Question;
+import com.quizzo.model.Quiz;
 
 public class QuizDataValidator {
 
@@ -32,8 +35,11 @@ public class QuizDataValidator {
         String title = updatedQuiz.title();
         if (title == null || title.isBlank())
             throw new IncorrectQuizDataException("Quiz title cannot be empty");
-        if (title.trim().length() < 3)
+        int titleLength = title.trim().length();
+        if (titleLength < 3)
             throw new IncorrectQuizDataException("Quiz title must have at least 3 characters");
+        if (titleLength > Quiz.TITLE_MAX_LENGTH)
+            throw new IncorrectQuizDataException("Quiz title cannot have more than " + Quiz.TITLE_MAX_LENGTH + " characters");
     }
 
     private static void validateTime(CreatedQuizRequest updatedQuiz) {
@@ -56,6 +62,8 @@ public class QuizDataValidator {
                 throw new IncorrectQuizDataException("Question data cannot be empty");
             if (questionData.question() == null || questionData.question().isBlank())
                 throw new IncorrectQuizDataException("Question text cannot be empty");
+            if (questionData.question().trim().length() > Question.VALUE_MAX_LENGTH)
+                throw new IncorrectQuizDataException("Question text cannot have more than " + Question.VALUE_MAX_LENGTH + " characters");
             if (questionData.answers() == null || questionData.answers().isEmpty())
                 throw new IncorrectQuizDataException("Question must have answers");
 
@@ -66,6 +74,8 @@ public class QuizDataValidator {
                     throw new IncorrectQuizDataException("Answer data cannot be empty");
                 if (a.value() == null || a.value().isBlank())
                     throw new IncorrectQuizDataException("Answer text cannot be empty");
+                if (a.value().trim().length() > Answer.VALUE_MAX_LENGTH)
+                    throw new IncorrectQuizDataException("Answer text cannot have more than " + Answer.VALUE_MAX_LENGTH + " characters");
                 if (!a.correct()) badOptions++;
                 else correctOptions++;
             }

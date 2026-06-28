@@ -10,17 +10,32 @@ import java.util.List;
 @Entity
 @Table(name = "quizzes")
 public class Quiz {
+    public static final int TITLE_MAX_LENGTH = 40;
+    public static final int CODE_LENGTH = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = TITLE_MAX_LENGTH, nullable = false)
     private String title;
+
+    @Column(length = CODE_LENGTH, nullable = false, unique = true)
     private String code;
+
+    @Column(nullable = false)
     private LocalDateTime createTime;
+
+    @Column(nullable = false)
     private Float durationTime;
+
+    @Column(nullable = false)
     private Integer eliminationsCount;
+
+    @Column(nullable = false)
     private Boolean multipleChoice;
+
+    @Column(nullable = false)
     private Boolean active;
 
     @ManyToOne

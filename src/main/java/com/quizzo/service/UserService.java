@@ -14,6 +14,7 @@ import com.quizzo.repository.AttemptRepository;
 import com.quizzo.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class UserService {
         this.attemptRepository = attemptRepository;
     }
 
+    @Transactional(readOnly = true)
     public UserProfileResponse getLoggedUserProfileData(UserDetails userDetails) {
         if (userDetails == null)
             throw new UnauthorizedException("User not logged in");
@@ -38,6 +40,7 @@ public class UserService {
         return buildUserProfile(user);
     }
 
+    @Transactional(readOnly = true)
     public UserProfileResponse getUserProfileData(LoginRequest loginRequest) {
         User user = userRepository.findByLogin(loginRequest.login())
                 .orElseThrow(() -> new UserNotFoundException("User with such login not found"));
